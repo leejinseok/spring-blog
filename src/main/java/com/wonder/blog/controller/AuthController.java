@@ -1,5 +1,6 @@
 package com.wonder.blog.controller;
 
+import com.wonder.blog.dto.UserDto;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.repository.UserRepository;
 import com.wonder.blog.service.AuthService;
@@ -27,16 +28,23 @@ public class AuthController {
   AuthService authService;
 
   @RequestMapping(method = RequestMethod.POST, path = "/signup")
-  public @ResponseBody User addUser(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
+  public ResponseEntity<UserDto> addUser(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
     User user = new User();
     user.setName(name);
     user.setEmail(email);
     user.setPassword(bCryptPasswordEncoder.encode(password));
-    return userRepository.save(user);
+
+    user = userRepository.save(user);
+    UserDto userDto = new UserDto();
+    userDto.setId(user.getId());
+    userDto.setEmail(user.getEmail());
+    userDto.setName(user.getName());
+
+    return new ResponseEntity<>(userDto, HttpStatus.CREATED);
   }
 
   @RequestMapping(method = RequestMethod.POST, path = "/login")
-  public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password) throws AuthenticationException  {
+  public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password) throws AuthenticationException {
     User user = authService.login(email, password);
     return new ResponseEntity<>(user, HttpStatus.OK);
   }
