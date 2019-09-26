@@ -4,12 +4,9 @@ import com.wonder.blog.dto.UserDto;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.repository.UserRepository;
 import com.wonder.blog.service.AuthService;
-import com.wonder.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
