@@ -3,6 +3,7 @@ package com.wonder.blog.entity;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "posts")
 public class Post {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -12,7 +13,7 @@ public class Post {
 
   private String text;
 
-  @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
+  @ManyToOne
+  @JoinColumn()
   private User user;
 }
