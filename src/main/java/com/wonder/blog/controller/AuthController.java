@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.AuthenticationException;
 
 @RestController
 @RequestMapping(path = "/api/v1/auth")
@@ -41,7 +40,7 @@ public class AuthController {
   }
 
   @RequestMapping(method = RequestMethod.POST, path = "/login")
-  public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password) throws AuthenticationException {
+  public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password) {
     User user = authService.login(email, password);
     return new ResponseEntity<>(user, HttpStatus.OK);
   }
