@@ -40,8 +40,12 @@ public class AuthController {
   }
 
   @RequestMapping(method = RequestMethod.POST, path = "/login")
-  public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password) {
+  public ResponseEntity<UserDto> login(@RequestParam String email, @RequestParam String password) {
     User user = authService.login(email, password);
-    return new ResponseEntity<>(user, HttpStatus.OK);
+    UserDto userDto = new UserDto();
+    userDto.setId(user.getId());
+    userDto.setEmail(user.getEmail());
+    userDto.setName(user.getName());
+    return new ResponseEntity<>(userDto, HttpStatus.OK);
   }
 }
