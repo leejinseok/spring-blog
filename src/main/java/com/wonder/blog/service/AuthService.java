@@ -17,7 +17,7 @@ public class AuthService {
   @Autowired
   BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  public User login(String email, String password) throws AuthenticationException {
+  public User login(String email, String password) {
     User user = userRepository.findByEmail(email);
     if (user == null) {
       throw new BadCredentialsException("no exist user");

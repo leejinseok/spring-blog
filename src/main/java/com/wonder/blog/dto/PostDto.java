@@ -1,32 +1,12 @@
-package com.wonder.blog.entity;
+package com.wonder.blog.dto;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "posts")
-public class Post {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+public class PostDto {
   private Integer id;
-
   private String title;
-
   private String text;
-
-  @ManyToOne
-  @JoinColumn()
-  private User user;
-
-  @Column(nullable = false, updatable = false)
-  @CreatedDate
   private LocalDateTime createdAt;
-
-  @LastModifiedDate
   private LocalDateTime updatedAt;
 
   public Integer getId() {
@@ -51,14 +31,6 @@ public class Post {
 
   public void setText(String text) {
     this.text = text;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
   }
 
   public LocalDateTime getCreatedAt() {
