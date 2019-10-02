@@ -5,6 +5,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 public class User {
+  public User() {}
+  public User(User user) {
+    this.id = user.getId();
+    this.name = user.getName();
+    this.email = user.getEmail();
+    this.password = user.getPassword();
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
