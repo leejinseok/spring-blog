@@ -1,6 +1,7 @@
 package com.wonder.blog.config;
 
 import com.wonder.blog.security.AuthenticationFailureHandler;
+import com.wonder.blog.security.AuthenticationSuccessHandler;
 import com.wonder.blog.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,15 +27,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   AuthenticationFailureHandler authenticationFailureHandler;
 
+  @Autowired
+  AuthenticationSuccessHandler authenticationSuccessHandler;
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable();
     http.authorizeRequests()
-            .anyRequest().authenticated()
+        .antMatchers("**").permitAll()
             .and()
             .formLogin()
-            .loginProcessingUrl("/api/auth/login")
-            .failureHandler(authenticationFailureHandler);
+            .loginProcessingUrl("/api/v1/auth/login")
+            .usernameParameter("email")
+            .passwordParameter("password")
+            .failureHandler(authenticationFailureHandler)
+            .successHandler(authenticationSuccessHandler);
   }
 
   @Override
