@@ -36,6 +36,7 @@ dependencies {
     compile("org.springframework.security:spring-security-core")
     compile("org.springframework.security:spring-security-web")
     compile("org.springframework.security:spring-security-config")
+    compile("com.auth0:java-jwt:3.8.3")
     testCompile("junit:junit")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

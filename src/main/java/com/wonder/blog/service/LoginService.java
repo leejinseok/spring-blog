@@ -23,12 +23,10 @@ public class LoginService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println("email " + email);
         User user = userRepository.findByEmail(email);
 
         if (user != null) {
-            Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
+            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new HashSet<>());
         }
 
         return null;

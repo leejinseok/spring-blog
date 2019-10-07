@@ -3,6 +3,7 @@ package com.wonder.blog.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wonder.blog.common.ErrorCode;
 import com.wonder.blog.common.ErrorResponse;
+import com.wonder.blog.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,8 +27,12 @@ public class AuthenticationSuccessHandler implements org.springframework.securit
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+
     response.setStatus(HttpStatus.UNAUTHORIZED.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+    System.out.println(authentication.getName());
+    System.out.println(authentication.getDetails());
 
     mapper.writeValue(response.getWriter(), ErrorResponse.of("Authentication success", ErrorCode.AUTHENTICATION, HttpStatus.OK));
   }
