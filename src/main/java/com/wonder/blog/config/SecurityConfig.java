@@ -21,6 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+  public static final String API_ROOT_URL = "/api/**";
+
   @Autowired
   LoginService loginService;
 
@@ -55,6 +57,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .and()
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+      .and()
+        .authorizeRequests()
+        .antMatchers("**")
+        .permitAll()
+
       .and()
         .addFilterBefore(new CustomCorsFilter(), UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(buildAjaxLoginProcessingFilter("/api/v1/auth/login"), UsernamePasswordAuthenticationFilter.class);
@@ -72,14 +80,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   //  @Override
-//  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//    auth.eraseCredentials(false).userDetailsService(loginService).passwordEncoder(passwordEncoder);
-//  }
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+  //  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+  //    auth.eraseCredentials(false).userDetailsService(loginService).passwordEncoder(passwordEncoder);
+  //  }
 
   @Bean
   public BCryptPasswordEncoder bCryptPasswordEncoder() {
