@@ -1,6 +1,5 @@
 package com.wonder.blog.security;
 
-import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wonder.blog.common.ErrorCode;
 import com.wonder.blog.common.ErrorResponse;

@@ -1,7 +1,9 @@
-package com.wonder.blog.security;
+package com.wonder.blog.security.ajax;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wonder.blog.util.WebUtil;
+import com.wonder.blog.security.AuthenticationFailureHandler;
+import com.wonder.blog.security.AuthenticationSuccessHandler;
+import com.wonder.blog.security.LoginRequest;
 import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;

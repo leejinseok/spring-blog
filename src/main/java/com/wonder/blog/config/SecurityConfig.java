@@ -2,7 +2,8 @@ package com.wonder.blog.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wonder.blog.security.*;
-import com.wonder.blog.service.LoginService;
+import com.wonder.blog.security.ajax.AjaxAuthenticationProvider;
+import com.wonder.blog.security.ajax.AjaxLoginProcessingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,26 +24,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
   public static final String API_ROOT_URL = "/api/**";
 
-  @Autowired
-  LoginService loginService;
-
-  @Autowired
-  PasswordEncoder passwordEncoder;
-
-  @Autowired
-  AjaxAuthenticationProvider ajaxAuthenticationProvider;
-
-  @Autowired
-  AuthenticationManager authenticationManager;
-
-  @Autowired
-  AuthenticationFailureHandler failureHandler;
-
-  @Autowired
-  AuthenticationSuccessHandler successHandler;
-
-  @Autowired private ObjectMapper objectMapper;
-
+  @Autowired PasswordEncoder passwordEncoder;
+  @Autowired AjaxAuthenticationProvider ajaxAuthenticationProvider;
+  @Autowired AuthenticationManager authenticationManager;
+  @Autowired AuthenticationFailureHandler failureHandler;
+  @Autowired AuthenticationSuccessHandler successHandler;
+  @Autowired ObjectMapper objectMapper;
 
   protected AjaxLoginProcessingFilter buildAjaxLoginProcessingFilter(String loginEntryPoint) {
     AjaxLoginProcessingFilter filter = new AjaxLoginProcessingFilter(loginEntryPoint, successHandler, failureHandler, objectMapper);

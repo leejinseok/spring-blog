@@ -1,6 +1,7 @@
-package com.wonder.blog.security;
+package com.wonder.blog.security.ajax;
 
 import com.wonder.blog.entity.User;
+import com.wonder.blog.security.UserContext;
 import com.wonder.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -42,7 +43,8 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
       throw new BadCredentialsException("Authentication Failed. Email or Password not valid");
     }
 
-    List<GrantedAuthority> authorities = new ArrayList<>();
+    List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+    authorities.add(new SimpleGrantedAuthority("USER"));
 
     UserContext userContext = UserContext.create(user.getEmail(), authorities);
     return new UsernamePasswordAuthenticationToken(userContext, null, userContext.getAuthorities());
