@@ -2,16 +2,21 @@ package com.wonder.blog.util;
 
 import com.wonder.blog.security.UserContext;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
+import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -31,6 +36,7 @@ public class JwtUtil {
 
 
     String token = Jwts.builder()
+      .setClaims(claims)
       .setIssuer("blog")
       .setIssuedAt(Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant()))
       .setExpiration(Date.from(expireTime.atZone(ZoneId.systemDefault()).toInstant()))
@@ -41,5 +47,22 @@ public class JwtUtil {
     return token;
   }
 
+  public UserContext decodeToken(String token) {
+    SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+    byte[] secretByte = DatatypeConverter.parseBase64Binary(secretKey);
+    Key signingKey = new SecretKeySpec(secretByte, signatureAlgorithm.getJcaName());
 
+    Jws<Claims> claims = Jwts.parser()
+      .setSigningKey(signingKey)
+      .parseClaimsJws(token);
+
+    String subject = claims.getBody().getSubject();
+    List<String> scopes = claims.getBody().get("scopes", List.class);
+    List<GrantedAuthority> authorities = scopes.stream()
+      .map(SimpleGrantedAuthority::new)
+      .collect(Collectors.toList());
+
+    UserContext userContext = UserContext.create(subject, authorities);
+    return userContext;
+  }
 }
