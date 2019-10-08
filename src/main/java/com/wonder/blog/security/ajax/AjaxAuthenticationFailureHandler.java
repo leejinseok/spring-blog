@@ -1,4 +1,4 @@
-package com.wonder.blog.security;
+package com.wonder.blog.security.ajax;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wonder.blog.common.ErrorCode;
@@ -15,11 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class AuthenticationFailureHandler implements org.springframework.security.web.authentication.AuthenticationFailureHandler {
+public class AjaxAuthenticationFailureHandler implements org.springframework.security.web.authentication.AuthenticationFailureHandler {
     private final ObjectMapper mapper;
 
     @Autowired
-    public AuthenticationFailureHandler(ObjectMapper mapper) {
+    public AjaxAuthenticationFailureHandler(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 

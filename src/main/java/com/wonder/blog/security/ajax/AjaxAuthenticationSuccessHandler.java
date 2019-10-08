@@ -1,6 +1,7 @@
-package com.wonder.blog.security;
+package com.wonder.blog.security.ajax;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wonder.blog.security.UserContext;
 import com.wonder.blog.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,11 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class AuthenticationSuccessHandler implements org.springframework.security.web.authentication.AuthenticationSuccessHandler {
+public class AjaxAuthenticationSuccessHandler implements org.springframework.security.web.authentication.AuthenticationSuccessHandler {
   private final ObjectMapper mapper;
 
   @Autowired
-  public AuthenticationSuccessHandler(ObjectMapper mapper) {
+  public AjaxAuthenticationSuccessHandler(ObjectMapper mapper) {
     this.mapper = mapper;
   }
 

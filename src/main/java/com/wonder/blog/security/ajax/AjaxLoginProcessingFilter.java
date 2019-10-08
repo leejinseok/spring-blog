@@ -1,8 +1,6 @@
 package com.wonder.blog.security.ajax;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wonder.blog.security.AuthenticationFailureHandler;
-import com.wonder.blog.security.AuthenticationSuccessHandler;
 import com.wonder.blog.security.LoginRequest;
 import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +20,12 @@ import java.io.IOException;
 public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingFilter {
   @Autowired
   AjaxAuthenticationProvider ajaxAuthenticationProvider;
-  private final AuthenticationSuccessHandler successHandler;
-  private final AuthenticationFailureHandler failureHandler;
+  private final AjaxAuthenticationSuccessHandler successHandler;
+  private final AjaxAuthenticationFailureHandler failureHandler;
 
   private final ObjectMapper objectMapper;
 
-  public AjaxLoginProcessingFilter(String defaultProcessUrl, AuthenticationSuccessHandler successHandler, AuthenticationFailureHandler failureHandler, ObjectMapper objectMapper) {
+  public AjaxLoginProcessingFilter(String defaultProcessUrl, AjaxAuthenticationSuccessHandler successHandler, AjaxAuthenticationFailureHandler failureHandler, ObjectMapper objectMapper) {
     super(defaultProcessUrl);
     this.successHandler = successHandler;
     this.failureHandler = failureHandler;
