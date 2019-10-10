@@ -47,7 +47,7 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
     LoginRequest loginRequest = new LoginRequest(email, password);
 
     if (StringUtils.isBlank(loginRequest.getEmail()) || StringUtils.isBlank(loginRequest.getPassword())) {
-      throw new AuthenticationServiceException("email or Password not provided");
+      throw new AuthenticationServiceException("email or password not provided");
     }
 
     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
@@ -56,13 +56,11 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
 
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-    System.out.println("success");
     successHandler.onAuthenticationSuccess(request, response, authResult);
   }
 
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-    System.out.println("failed");
     failureHandler.onAuthenticationFailure(request, response, failed);
   }
 }

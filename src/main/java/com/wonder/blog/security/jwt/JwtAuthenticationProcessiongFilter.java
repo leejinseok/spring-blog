@@ -1,5 +1,6 @@
 package com.wonder.blog.security.jwt;
 
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -24,8 +25,12 @@ public class JwtAuthenticationProcessiongFilter extends AbstractAuthenticationPr
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-    String tokenPayload = request.getHeader("Authorization").split(" ")[1];
-    return this.getAuthenticationManager().authenticate(new JwtAuthenticationToken(tokenPayload));
+    try {
+      String tokenPayload = request.getHeader("Authorization").split(" ")[1];
+      return this.getAuthenticationManager().authenticate(new JwtAuthenticationToken(tokenPayload));
+    } catch (Exception e) {
+      throw new AuthenticationServiceException("Access token is null");
+    }
   }
 
   @Override
@@ -34,5 +39,10 @@ public class JwtAuthenticationProcessiongFilter extends AbstractAuthenticationPr
     context.setAuthentication(authResult);
     SecurityContextHolder.setContext(context);
     chain.doFilter(request, response);
+  }
+
+  @Override
+  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    failureHandler.onAuthenticationFailure(request, response, failed);
   }
 }

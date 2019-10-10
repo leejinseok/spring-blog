@@ -57,7 +57,7 @@ public class AuthController {
   }
 
   @RequestMapping(method = RequestMethod.GET, path = "/session")
-  public ResponseEntity<UserDto> session(JwtAuthenticationToken jwtAuthenticationToken) {
+  public ResponseEntity<UserDto> session() {
     SecurityContext securityContext = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
     UserDto userDto = new UserDto();
