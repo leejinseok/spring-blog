@@ -32,9 +32,11 @@ import java.util.List;
 @EnableWebSecurity
 @EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-  public static final String API_ROOT_URL = "/api/**";
+  public static final String API_ROOT_URL = "/api/v1/**";
   public static final String AUTHENTICATION_URL = "/api/v1/auth/login";
   public static final String REFRESH_TOKEN_URL = "/api/v1/auth/token";
+  public static final String SESSION_URL = "/api/v1/auth/session";
+
 
   @Autowired ObjectMapper objectMapper;
   @Autowired AuthenticationFailureHandler failureHandler;
@@ -77,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
       .and()
         .authorizeRequests()
-        .antMatchers("**")
+        .antMatchers(permitAllEndpointList.toArray(new String[permitAllEndpointList.size()]))
         .permitAll()
 
       .and()

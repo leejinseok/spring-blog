@@ -14,10 +14,10 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     String token = (String) authentication.getCredentials();
-    System.out.println("JwtAuthenticationProvider: token: " + token);
     JwtUtil jwtUtil = new JwtUtil();
     UserContext context = jwtUtil.decodeToken(token);
-    return new JwtAuthenticationToken(context, context.getAuthorities());
+    JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(context, context.getAuthorities());
+    return jwtAuthenticationToken;
   }
 
   @Override

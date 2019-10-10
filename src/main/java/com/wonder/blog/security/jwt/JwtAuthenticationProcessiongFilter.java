@@ -25,7 +25,6 @@ public class JwtAuthenticationProcessiongFilter extends AbstractAuthenticationPr
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
     String tokenPayload = request.getHeader("Authorization").split(" ")[1];
-    System.out.println("[JwtAuthenticationProcessiongFilter]");
     return this.getAuthenticationManager().authenticate(new JwtAuthenticationToken(tokenPayload));
   }
 
