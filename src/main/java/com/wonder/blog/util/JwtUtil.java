@@ -34,17 +34,13 @@ public class JwtUtil {
     byte[] secretByte = DatatypeConverter.parseBase64Binary(secretKey);
     Key signingKey = new SecretKeySpec(secretByte, signatureAlgorithm.getJcaName());
 
-
-    String token = Jwts.builder()
+    return Jwts.builder()
       .setClaims(claims)
       .setIssuer("blog")
       .setIssuedAt(Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant()))
       .setExpiration(Date.from(expireTime.atZone(ZoneId.systemDefault()).toInstant()))
       .signWith(signatureAlgorithm, signingKey)
       .compact();
-
-
-    return token;
   }
 
   public UserContext decodeToken(String token) throws Exception {
@@ -62,7 +58,6 @@ public class JwtUtil {
       .map(SimpleGrantedAuthority::new)
       .collect(Collectors.toList());
 
-    UserContext userContext = UserContext.create(subject, authorities);
-    return userContext;
+    return UserContext.create(subject, authorities);
   }
 }
