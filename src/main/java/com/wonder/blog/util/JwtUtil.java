@@ -47,7 +47,7 @@ public class JwtUtil {
     return token;
   }
 
-  public UserContext decodeToken(String token) {
+  public UserContext decodeToken(String token) throws Exception {
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     byte[] secretByte = DatatypeConverter.parseBase64Binary(secretKey);
     Key signingKey = new SecretKeySpec(secretByte, signatureAlgorithm.getJcaName());

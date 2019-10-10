@@ -7,6 +7,7 @@ import com.wonder.blog.security.ajax.AjaxAuthenticationProvider;
 import com.wonder.blog.security.ajax.AjaxLoginProcessingFilter;
 import com.wonder.blog.security.ajax.AjaxAuthenticationFailureHandler;
 import com.wonder.blog.security.ajax.AjaxAuthenticationSuccessHandler;
+import com.wonder.blog.security.jwt.JwtAuthenticationFailureHandler;
 import com.wonder.blog.security.jwt.JwtAuthenticationProcessiongFilter;
 import com.wonder.blog.security.jwt.JwtAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
   @Autowired ObjectMapper objectMapper;
-  @Autowired AuthenticationFailureHandler failureHandler;
   @Autowired PasswordEncoder passwordEncoder;
   @Autowired AuthenticationManager authenticationManager;
 
@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired AjaxAuthenticationSuccessHandler ajaxSuccessHandler;
 
   @Autowired JwtAuthenticationProvider jwtAuthenticationProvider;
+  @Autowired JwtAuthenticationFailureHandler jwtAuthenticationFailureHandler;
 
 
   protected AjaxLoginProcessingFilter buildAjaxLoginProcessingFilter(String loginEntryPoint) {
@@ -58,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   protected JwtAuthenticationProcessiongFilter buildJwtAuthenticationFilter(List<String> pathsToSkip, String pattern) throws Exception {
     SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip, pattern);
-    JwtAuthenticationProcessiongFilter filter = new JwtAuthenticationProcessiongFilter(failureHandler, matcher);
+    JwtAuthenticationProcessiongFilter filter = new JwtAuthenticationProcessiongFilter(jwtAuthenticationFailureHandler, matcher);
     filter.setAuthenticationManager(this.authenticationManager);
     return filter;
   }
