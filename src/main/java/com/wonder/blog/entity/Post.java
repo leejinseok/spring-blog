@@ -16,7 +16,7 @@ public class Post {
 
   private String title;
 
-  private String text;
+  private String content;
 
   @ManyToOne
   @JoinColumn()
@@ -45,12 +45,12 @@ public class Post {
     this.title = title;
   }
 
-  public String getText() {
-    return text;
+  public String getContent() {
+    return content;
   }
 
-  public void setText(String text) {
-    this.text = text;
+  public void setContent(String content) {
+    this.content = content;
   }
 
   public User getUser() {

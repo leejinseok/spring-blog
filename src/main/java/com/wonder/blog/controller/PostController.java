@@ -1,5 +1,6 @@
 package com.wonder.blog.controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.service.PostService;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping(path = "/api/v1/posts")
 public class PostController {
@@ -18,12 +22,18 @@ public class PostController {
   PostService postService;
 
   @RequestMapping(method = RequestMethod.POST)
-  public ResponseEntity<PostDto> addUser(@RequestParam String title, @RequestParam String text) {
-    Post post = postService.addPost(title, text);
+  public ResponseEntity<PostDto> addPost(@RequestParam String title, @RequestParam String content) {
+    Post post = postService.addPost(title, content);
     PostDto postDto = new PostDto();
     postDto.setId(post.getId());
     postDto.setTitle(post.getTitle());
-    postDto.setText(post.getText());
+    postDto.setText(post.getContent());
     return new ResponseEntity<>(postDto, HttpStatus.CREATED);
+  }
+
+  @RequestMapping(method = RequestMethod.GET)
+  public ResponseEntity<List<PostDto>> getPosts(@RequestParam(defaultValue = "0") Integer cursor, @RequestParam(defaultValue = "10") Integer offset) {
+    List<Post> posts = postService.getPosts(cursor, offset);
+    return new ResponseEntity<>(posts.stream().map(post -> new PostDto(post)).collect(Collectors.toList()), HttpStatus.OK);
   }
 }
