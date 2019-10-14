@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Integer> {
+  Post findPostById(Integer id);
+
   @Override
   Page<Post> findAll(Pageable pageable);
 }
