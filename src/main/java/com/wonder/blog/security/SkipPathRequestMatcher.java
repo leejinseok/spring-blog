@@ -23,8 +23,11 @@ public class SkipPathRequestMatcher implements RequestMatcher {
 
   public SkipPathRequestMatcher(Map<String, HttpMethod> pathsToSkip, String processingPath) {
     List<RequestMatcher> m = new ArrayList<>();
+
     for (Map.Entry<String, HttpMethod> entry : pathsToSkip.entrySet()) {
-      AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher(entry.getKey(), entry.getValue().name());
+      String url = entry.getKey();
+      String method = entry.getValue().name();
+      AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher(url, method);
       m.add(antPathRequestMatcher);
     }
 

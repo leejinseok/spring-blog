@@ -31,9 +31,9 @@ import java.util.*;
 @EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
   public static final String API_ROOT_URL = "/api/v1/**";
-  public static final String AUTHENTICATION_URL = "/api/v1/auth/login";
+  public static final String LOGIN_URL = "/api/v1/auth/login";
   public static final String REFRESH_TOKEN_URL = "/api/v1/auth/token";
-  public static final String GET_POSTS_URL = "/api/v1/posts";
+  public static final String POSTS_URL = "/api/v1/posts";
 
   @Autowired ObjectMapper objectMapper;
   @Autowired PasswordEncoder passwordEncoder;
@@ -70,15 +70,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 //    List<String> permitAllEndpointList = Arrays.asList(
-//      AUTHENTICATION_URL,
+//      LOGIN_URL,
 //      REFRESH_TOKEN_URL,
 //      "/console"
 //    );
 
     Map<String, HttpMethod> permitAllMap = new HashMap<>();
-    permitAllMap.put(AUTHENTICATION_URL, HttpMethod.POST);
+    permitAllMap.put(LOGIN_URL, HttpMethod.POST);
     permitAllMap.put(REFRESH_TOKEN_URL, HttpMethod.PATCH);
-    permitAllMap.put(GET_POSTS_URL, HttpMethod.GET);
+    permitAllMap.put(POSTS_URL, HttpMethod.GET);
 
     http.csrf().disable()
       .exceptionHandling()
@@ -89,14 +89,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .and()
         .authorizeRequests()
 //        .antMatchers(permitAllEndpointList.toArray(new String[permitAllEndpointList.size()]))
-        .antMatchers(HttpMethod.POST, AUTHENTICATION_URL).permitAll()
+        .antMatchers(HttpMethod.POST, LOGIN_URL).permitAll()
         .antMatchers(HttpMethod.PATCH, REFRESH_TOKEN_URL).permitAll()
-        .antMatchers(HttpMethod.GET, GET_POSTS_URL).permitAll()
+        .antMatchers(HttpMethod.GET, POSTS_URL).permitAll()
         .antMatchers("/console").permitAll()
 
       .and()
         .addFilterBefore(new CustomCorsFilter(), UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(buildAjaxLoginProcessingFilter("/api/v1/auth/login"), UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(buildAjaxLoginProcessingFilter(LOGIN_URL), UsernamePasswordAuthenticationFilter.class)
 //        .addFilterBefore(buildJwtAuthenticationFilter(permitAllEndpointList, API_ROOT_URL), UsernamePasswordAuthenticationFilter.class);
         .addFilterBefore(buildJwtAuthenticationFilter(permitAllMap, API_ROOT_URL), UsernamePasswordAuthenticationFilter.class);
   }
