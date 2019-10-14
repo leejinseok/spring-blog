@@ -1,6 +1,7 @@
 package com.wonder.blog.dto;
 
 import com.wonder.blog.entity.Post;
+import com.wonder.blog.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -8,6 +9,7 @@ public class PostDto {
   private Integer id;
   private String title;
   private String content;
+  private User user;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
@@ -17,8 +19,25 @@ public class PostDto {
     this.id = post.getId();
     this.title = post.getTitle();
     this.content = post.getContent();
+    this.user = post.getUser();
     this.createdAt = post.getCreatedAt();
     this.updatedAt = post.getUpdatedAt();
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
   }
 
   public Integer getId() {
