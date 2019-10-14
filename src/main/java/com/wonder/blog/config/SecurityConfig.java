@@ -36,12 +36,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+    Map<String, HttpMethod> permitAllMap = new HashMap<>();
+    permitAllMap.put(LOGIN_URL, HttpMethod.POST);
+    permitAllMap.put(REFRESH_TOKEN_URL, HttpMethod.PATCH);
+    permitAllMap.put(POSTS_URL, HttpMethod.GET);
+
+    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(permitAllMap, API_ROOT_URL);
+
     http.csrf().disable();
     http.authorizeRequests()
       .antMatchers(LOGIN_URL).permitAll();
 
     http.addFilterBefore(new AjaxAuthFilter(LOGIN_URL, this.authenticationManager), UsernamePasswordAuthenticationFilter.class)
       .authenticationProvider(ajaxAuthProvider);
+
+    http.addFilterBefore(new JwtAuthFilter(matcher), UsernamePasswordAuthenticationFilter.class);
   }
 
   @Bean

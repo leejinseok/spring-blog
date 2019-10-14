@@ -14,11 +14,14 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
+  public static final String jwtTokenCookieName = "JWT-TOKEN";
+
   public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager) {
     super(loginUrl);
     this.setAuthenticationManager(authenticationManager);
@@ -43,8 +46,10 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
     JwtUtil jwtUtil = new JwtUtil();
     String token = jwtUtil.generateToken(userContext);
 
-    CookieUtil.create(response, "accessToken", token, true, 60 * 60 * 24 * 3, "localhost");
+    CookieUtil.create(response, jwtTokenCookieName, token, false, -1, "localhost");
     response.getWriter().write(token);
+    response.getWriter().flush();
+    response.getWriter().close();
   }
 
   @Override
