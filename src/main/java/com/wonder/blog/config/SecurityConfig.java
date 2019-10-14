@@ -32,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired PasswordEncoder passwordEncoder;
   @Autowired AuthenticationManager authenticationManager;
   @Autowired AjaxAuthProvider ajaxAuthProvider;
+  @Autowired JwtAuthProvider jwtAuthProvider;
 
 
   @Override
@@ -50,7 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.addFilterBefore(new AjaxAuthFilter(LOGIN_URL, this.authenticationManager), UsernamePasswordAuthenticationFilter.class)
       .authenticationProvider(ajaxAuthProvider);
 
-    http.addFilterBefore(new JwtAuthFilter(matcher), UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(new JwtAuthFilter(matcher, this.authenticationManager), UsernamePasswordAuthenticationFilter.class)
+      .authenticationProvider(jwtAuthProvider);
   }
 
   @Bean

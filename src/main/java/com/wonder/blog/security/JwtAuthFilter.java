@@ -2,6 +2,7 @@ package com.wonder.blog.security;
 
 import com.wonder.blog.util.CookieUtil;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -25,16 +26,15 @@ import static com.wonder.blog.security.AjaxAuthFilter.jwtTokenCookieName;
 
 public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
-  public JwtAuthFilter(SkipPathRequestMatcher matcher) {
+  public JwtAuthFilter(SkipPathRequestMatcher matcher, AuthenticationManager authenticationManager) {
     super(matcher);
+    this.setAuthenticationManager(authenticationManager);
   };
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-    System.out.println("JWT 시도");
     String accessToken = CookieUtil.getValue(request, jwtTokenCookieName);
-    System.out.println(accessToken);
-    return null;
+    return this.getAuthenticationManager().authenticate(new JwtAuthToken(accessToken));
   }
 
   @Override
