@@ -21,10 +21,10 @@ public class UserControllerTest {
   @Autowired
   private MockMvc mockMvc;
 
-  @Test
-  public void getHello() throws Exception {
+//  @Test
+//  public void getHello() throws Exception {
 //    mockMvc.perform(MockMvcRequestBuilders.get("/").accept(MediaType.APPLICATION_JSON))
 //      .andExpect(status().isOk())
 //      .andExpect(content().string(equalTo("Hello, Spring")));
-  }
+//  }
 }
