@@ -54,4 +54,11 @@ public class PostService {
     post.setUpdatedAt(LocalDateTime.now());
     return postRepository.save(post);
   }
+
+  public void deletePost(int id, User user) {
+    Post post = this.getPost(id);
+    if (post.getUser().getId() != user.getId()) {
+    }
+    postRepository.deleteById(id);
+  }
 }
