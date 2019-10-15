@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @ControllerAdvice
-public class ExceptionHandlingController {
+public class ExceptionController {
 
   @ExceptionHandler(CustomException.class)
   public void custom(Exception exception, HttpServletResponse response) throws IOException  {
