@@ -2,6 +2,7 @@ package com.wonder.blog.service;
 
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.User;
+import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.repository.PostRepository;
 import com.wonder.blog.security.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,7 @@ public class PostService {
   }
 
   public Post updatePost(int id, String title, String content) {
-    Post post = new Post();
-    post.setId(id);
+    Post post = getPost(id);
     post.setTitle(title);
     post.setContent(content);
     post.setUpdatedAt(LocalDateTime.now());
@@ -56,8 +56,9 @@ public class PostService {
   }
 
   public void deletePost(int id, User user) {
-    Post post = this.getPost(id);
-    if (post.getUser().getId() != user.getId()) {
+    Post post = getPost(id);
+    if (post.getUser() == null || post.getUser().getId() != user.getId()) {
+      throw new CustomException("This post not your own");
     }
     postRepository.deleteById(id);
   }

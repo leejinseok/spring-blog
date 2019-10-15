@@ -5,6 +5,7 @@ import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.exception.CustomException;
+import com.wonder.blog.exception.DataNotFoundException;
 import com.wonder.blog.security.UserContext;
 import com.wonder.blog.service.PostService;
 import com.wonder.blog.service.UserService;
@@ -44,6 +45,10 @@ public class PostController {
 
   @RequestMapping(method = RequestMethod.GET, value = "/{id}")
   public ResponseEntity<PostDto> getPost(@PathVariable int id) {
+    Post post = postService.getPost(id);
+    if (post == null) {
+      throw new DataNotFoundException("Post id: " + id + " not founded");
+    }
     return new ResponseEntity<>(new PostDto(postService.getPost(id)), HttpStatus.OK);
   }
 
@@ -54,14 +59,12 @@ public class PostController {
 
   @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
   public int deletePost(@PathVariable int id) throws CustomException {
-    throw new CustomException("hello");
-//    SecurityContext securityContext = SecurityContextHolder.getContext();
-//    UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
-//
-//    User user = userService.getByUserEmail(userContext.getEmail());
-//    postService.deletePost(id, user);
+    SecurityContext securityContext = SecurityContextHolder.getContext();
+    UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
 
+    User user = userService.getByUserEmail(userContext.getEmail());
+    postService.deletePost(id, user);
 
-//    return id;
+    return id;
   }
 }
