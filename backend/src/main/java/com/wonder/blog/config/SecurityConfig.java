@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Configuration
@@ -26,7 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private static final String API_ROOT_URL = "/api/v1/**";
   private static final String LOGIN_URL = "/api/v1/auth/login";
   private static final String REFRESH_TOKEN_URL = "/api/v1/auth/token";
-  private static final String POSTS_URL = "/api/v1/posts/*";
+  private static final String POSTS_URL = "/api/v1/posts";
+  private static final String POST_URL = "/api/v1/posts/*";
 
   @Autowired
   ObjectMapper objectMapper;
@@ -49,9 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     permitAllMap.put(LOGIN_URL, HttpMethod.POST);
     permitAllMap.put(REFRESH_TOKEN_URL, HttpMethod.PATCH);
     permitAllMap.put(POSTS_URL, HttpMethod.GET);
+    permitAllMap.put(POST_URL, HttpMethod.GET);
 
     SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(permitAllMap, API_ROOT_URL);
-
+    http.cors().disable();
     http.csrf().disable();
     http.authorizeRequests()
       .antMatchers(LOGIN_URL).permitAll();

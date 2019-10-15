@@ -2120,6 +2120,13 @@ concat-stream@^1.5.0:
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
+config@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/config/-/config-3.2.3.tgz#147a30f9eb235ecc46516f767e211335dbcbf3cc"
+  integrity sha512-pditxQzO+SkKX/2gs99YnUGEjmBVkTj2o/hGOgC0oYEU7QgLnVVDYmcSL6HiGels/8QtFJpFzi5iKYv4D0dalg==
+  dependencies:
+    json5 "^1.0.1"
+
 connect@^3.7.0:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/connect/-/connect-3.7.0.tgz#5d49348910caa5e07a01800b030d0c35f20484f8"

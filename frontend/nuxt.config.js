@@ -1,3 +1,6 @@
+import config from 'config';
+
+console.log(config.get('api.host'));
 
 export default {
   mode: 'universal',
@@ -46,6 +49,16 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    proxy: true,
+
+  },
+  proxy: {
+    '/api/': {
+      target: config.get('api.host'),
+      pathRewrite: {
+        '^/api/': '/api/'
+      }
+    }
   },
   /*
   ** Build configuration
