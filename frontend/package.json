@@ -13,7 +13,8 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "config": "^3.2.3",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "qs": "^6.9.0"
   },
   "devDependencies": {}
 }
