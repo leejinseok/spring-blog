@@ -5,6 +5,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.wonder.blog.config.SecurityConfig.*;
-import static com.wonder.blog.security.AjaxAuthFilter.jwtTokenCookieName;
+import static com.wonder.blog.security.AjaxAuthFilter.JWT_TOKEN_NAME;
 
 public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -33,13 +35,16 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-    String accessToken = CookieUtil.getValue(request, jwtTokenCookieName);
+    String accessToken = CookieUtil.getValue(request, JWT_TOKEN_NAME);
     return this.getAuthenticationManager().authenticate(new JwtAuthToken(accessToken));
   }
 
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-    super.successfulAuthentication(request, response, chain, authResult);
+    SecurityContext context = SecurityContextHolder.createEmptyContext();
+    context.setAuthentication(authResult);
+    SecurityContextHolder.setContext(context);
+    chain.doFilter(request, response);
   }
 
   @Override

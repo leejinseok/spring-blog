@@ -5,6 +5,7 @@ import com.wonder.blog.entity.User;
 import com.wonder.blog.repository.UserRepository;
 import com.wonder.blog.security.UserContext;
 import com.wonder.blog.service.AuthService;
+import com.wonder.blog.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static com.wonder.blog.security.AjaxAuthFilter.JWT_TOKEN_NAME;
 
 @RestController
 @RequestMapping(path = "/api/v1/auth")
@@ -56,11 +59,18 @@ public class AuthController {
   }
 
   @RequestMapping(method = RequestMethod.GET, path = "/session")
-  public ResponseEntity<UserDto> session() {
+  public ResponseEntity<UserContext> session() {
     SecurityContext securityContext = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
-    UserDto userDto = new UserDto();
-    userDto.setEmail(userContext.getEmail());
-    return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
+    return new ResponseEntity<>(userContext, HttpStatus.OK);
+  }
+
+  @RequestMapping(method = RequestMethod.POST, path = "/logout")
+  public ResponseEntity<UserContext> logout(HttpServletResponse response) {
+    SecurityContext securityContext = SecurityContextHolder.getContext();
+    UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
+
+    CookieUtil.clear(response, JWT_TOKEN_NAME);
+    return new ResponseEntity<>(userContext, HttpStatus.OK);
   }
 }

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
-  public static final String jwtTokenCookieName = "JWT-TOKEN";
+  public static final String JWT_TOKEN_NAME = "JWT-TOKEN";
 
   public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager) {
     super(loginUrl);
@@ -46,7 +46,7 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
     JwtUtil jwtUtil = new JwtUtil();
     String token = jwtUtil.generateToken(userContext);
 
-    CookieUtil.create(response, jwtTokenCookieName, token, false, -1, "localhost");
+    CookieUtil.create(response, JWT_TOKEN_NAME, token, false, -1, "localhost");
     response.getWriter().write(token);
     response.getWriter().flush();
     response.getWriter().close();

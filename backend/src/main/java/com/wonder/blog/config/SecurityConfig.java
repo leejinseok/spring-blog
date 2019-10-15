@@ -23,17 +23,25 @@ import java.util.*;
 @EnableWebSecurity
 @EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-  public static final String API_ROOT_URL = "/api/v1/**";
-  public static final String LOGIN_URL = "/api/v1/auth/login";
-  public static final String REFRESH_TOKEN_URL = "/api/v1/auth/token";
-  public static final String POSTS_URL = "/api/v1/posts";
+  private static final String API_ROOT_URL = "/api/v1/**";
+  private static final String LOGIN_URL = "/api/v1/auth/login";
+  private static final String REFRESH_TOKEN_URL = "/api/v1/auth/token";
+  private static final String POSTS_URL = "/api/v1/posts";
 
-  @Autowired ObjectMapper objectMapper;
-  @Autowired PasswordEncoder passwordEncoder;
-  @Autowired AuthenticationManager authenticationManager;
-  @Autowired AjaxAuthProvider ajaxAuthProvider;
-  @Autowired JwtAuthProvider jwtAuthProvider;
+  @Autowired
+  ObjectMapper objectMapper;
 
+  @Autowired
+  PasswordEncoder passwordEncoder;
+
+  @Autowired
+  AuthenticationManager authenticationManager;
+
+  @Autowired
+  AjaxAuthProvider ajaxAuthProvider;
+
+  @Autowired
+  JwtAuthProvider jwtAuthProvider;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -59,10 +67,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   public AuthenticationManager authenticationManagerBean() throws Exception {
     return super.authenticationManagerBean();
-  }
-
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
   }
 
   @Bean
