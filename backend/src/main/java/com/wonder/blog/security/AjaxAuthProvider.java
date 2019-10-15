@@ -29,10 +29,6 @@ public class AjaxAuthProvider implements AuthenticationProvider {
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     String email = (String) authentication.getPrincipal();
     String password = (String) authentication.getCredentials();
-    System.out.println("AjaxAuthProvider");
-    System.out.println("email: " + email);
-    System.out.println("password: " + password);
-
     User user = userService.getByUserEmail(email);
 
     if (user == null) {

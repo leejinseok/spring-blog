@@ -2,7 +2,10 @@ package com.wonder.blog.security;
 
 import com.wonder.blog.util.CookieUtil;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -36,6 +39,9 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
     String accessToken = CookieUtil.getValue(request, JWT_TOKEN_NAME);
+    if (accessToken == "") {
+      throw new AuthenticationServiceException("accessToken is not provided");
+    }
     return this.getAuthenticationManager().authenticate(new JwtAuthToken(accessToken));
   }
 
@@ -49,6 +55,11 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-    super.unsuccessfulAuthentication(request, response, failed);
+    SecurityContextHolder.clearContext();
+    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    response.getWriter().write(failed.getMessage());
+    response.getWriter().flush();
+    response.getWriter().close();
   }
 }

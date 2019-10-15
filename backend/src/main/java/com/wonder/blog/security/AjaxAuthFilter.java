@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
 import javax.servlet.FilterChain;
@@ -31,6 +33,10 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
     String email = request.getParameter("email");
     String password = request.getParameter("password");
+
+    if (email.isEmpty() || password.isEmpty()) {
+      throw new AuthenticationServiceException("Email and Password must provided");
+    }
 
     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
     return this.getAuthenticationManager().authenticate(token);
@@ -54,6 +60,11 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
 
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-    super.unsuccessfulAuthentication(request, response, failed);
+    SecurityContextHolder.clearContext();
+    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    response.getWriter().write(failed.getMessage());
+    response.getWriter().flush();
+    response.getWriter().close();
   }
 }

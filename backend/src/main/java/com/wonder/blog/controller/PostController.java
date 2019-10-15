@@ -26,7 +26,7 @@ public class PostController {
     PostDto postDto = new PostDto();
     postDto.setId(post.getId());
     postDto.setTitle(post.getTitle());
-    postDto.setText(post.getContent());
+    postDto.setContent(post.getContent());
     return new ResponseEntity<>(postDto, HttpStatus.CREATED);
   }
 
@@ -38,5 +38,10 @@ public class PostController {
   @RequestMapping(method = RequestMethod.GET, value = "/{id}")
   public ResponseEntity<PostDto> getPost(@PathVariable int id) {
     return new ResponseEntity<>(new PostDto(postService.getPost(id)), HttpStatus.OK);
+  }
+
+  @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+  public ResponseEntity<PostDto> updatePost(@PathVariable int id, @RequestParam String title, @RequestParam String content) {
+    return new ResponseEntity<>(new PostDto(postService.updatePost(id, title, content)), HttpStatus.OK);
   }
 }

@@ -56,14 +56,6 @@ public class PostDto {
     this.title = title;
   }
 
-  public String getText() {
-    return content;
-  }
-
-  public void setText(String content) {
-    this.content = content;
-  }
-
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }

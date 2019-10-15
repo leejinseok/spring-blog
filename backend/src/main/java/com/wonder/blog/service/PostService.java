@@ -45,4 +45,13 @@ public class PostService {
   public Post getPost(Integer id) {
     return postRepository.findPostById(id);
   }
+
+  public Post updatePost(int id, String title, String content) {
+    Post post = new Post();
+    post.setId(id);
+    post.setTitle(title);
+    post.setContent(content);
+    post.setUpdatedAt(LocalDateTime.now());
+    return postRepository.save(post);
+  }
 }
