@@ -16,6 +16,13 @@
 import qs from 'qs';
 
 export default {
+  middleware: 'authenticated',
+  async asyncData(context) {
+    const { redirect, store } = context;
+    if (store.state.user.init) {
+      redirect('/admin/posts');
+    }
+  },
   data() {
     return {
       email: 'sonaky47@nate.com',
