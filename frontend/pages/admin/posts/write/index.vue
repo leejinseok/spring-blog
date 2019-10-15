@@ -14,6 +14,7 @@
 import qs from 'qs';
 
 export default {
+  layout: 'admin',
   data() {
     return {
       title: '',

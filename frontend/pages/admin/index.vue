@@ -16,6 +16,7 @@
 import qs from 'qs';
 
 export default {
+  layout: 'admin',
   middleware: 'authenticated',
   async asyncData(context) {
     const { redirect, store } = context;
