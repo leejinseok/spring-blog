@@ -5,12 +5,17 @@
       <div class="content">
         {{ post.content }}
       </div>
+      <div class="date">
+        <p class="createdAt">{{ displayDate(post.createdAt) }} 작성</p>
+        <p class="updatedAt">{{ displayDate(post.updatedAt) }} 최종수정</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Header from '~/components/Header/Header';
+import { displayDate } from '~/plugins/util/date';
 
 export default {
   components: {
@@ -29,9 +34,7 @@ export default {
     };
   },
   methods: {
-    nl2br: function(str) {
-      return str.replace(/\n/g, '<br>');
-    }
+    displayDate
   }
 }
 </script>
@@ -41,5 +44,16 @@ export default {
   white-space: pre-line;
   font-size: 18px;
   line-height: 1.5;
+  border-top: 2px solid #eaeaea;
+}
+
+.date {
+  margin-top: 10px;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.date p {
+  margin-bottom: 4px;
 }
 </style>

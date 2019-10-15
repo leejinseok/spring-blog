@@ -19,8 +19,8 @@ export default {
 }
 
 .container__inner h2 {
-  font-size: 34px;
-  margin: 50px;
+  font-size: 28px;
+  margin: 30px;
   margin-bottom: 20px;
 }
 </style>
