@@ -3,6 +3,7 @@ package com.wonder.blog.service;
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.exception.CustomException;
+import com.wonder.blog.exception.DataNotFoundException;
 import com.wonder.blog.repository.PostRepository;
 import com.wonder.blog.security.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,10 @@ public class PostService {
 
   public Post updatePost(int id, String title, String content) {
     Post post = getPost(id);
+    if (post == null) {
+      throw new DataNotFoundException("Post id: " + id + " not founded");
+    }
+
     post.setTitle(title);
     post.setContent(content);
     post.setUpdatedAt(LocalDateTime.now());
