@@ -13,10 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @RestController
 @RequestMapping(path = "/api/v1/auth")
 public class AuthController {
@@ -56,11 +52,9 @@ public class AuthController {
   }
 
   @RequestMapping(method = RequestMethod.GET, path = "/session")
-  public ResponseEntity<UserDto> session() {
+  public ResponseEntity<UserContext> session() {
     SecurityContext securityContext = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
-    UserDto userDto = new UserDto();
-    userDto.setEmail(userContext.getEmail());
-    return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
+    return new ResponseEntity<>(userContext, HttpStatus.OK);
   }
 }
