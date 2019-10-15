@@ -1,7 +1,6 @@
-package com.wonder.blog.security.ajax;
+package com.wonder.blog.security;
 
 import com.wonder.blog.entity.User;
-import com.wonder.blog.security.UserContext;
 import com.wonder.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -19,8 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class AjaxAuthenticationProvider implements AuthenticationProvider {
-
+public class AjaxAuthProvider implements AuthenticationProvider {
   @Autowired
   UserService userService;
 
@@ -31,12 +29,14 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     String email = (String) authentication.getPrincipal();
     String password = (String) authentication.getCredentials();
+    System.out.println("AjaxAuthProvider");
+    System.out.println("email: " + email);
+    System.out.println("password: " + password);
 
     User user = userService.getByUserEmail(email);
 
-
     if (user == null) {
-        throw new UsernameNotFoundException("User not found: " + email);
+      throw new UsernameNotFoundException("User not found: " + email);
     }
 
     if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {

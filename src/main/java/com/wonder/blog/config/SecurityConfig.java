@@ -2,13 +2,6 @@ package com.wonder.blog.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wonder.blog.security.*;
-import com.wonder.blog.security.ajax.AjaxAuthenticationProvider;
-import com.wonder.blog.security.ajax.AjaxLoginProcessingFilter;
-import com.wonder.blog.security.ajax.AjaxAuthenticationFailureHandler;
-import com.wonder.blog.security.ajax.AjaxAuthenticationSuccessHandler;
-import com.wonder.blog.security.jwt.JwtAuthenticationFailureHandler;
-import com.wonder.blog.security.jwt.JwtAuthenticationProcessiongFilter;
-import com.wonder.blog.security.jwt.JwtAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,67 +31,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired ObjectMapper objectMapper;
   @Autowired PasswordEncoder passwordEncoder;
   @Autowired AuthenticationManager authenticationManager;
+  @Autowired AjaxAuthProvider ajaxAuthProvider;
+  @Autowired JwtAuthProvider jwtAuthProvider;
 
-  @Autowired AjaxAuthenticationProvider ajaxAuthenticationProvider;
-  @Autowired AjaxAuthenticationFailureHandler ajaxFailureHandler;
-  @Autowired AjaxAuthenticationSuccessHandler ajaxSuccessHandler;
-
-  @Autowired JwtAuthenticationProvider jwtAuthenticationProvider;
-  @Autowired JwtAuthenticationFailureHandler jwtAuthenticationFailureHandler;
-
-
-  protected AjaxLoginProcessingFilter buildAjaxLoginProcessingFilter(String loginEntryPoint) {
-    AjaxLoginProcessingFilter filter = new AjaxLoginProcessingFilter(loginEntryPoint, ajaxSuccessHandler, ajaxFailureHandler, objectMapper);
-    filter.setAuthenticationManager(this.authenticationManager);
-    return filter;
-  }
-
-//  protected JwtAuthenticationProcessiongFilter buildJwtAuthenticationFilter(List<String> pathsToSkip, String pattern) throws Exception {
-//    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip, pattern);
-//    JwtAuthenticationProcessiongFilter filter = new JwtAuthenticationProcessiongFilter(jwtAuthenticationFailureHandler, matcher);
-//    filter.setAuthenticationManager(this.authenticationManager);
-//    return filter;
-//  }
-
-  protected JwtAuthenticationProcessiongFilter buildJwtAuthenticationFilter(Map<String, HttpMethod> pathsToSkip, String pattern) throws Exception {
-    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip, pattern);
-    JwtAuthenticationProcessiongFilter filter = new JwtAuthenticationProcessiongFilter(jwtAuthenticationFailureHandler, matcher);
-    filter.setAuthenticationManager(this.authenticationManager);
-    return filter;
-  }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-//    List<String> permitAllEndpointList = Arrays.asList(
-//      LOGIN_URL,
-//      REFRESH_TOKEN_URL,
-//      "/console"
-//    );
-
     Map<String, HttpMethod> permitAllMap = new HashMap<>();
     permitAllMap.put(LOGIN_URL, HttpMethod.POST);
     permitAllMap.put(REFRESH_TOKEN_URL, HttpMethod.PATCH);
     permitAllMap.put(POSTS_URL, HttpMethod.GET);
 
-    http.csrf().disable()
-      .exceptionHandling()
-      .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(permitAllMap, API_ROOT_URL);
 
-      .and()
-        .authorizeRequests()
-//        .antMatchers(permitAllEndpointList.toArray(new String[permitAllEndpointList.size()]))
-        .antMatchers(HttpMethod.POST, LOGIN_URL).permitAll()
-        .antMatchers(HttpMethod.PATCH, REFRESH_TOKEN_URL).permitAll()
-        .antMatchers(HttpMethod.GET, POSTS_URL).permitAll()
-        .antMatchers("/console").permitAll()
+    http.csrf().disable();
+    http.authorizeRequests()
+      .antMatchers(LOGIN_URL).permitAll();
 
-      .and()
-        .addFilterBefore(new CustomCorsFilter(), UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(buildAjaxLoginProcessingFilter(LOGIN_URL), UsernamePasswordAuthenticationFilter.class)
-//        .addFilterBefore(buildJwtAuthenticationFilter(permitAllEndpointList, API_ROOT_URL), UsernamePasswordAuthenticationFilter.class);
-        .addFilterBefore(buildJwtAuthenticationFilter(permitAllMap, API_ROOT_URL), UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(new AjaxAuthFilter(LOGIN_URL, this.authenticationManager), UsernamePasswordAuthenticationFilter.class)
+      .authenticationProvider(ajaxAuthProvider);
+
+    http.addFilterBefore(new JwtAuthFilter(matcher, this.authenticationManager), UsernamePasswordAuthenticationFilter.class)
+      .authenticationProvider(jwtAuthProvider);
   }
 
   @Bean
@@ -109,8 +63,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.authenticationProvider(ajaxAuthenticationProvider);
-    auth.authenticationProvider(jwtAuthenticationProvider);
   }
 
   @Bean

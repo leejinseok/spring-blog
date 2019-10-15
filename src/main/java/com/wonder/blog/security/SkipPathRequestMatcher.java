@@ -9,25 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class SkipPathRequestMatcher implements RequestMatcher {
   private OrRequestMatcher matchers;
   private RequestMatcher processiongMatcher;
 
-//  public SkipPathRequestMatcher(List<String> pathsToSkip, String processingPath) {
-//    List<RequestMatcher> m = pathsToSkip.stream().map(path -> new AntPathRequestMatcher(path)).collect(Collectors.toList());
-//    matchers = new OrRequestMatcher(m);
-//    processiongMatcher = new AntPathRequestMatcher(processingPath);
-//  }
-
   public SkipPathRequestMatcher(Map<String, HttpMethod> pathsToSkip, String processingPath) {
     List<RequestMatcher> m = new ArrayList<>();
-
     for (Map.Entry<String, HttpMethod> entry : pathsToSkip.entrySet()) {
-      String url = entry.getKey();
-      String method = entry.getValue().name();
-      AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher(url, method);
+      AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher(entry.getKey(), entry.getValue().name());
       m.add(antPathRequestMatcher);
     }
 
