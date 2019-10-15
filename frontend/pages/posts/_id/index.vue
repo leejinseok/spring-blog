@@ -2,7 +2,9 @@
   <div class="container">
     <Header />
     <div class="container__inner">
-      {{ post.content }}
+      <div class="content">
+        {{ post.content }}
+      </div>
     </div>
   </div>
 </template>
@@ -25,10 +27,19 @@ export default {
     return {
       post
     };
+  },
+  methods: {
+    nl2br: function(str) {
+      return str.replace(/\n/g, '<br>');
+    }
   }
 }
 </script>
 
-<style>
-
+<style scoped>
+.content {
+  white-space: pre-line;
+  font-size: 18px;
+  line-height: 1.5;
+}
 </style>
