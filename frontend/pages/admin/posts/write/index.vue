@@ -1,11 +1,26 @@
 <template>
-  <div class="container">
-    <div class="form-container">
-      <form @submit="submit($event)">
-        <input v-model="title" type="text" placeholder="타이틀">
-        <textarea v-model="content" placeholder="내용"></textarea>
-        <button type="submit">등록</button>
-      </form>
+  <div>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">관리자페이지</a></li>
+        <li class="breadcrumb-item active"><nuxt-link to="/admin/posts">게시글</nuxt-link></li>
+        <li class="breadcrumb-item active" aria-current="page">글쓰기</li>
+      </ol>
+    </nav>
+    <div class="container">
+      <div class="form-container">
+        <form @submit="submit($event)">
+          <div class="form-group">
+            <input class="form-control" v-model="title" type="text" placeholder="타이틀">
+          </div>
+          <div class="form-group">
+            <textarea class="form-control" v-model="content" placeholder="내용"></textarea>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">등록</button>     
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
