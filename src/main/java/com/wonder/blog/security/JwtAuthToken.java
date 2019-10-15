@@ -1,21 +1,21 @@
-package com.wonder.blog.security.jwt;
+package com.wonder.blog.security;
 
-import com.wonder.blog.security.UserContext;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 
-public class JwtAuthenticationToken extends AbstractAuthenticationToken {
+public class JwtAuthToken extends AbstractAuthenticationToken {
+
   private String token;
   private UserContext userContext;
 
-  public JwtAuthenticationToken(String token) {
+  public JwtAuthToken(String token) {
     super(null);
     this.token = token;
   }
 
-  public JwtAuthenticationToken(UserContext userContext, List<GrantedAuthority> authorities) {
+  public JwtAuthToken(UserContext userContext, List<GrantedAuthority> authorities) {
     super(authorities);
     this.userContext = userContext;
   }

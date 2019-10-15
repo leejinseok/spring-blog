@@ -4,7 +4,6 @@ import com.wonder.blog.dto.UserDto;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.repository.UserRepository;
 import com.wonder.blog.security.UserContext;
-import com.wonder.blog.security.jwt.JwtAuthenticationToken;
 import com.wonder.blog.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
