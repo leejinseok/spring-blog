@@ -6,5 +6,6 @@ export const state = () => ({
 export const mutations = {
   set (state, data) {
     state.data = data;
+    state.init = true;
   }
 }

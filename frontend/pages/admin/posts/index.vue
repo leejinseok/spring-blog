@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <h2>관리자페이지 - 게시글</h2>
-
     <div class="table-container">
       <table>
         <thead>
@@ -35,6 +34,7 @@
 
 <script>
 export default {
+  middleware: 'authenticated',
   async asyncData(context) {
     const { $axios, route } = context;
     const size = route.query.size || 10;
