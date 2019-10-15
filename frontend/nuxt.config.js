@@ -1,7 +1,5 @@
 import config from 'config';
 
-console.log(config.get('api.host'));
-
 export default {
   mode: 'universal',
   /*
