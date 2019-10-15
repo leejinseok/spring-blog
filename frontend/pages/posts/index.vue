@@ -61,12 +61,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .container__inner ul li {
   padding-top: 20px;
   padding-bottom: 20px;
   border-top: 2px solid #eaeaea;
 }
+
 .title-and-date {
   display: flex;
   align-items: center;

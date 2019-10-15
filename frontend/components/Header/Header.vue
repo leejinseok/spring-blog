@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="container__inner">
-      이진석 블로그
+      <h2>이진석 블로그</h2>
     </div>
   </div>
 </template>
@@ -11,11 +11,16 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .container__inner {
   text-align: center;
   padding-bottom: 10px;
   padding-top: 10px;
 }
 
+.container__inner h2 {
+  font-size: 34px;
+  margin: 50px;
+  margin-bottom: 20px;
+}
 </style>
