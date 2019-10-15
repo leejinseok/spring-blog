@@ -39,7 +39,7 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
     String accessToken = CookieUtil.getValue(request, JWT_TOKEN_NAME);
-    if (accessToken == "") {
+    if (accessToken == null || accessToken == "" ) {
       throw new AuthenticationServiceException("accessToken is not provided");
     }
     return this.getAuthenticationManager().authenticate(new JwtAuthToken(accessToken));

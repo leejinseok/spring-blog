@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.exception.DataNotFoundException;
+import com.wonder.blog.exception.TokenIsNullException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -45,8 +46,9 @@ public class ExceptionController {
     Gson gson = new GsonBuilder().create();
     String json = gson.toJson(map);
 
-    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+    response.setStatus(HttpStatus.NOT_FOUND.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.getWriter().write(json);
   }
+
 }

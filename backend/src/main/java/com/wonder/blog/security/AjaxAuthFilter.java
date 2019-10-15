@@ -49,14 +49,10 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
 
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-    response.setStatus(HttpStatus.OK.value());
-    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
     UserContext userContext = (UserContext) authResult.getPrincipal();
 
     JwtUtil jwtUtil = new JwtUtil();
     String token = jwtUtil.generateToken(userContext);
-
     CookieUtil.create(response, JWT_TOKEN_NAME, token, false, -1, "localhost");
 
     Map<String, Object> map = new HashMap<>();
@@ -67,6 +63,8 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
     Gson gson = new GsonBuilder().create();
     String json = gson.toJson(map);
 
+    response.setStatus(HttpStatus.OK.value());
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.getWriter().write(json);
     response.getWriter().flush();
     response.getWriter().close();

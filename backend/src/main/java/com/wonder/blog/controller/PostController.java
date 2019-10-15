@@ -34,8 +34,8 @@ public class PostController {
   UserService userService;
 
   @RequestMapping(method = RequestMethod.POST)
-  public ResponseEntity<PostDto> addPost(@RequestParam String title, @RequestParam String content) {
-    return new ResponseEntity<>(new PostDto(postService.addPost(title, content)), HttpStatus.CREATED);
+  public ResponseEntity<PostDto> addPost(@RequestBody Post post) {
+    return new ResponseEntity<>(new PostDto(postService.addPost(post.getTitle(), post.getContent())), HttpStatus.CREATED);
   }
 
   @RequestMapping(method = RequestMethod.GET)
@@ -53,8 +53,8 @@ public class PostController {
   }
 
   @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-  public ResponseEntity<PostDto> updatePost(@PathVariable int id, @RequestParam String title, @RequestParam String content) {
-    return new ResponseEntity<>(new PostDto(postService.updatePost(id, title, content)), HttpStatus.OK);
+  public ResponseEntity<PostDto> updatePost(@PathVariable int id, @RequestBody Post post) {
+    return new ResponseEntity<>(new PostDto(postService.updatePost(id, post.getTitle(), post.getContent())), HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
