@@ -3,30 +3,19 @@ package com.wonder.blog.controller;
 import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.dto.PostImageDto;
 import com.wonder.blog.entity.Post;
-import com.wonder.blog.entity.PostImage;
-import com.wonder.blog.entity.User;
 import com.wonder.blog.exception.CustomException;
-import com.wonder.blog.exception.DataNotFoundException;
-import com.wonder.blog.security.UserContext;
 import com.wonder.blog.service.PostImageService;
 import com.wonder.blog.service.PostService;
 import com.wonder.blog.service.UserService;
-import com.wonder.blog.util.AwsS3Util;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -62,13 +51,14 @@ public class PostController {
   }
 
   @PutMapping("/{id}/images")
-  public PostImageDto uploadPostImage(@PathVariable int id, @RequestParam("file") MultipartFile file) throws IOException {
-    return new PostImageDto(postImageService.addPostImage(id, file));
+  public ResponseEntity<PostImageDto> uploadPostImage(@PathVariable int id, @RequestParam("file") MultipartFile file) throws IOException {
+    PostImageDto postImageDto = new PostImageDto(postImageService.addPostImage(id, file));
+    return new ResponseEntity<>(postImageDto, HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
-  public int deletePost(@PathVariable int id) throws CustomException {
+  public ResponseEntity<Integer> deletePost(@PathVariable int id) throws CustomException {
     postService.deletePost(id);
-    return id;
+    return new ResponseEntity<>(id, HttpStatus.OK);
   }
 }
