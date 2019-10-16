@@ -54,7 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     permitAllMap.put(REFRESH_TOKEN_URL, HttpMethod.PATCH);
     permitAllMap.put(POSTS_URL, HttpMethod.GET);
     permitAllMap.put(POST_URL, HttpMethod.GET);
-    permitAllMap.put(LOGOUT_URL, HttpMethod.POST);
 
     SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(permitAllMap, API_ROOT_URL);
     http.cors().disable();

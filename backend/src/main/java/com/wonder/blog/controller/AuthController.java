@@ -39,8 +39,10 @@ public class AuthController {
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<String> logout(HttpServletResponse response) {
+  public ResponseEntity<UserContext> logout(HttpServletResponse response) {
+    SecurityContext securityContext = SecurityContextHolder.getContext();
+    UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
     CookieUtil.clear(response, JWT_TOKEN_NAME);
-    return new ResponseEntity<>("success", HttpStatus.OK);
+    return new ResponseEntity<>(userContext, HttpStatus.OK);
   }
 }
