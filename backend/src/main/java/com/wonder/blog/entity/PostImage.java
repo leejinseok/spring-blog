@@ -1,7 +1,5 @@
 package com.wonder.blog.entity;
 
-import org.hibernate.annotations.OnDelete;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
