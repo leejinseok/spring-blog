@@ -41,38 +41,32 @@ public class PostController {
   @Autowired
   UserService userService;
 
-  @RequestMapping(method = RequestMethod.POST)
+  @PostMapping
   public ResponseEntity<PostDto> addPost(@RequestBody Post post) {
     return new ResponseEntity<>(new PostDto(postService.addPost(post.getTitle(), post.getContent())), HttpStatus.CREATED);
   }
 
-  @RequestMapping(method = RequestMethod.GET)
+  @GetMapping
   public ResponseEntity<List<PostDto>> getPosts(Pageable pageable) {
     return new ResponseEntity<>(postService.getPosts(pageable).stream().map(post -> new PostDto(post)).collect(Collectors.toList()), HttpStatus.OK);
   }
 
-  @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+  @GetMapping("/{id}")
   public ResponseEntity<PostDto> getPost(@PathVariable int id) {
     return new ResponseEntity<>(new PostDto(postService.getPost(id)), HttpStatus.OK);
   }
 
-  @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+  @PutMapping("/{id}")
   public ResponseEntity<PostDto> updatePost(@PathVariable int id, @RequestBody Post post) {
     return new ResponseEntity<>(new PostDto(postService.updatePost(id, post.getTitle(), post.getContent())), HttpStatus.OK);
   }
 
-  @RequestMapping(method = RequestMethod.PUT, value ="/{postId}/images")
-  public PostImageDto uploadPostImage(@PathVariable int postId, @RequestParam("file") MultipartFile file) throws IOException {
-    return new PostImageDto(postImageService.addPostImage(postId, file));
+  @PutMapping("/{id}/images")
+  public PostImageDto uploadPostImage(@PathVariable int id, @RequestParam("file") MultipartFile file) throws IOException {
+    return new PostImageDto(postImageService.addPostImage(id, file));
   }
 
-  @RequestMapping(method = RequestMethod.DELETE, value ="/{postId}/images/{imageId}")
-  public PostImage deletePostImage(@PathVariable int imageId, @RequestBody PostImage postImage) throws IOException {
-    postImageService.deletePostImage(postImage);
-    return postImage;
-  }
-
-  @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+  @DeleteMapping("/{id}")
   public int deletePost(@PathVariable int id) throws CustomException {
     postService.deletePost(id);
     return id;

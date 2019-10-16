@@ -83,10 +83,11 @@ export default {
     removeImage: async function(image, index) {
       try {
         const result = await this.$axios({
-          url: `/api/v1/posts/${this.post.id}/images/${image.id}`,
+          url: `/api/v1/posts/images/${image.id}`,
           method: 'delete',
-          data: image
         });
+
+        console.log(result);
 
         this.post.postImages.splice(index, 1);
       } catch (e) {
@@ -142,6 +143,10 @@ form button {
 }
 
 .form-group.images {
+  position: relative;
+}
+
+.form-group.images .wrapper-image {
   position: relative;
 }
 

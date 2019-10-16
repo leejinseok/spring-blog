@@ -2,6 +2,7 @@ package com.wonder.blog.service;
 
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.PostImage;
+import com.wonder.blog.exception.DataNotFoundException;
 import com.wonder.blog.repository.PostImageRepository;
 import com.wonder.blog.util.AwsS3Util;
 import org.apache.commons.io.FilenameUtils;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,9 +42,14 @@ public class PostImageService {
     return postImageRepository.findAllByPost(post);
   }
 
-  public void deletePostImage(PostImage postImage) {
+  public Optional<PostImage> getPostImageById(int id) {
+    return postImageRepository.findById(id);
+  }
+
+  public void deletePostImage(int id) {
+    Optional<PostImage> postImage = getPostImageById(id);
     AwsS3Util awsS3Util = new AwsS3Util();
-    awsS3Util.delete(postImage.getS3Key());
-    postImageRepository.deleteById(postImage.getId());
+    awsS3Util.delete(postImage.get().getS3Key());
+    postImageRepository.deleteById(postImage.get().getId());
   }
 }
