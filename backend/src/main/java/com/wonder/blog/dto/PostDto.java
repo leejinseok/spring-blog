@@ -3,6 +3,9 @@ package com.wonder.blog.dto;
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.entity.User;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -18,14 +21,6 @@ public class PostDto {
   private LocalDateTime updatedAt;
 
   public PostDto() {}
-
-  public Collection<PostImageDto> getPostImages() {
-    return postImages;
-  }
-
-  public void setPostImages(Collection<PostImageDto> postImages) {
-    this.postImages = postImages;
-  }
 
   public PostDto(Post post) {
     this.id = post.getId();
@@ -60,6 +55,14 @@ public class PostDto {
 
   public void setContent(String content) {
     this.content = content;
+  }
+
+  public Collection<PostImageDto> getPostImages() {
+    return postImages;
+  }
+
+  public void setPostImages(Collection<PostImageDto> postImages) {
+    this.postImages = postImages;
   }
 
   public LocalDateTime getCreatedAt() {

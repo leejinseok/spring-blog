@@ -3,10 +3,11 @@ package com.wonder.blog.dto;
 import com.wonder.blog.entity.PostImage;
 
 public class PostImageDto {
+  private static final String BASE_URL = "https://leejinseok-blog.s3.ap-northeast-2.amazonaws.com/";
+
   private int id;
   private String s3Key;
   private String url;
-  private static final String BASE_URL = "https://leejinseok-blog.s3.ap-northeast-2.amazonaws.com/";
 
   public PostImageDto(PostImage postImage) {
     this.id = postImage.getId();
