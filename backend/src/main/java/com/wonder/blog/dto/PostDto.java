@@ -7,22 +7,23 @@ import com.wonder.blog.entity.User;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PostDto {
   private Integer id;
   private String title;
   private String content;
-  private Collection<PostImage> postImages;
+  private Collection<PostImageDto> postImages;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
   public PostDto() {}
 
-  public Collection<PostImage> getPostImages() {
+  public Collection<PostImageDto> getPostImages() {
     return postImages;
   }
 
-  public void setPostImages(List<PostImage> postImages) {
+  public void setPostImages(Collection<PostImageDto> postImages) {
     this.postImages = postImages;
   }
 
@@ -30,7 +31,7 @@ public class PostDto {
     this.id = post.getId();
     this.title = post.getTitle();
     this.content = post.getContent();
-    this.postImages = post.getPostImages();
+    this.postImages = post.getPostImages().stream().map(item -> new PostImageDto(item)).collect(Collectors.toList());
     this.createdAt = post.getCreatedAt();
     this.updatedAt = post.getUpdatedAt();
   }

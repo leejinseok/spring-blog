@@ -12,7 +12,7 @@
 
       <div class="images">
         <div class="wrapper-image" v-for="postImage in post.postImages" :key="postImage.id">
-          <img :src="`https://leejinseok-blog.s3.ap-northeast-2.amazonaws.com/${postImage.s3Key}`" alt="">
+          <img :src="postImage.url" alt="">
         </div>
       </div>
 

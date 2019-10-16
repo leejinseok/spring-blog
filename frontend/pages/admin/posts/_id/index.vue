@@ -16,9 +16,9 @@
           <textarea class="form-control" v-model="post.content"></textarea>
         </div>
         <div class="form-group images">
-          <div class="wrapper-image" v-for="(image, index) in post.postImages" :key="image.id">
-            <button type="button" @click="removeImage(image, index)" title="이미지삭제">X</button>
-            <img :src="`https://leejinseok-blog.s3.ap-northeast-2.amazonaws.com/${image.s3_key}`">
+          <div class="wrapper-image" v-for="(postImage, index) in post.postImages" :key="postImage.id">
+            <button type="button" @click="removeImage(postImage, index)" title="이미지삭제">X</button>
+            <img :src="postImage.url">
           </div>
 
           <input type="file" ref="file" @change="uploadImage">
