@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.exception.DataNotFoundException;
+import com.wonder.blog.exception.JwtExpiredException;
 import com.wonder.blog.exception.TokenIsNullException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,6 +48,22 @@ public class ExceptionController {
     String json = gson.toJson(map);
 
     response.setStatus(HttpStatus.NOT_FOUND.value());
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    response.getWriter().write(json);
+  }
+
+  @ExceptionHandler(JwtExpiredException.class)
+  public void jwtExpire(Exception exception, HttpServletResponse response) throws IOException {
+    Map<String, Object> map = new HashMap<>();
+    map.put("timestamp", LocalDateTime.now().toString());
+    map.put("message", exception.getMessage());
+    map.put("error", "Jwt Expired");
+    map.put("status", HttpStatus.UNAUTHORIZED.value());
+
+    Gson gson = new GsonBuilder().create();
+    String json = gson.toJson(map);
+
+    response.setStatus(HttpStatus.UNAUTHORIZED.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.getWriter().write(json);
   }

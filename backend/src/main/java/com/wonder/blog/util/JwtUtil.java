@@ -1,10 +1,7 @@
 package com.wonder.blog.util;
 
 import com.wonder.blog.security.UserContext;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -43,7 +40,7 @@ public class JwtUtil {
       .compact();
   }
 
-  public UserContext decodeToken(String token) throws Exception {
+  public UserContext decodeToken(String token) throws ExpiredJwtException {
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     byte[] secretByte = DatatypeConverter.parseBase64Binary(secretKey);
     Key signingKey = new SecretKeySpec(secretByte, signatureAlgorithm.getJcaName());

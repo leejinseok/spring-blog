@@ -87,8 +87,6 @@ export default {
           method: 'delete',
         });
 
-        console.log(result);
-
         this.post.postImages.splice(index, 1);
       } catch (e) {
         alert('에러발생!');

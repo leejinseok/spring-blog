@@ -8,6 +8,7 @@ import com.wonder.blog.service.PostImageService;
 import com.wonder.blog.service.PostService;
 import com.wonder.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +37,15 @@ public class PostController {
   }
 
   @GetMapping
-  public ResponseEntity<List<PostDto>> getPosts(Pageable pageable) {
-    return new ResponseEntity<>(postService.getPosts(pageable).stream().map(post -> new PostDto(post)).collect(Collectors.toList()), HttpStatus.OK);
+  public ResponseEntity<Page<Post>> getPosts(Pageable pageable) {
+    Page page = postService.getPosts(pageable);
+    return new ResponseEntity<>(page, HttpStatus.OK);
   }
+
+//  @GetMapping
+//  public ResponseEntity<List<PostDto>> getPosts(Pageable pageable) {
+//    return new ResponseEntity<>(postService.getPosts(pageable).stream().map(post -> new PostDto(post)).collect(Collectors.toList()), HttpStatus.OK);
+//  }
 
   @GetMapping("/{id}")
   public ResponseEntity<PostDto> getPost(@PathVariable int id) {

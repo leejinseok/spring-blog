@@ -33,7 +33,7 @@ export default {
     const page = route.query.page || 0;
     const sort = route.query.sort || 'createdAt,desc';
 
-    const { data: posts } = await $axios({
+    const result = await $axios({
       url: `/api/v1/posts`,
       method: 'get',
       params: {
@@ -44,7 +44,16 @@ export default {
     });
 
     return {
-      posts
+      posts: result.data.content,
+      pagination: {
+        totalPages: result.data.totalPages,
+        totalElements: result.data.totalElements,
+        last: result.data.last,
+        size: result.data.size,
+        first: result.data.first,
+        number: result.data.number,
+        numberOfElements: result.data.numberOfElements,
+      }
     }
   },
   data() {

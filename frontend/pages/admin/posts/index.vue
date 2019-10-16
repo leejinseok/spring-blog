@@ -6,7 +6,6 @@
         <li class="breadcrumb-item active" aria-current="page">게시글</li>
       </ol>
     </nav>
-    
     <div class="container">
       <div class="table-container">
         <table class="table">
@@ -50,7 +49,7 @@ export default {
     const page = route.query.page || 0;
     const sort = route.query.sort || 'createdAt,desc';
 
-    const { data: posts } = await $axios({
+    const { data } = await $axios({
       url: '/api/v1/posts',
       method: 'get',
       params: {
@@ -61,7 +60,7 @@ export default {
     });
 
     return {
-      posts
+      posts: data.content
     }
   }
 }
