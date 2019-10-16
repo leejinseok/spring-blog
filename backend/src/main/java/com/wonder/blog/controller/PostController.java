@@ -1,27 +1,36 @@
 package com.wonder.blog.controller;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.entity.Post;
+import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.exception.DataNotFoundException;
 import com.wonder.blog.security.UserContext;
+import com.wonder.blog.service.PostImageService;
 import com.wonder.blog.service.PostService;
 import com.wonder.blog.service.UserService;
+import com.wonder.blog.util.AwsS3Util;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.naming.AuthenticationException;
-import java.sql.SQLException;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,6 +38,9 @@ import java.util.stream.Collectors;
 public class PostController {
   @Autowired
   PostService postService;
+
+  @Autowired
+  PostImageService postImageService;
 
   @Autowired
   UserService userService;
@@ -55,6 +67,22 @@ public class PostController {
   @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
   public ResponseEntity<PostDto> updatePost(@PathVariable int id, @RequestBody Post post) {
     return new ResponseEntity<>(new PostDto(postService.updatePost(id, post.getTitle(), post.getContent())), HttpStatus.OK);
+  }
+
+  @RequestMapping(method = RequestMethod.PUT, value ="/{id}/images")
+  public PostImage uploadPostImage(@PathVariable int id, @RequestParam("file") MultipartFile file) throws IOException {
+
+    AwsS3Util awsS3Util = new AwsS3Util();
+    String key = id + "/" + UUID.randomUUID() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
+    awsS3Util.upload(key, file);
+
+    Post post = postService.getPost(id);
+    PostImage postImage = new PostImage();
+    postImage.setPost(post);
+    postImage.setS3_key(key);
+    postImage.setCreatedAt(LocalDateTime.now());
+
+    return postImageService.addPostImage(postImage);
   }
 
   @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")

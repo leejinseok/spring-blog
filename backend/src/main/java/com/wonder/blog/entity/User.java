@@ -5,6 +5,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 public class User {
+  public User() {};
+
+  public User(int id) {
+    this.id = id;
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;

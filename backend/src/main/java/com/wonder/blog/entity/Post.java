@@ -1,11 +1,13 @@
 package com.wonder.blog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -21,6 +23,11 @@ public class Post {
   @ManyToOne
   @JoinColumn()
   private User user;
+
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+  @JoinColumn(name = "post_id")
+  @JsonIgnore
+  private List<PostImage> postImages;
 
   @Column(nullable = false, updatable = false)
   @CreatedDate
@@ -75,5 +82,13 @@ public class Post {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public List<PostImage> getPostImages() {
+    return postImages;
+  }
+
+  public void setPostImages(List<PostImage> postImages) {
+    this.postImages = postImages;
   }
 }

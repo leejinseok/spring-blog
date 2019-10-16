@@ -32,7 +32,7 @@
 
           </tbody>
         </table>
-        <nuxt-link to="/admin/posts/write" class="btn btn-primary">
+        <nuxt-link to="/admin/posts/register" class="btn btn-primary">
           글쓰기
         </nuxt-link>
       </div>

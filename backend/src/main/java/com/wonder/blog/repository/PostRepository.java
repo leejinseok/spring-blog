@@ -1,6 +1,7 @@
 package com.wonder.blog.repository;
 
 import com.wonder.blog.entity.Post;
+import com.wonder.blog.entity.PostImage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

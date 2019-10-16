@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="container__inner">
-      <h2>이진석 블로그</h2>
+      <h2>잘생길 교회오빠 블로그</h2>
     </div>
   </div>
 </template>

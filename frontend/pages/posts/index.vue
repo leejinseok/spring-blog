@@ -11,7 +11,7 @@
               </nuxt-link>
             </p>
             <p class="createdAt">
-              {{ displayDate(post.createdAt) }}
+              {{ displayDate(post.createdAt) }} 작성
             </p>
           </div>
         </li>

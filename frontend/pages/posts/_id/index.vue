@@ -2,9 +2,14 @@
   <div class="container">
     <Header />
     <div class="container__inner">
+      <div class="title">
+        <h3>{{ post.title }}</h3>
+      </div>
+
       <div class="content">
         {{ post.content }}
       </div>
+
       <div class="date">
         <p class="createdAt">{{ displayDate(post.createdAt) }} 작성</p>
         <p class="updatedAt">{{ displayDate(post.updatedAt) }} 최종수정</p>
@@ -40,11 +45,19 @@ export default {
 </script>
 
 <style scoped>
+.title {
+  border-top: 2px solid #eaeaea;
+}
+
+.title h3 {
+  font-size: 22px;
+  margin-top: 20px;
+}
+
 .content {
   white-space: pre-line;
   font-size: 18px;
   line-height: 1.5;
-  border-top: 2px solid #eaeaea;
 }
 
 .date {
