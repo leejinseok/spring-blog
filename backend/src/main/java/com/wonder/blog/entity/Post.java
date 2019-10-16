@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -27,7 +28,7 @@ public class Post {
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
   @JoinColumn(name = "post_id")
   @JsonIgnore
-  private List<PostImage> postImages;
+  private Collection<PostImage> postImages;
 
   @Column(nullable = false, updatable = false)
   @CreatedDate
@@ -84,7 +85,7 @@ public class Post {
     this.updatedAt = updatedAt;
   }
 
-  public List<PostImage> getPostImages() {
+  public Collection<PostImage> getPostImages() {
     return postImages;
   }
 

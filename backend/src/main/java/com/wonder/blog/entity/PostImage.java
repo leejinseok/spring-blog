@@ -23,6 +23,9 @@ public class PostImage {
   @Column
   private String url;
 
+  @ManyToOne
+  private Post post;
+
   public String getUrl() {
     return url;
   }
@@ -31,8 +34,6 @@ public class PostImage {
     this.url = url;
   }
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  private Post post;
 
   @Column(nullable = false, updatable = false)
   @CreatedDate
