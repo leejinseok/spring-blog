@@ -19,22 +19,13 @@ public class PostImage {
   private String uuid;
 
   @Column
-  private String s3_key;
+  private String s3Key;
 
   @Column
   private String url;
 
   @ManyToOne
   private Post post;
-
-  public String getUrl() {
-    return url;
-  }
-
-  public void setUrl(String url) {
-    this.url = url;
-  }
-
 
   @Column(nullable = false, updatable = false)
   @CreatedDate
@@ -60,6 +51,22 @@ public class PostImage {
     this.uuid = uuid;
   }
 
+  public String getS3Key() {
+    return s3Key;
+  }
+
+  public void setS3Key(String s3Key) {
+    this.s3Key = s3Key;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
   public Post getPost() {
     return post;
   }
@@ -82,13 +89,5 @@ public class PostImage {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
-  }
-
-  public String getS3_key() {
-    return s3_key;
-  }
-
-  public void setS3_key(String s3_key) {
-    this.s3_key = s3_key;
   }
 }

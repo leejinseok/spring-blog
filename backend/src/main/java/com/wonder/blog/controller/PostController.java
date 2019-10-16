@@ -80,34 +80,32 @@ public class PostController {
     Post post = postService.getPost(id);
     PostImage postImage = new PostImage();
     postImage.setPost(post);
-    postImage.setS3_key(key);
+    postImage.setS3Key(key);
     postImage.setCreatedAt(LocalDateTime.now());
 
     return postImageService.addPostImage(postImage);
   }
 
   @RequestMapping(method = RequestMethod.DELETE, value ="/{postId}/images/{imageId}")
-  public PostImage uploadPostImage(@PathVariable int imageId, @RequestBody PostImage postImage) throws IOException {
+  public PostImage deletePostImage(@PathVariable int imageId, @RequestBody PostImage postImage) throws IOException {
     AwsS3Util awsS3Util = new AwsS3Util();
-    awsS3Util.delete(postImage.getS3_key());
+    awsS3Util.delete(postImage.getS3Key());
     postImageService.deletePostImage(imageId);
     return postImage;
   }
 
   @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
   public int deletePost(@PathVariable int id) throws CustomException {
-    SecurityContext securityContext = SecurityContextHolder.getContext();
-    UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
-
     Post post = postService.getPost(id);
     Collection<PostImage> postImages = postImageService.getPostImagesByPost(post);
 
     AwsS3Util awsS3Util = new AwsS3Util();
-
     for (PostImage postImage : postImages) {
-      awsS3Util.delete(postImage.getS3_key());
+      awsS3Util.delete(postImage.getS3Key());
     }
 
+    SecurityContext securityContext = SecurityContextHolder.getContext();
+    UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
     User user = userService.getByUserEmail(userContext.getEmail());
     postService.deletePost(id, user);
     return id;

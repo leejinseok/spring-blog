@@ -10,6 +10,12 @@
         {{ post.content }}
       </div>
 
+      <div class="images">
+        <div class="wrapper-image" v-for="postImage in post.postImages" :key="postImage.id">
+          <img :src="`https://leejinseok-blog.s3.ap-northeast-2.amazonaws.com/${postImage.s3Key}`" alt="">
+        </div>
+      </div>
+
       <div class="date">
         <p class="createdAt">{{ displayDate(post.createdAt) }} 작성</p>
         <p class="updatedAt">{{ displayDate(post.updatedAt) }} 최종수정</p>
@@ -58,6 +64,10 @@ export default {
   white-space: pre-line;
   font-size: 18px;
   line-height: 1.5;
+}
+
+.images {
+  margin-top: 6px;
 }
 
 .date {

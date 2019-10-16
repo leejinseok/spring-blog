@@ -2,7 +2,7 @@ package com.wonder.blog.dto;
 
 public class PostImageDto {
   private int id;
-  private String s3_key;
+  private String s3Key;
 
   public int getId() {
     return id;
@@ -13,10 +13,10 @@ public class PostImageDto {
   }
 
   public String getS3_key() {
-    return s3_key;
+    return s3Key;
   }
 
-  public void setS3_key(String s3_key) {
-    this.s3_key = s3_key;
+  public void setS3_key(String s3Key) {
+    this.s3Key = s3Key;
   }
 }
