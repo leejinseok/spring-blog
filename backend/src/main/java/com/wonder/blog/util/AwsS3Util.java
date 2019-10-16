@@ -6,10 +6,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -30,5 +27,9 @@ public class AwsS3Util {
 
   public PutObjectResult upload(String key, MultipartFile file) throws IOException {
     return amazonS3.putObject(new PutObjectRequest(BUCKET_NAME, key, file.getInputStream(), new ObjectMetadata()).withCannedAcl(CannedAccessControlList.PublicRead));
+  }
+
+  public void delete(String key) {
+    amazonS3.deleteObject(BUCKET_NAME, key);
   }
 }

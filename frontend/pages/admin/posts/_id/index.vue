@@ -16,7 +16,12 @@
           <textarea class="form-control" v-model="post.content"></textarea>
         </div>
         <div class="form-group images">
-          <img :src="`https://leejinseok-blog.s3.ap-northeast-2.amazonaws.com/${image.s3_key}`" alt="" v-for="image in post.postImages" :key="image.id">
+          <div class="wrapper-image" v-for="(image, index) in post.postImages" :key="image.id">
+            <button type="button" @click="removeImage(image, index)" title="이미지삭제">X</button>
+            <img :src="`https://leejinseok-blog.s3.ap-northeast-2.amazonaws.com/${image.s3_key}`">
+          </div>
+
+          <input type="file" ref="file" @change="uploadImage">
         </div>
         <div class="form-group">
           <button class="btn btn-primary" type="button" @click="update()">수정</button>
@@ -74,6 +79,38 @@ export default {
         console.log(e);
         alert('에러발생');
       }
+    },
+    removeImage: async function(image, index) {
+      try {
+        const result = await this.$axios({
+          url: `/api/v1/posts/${this.post.id}/images/${image.id}`,
+          method: 'delete',
+          data: image
+        });
+
+        this.post.postImages.splice(index, 1);
+      } catch (e) {
+        alert('에러발생!');
+        console.log(e);
+      }
+    },
+    uploadImage: async function() {
+      try {
+        const file = this.$refs.file.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+        const result = await this.$axios({
+          url: `/api/v1/posts/${this.post.id}/images`,
+          method: 'put',
+          data: formData
+        });
+
+        this.post.postImages.push(result.data);
+        this.$refs.file.form.reset();
+      } catch (e) {
+        alert('에러발생');
+        console.error(e);
+      }
     }
   }
 }
@@ -95,6 +132,7 @@ form textarea {
 
 form textarea {
   margin-top: 10px;
+  min-height: 200px;
 }
 
 form button {
@@ -103,7 +141,32 @@ form button {
   margin-top: 6px;
 }
 
+.form-group.images {
+  position: relative;
+}
+
 .form-group.images img {
   max-width: 100%;
+}
+
+.form-group.images button {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  margin-top: 0;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, .5);
+  color: #fff;
+  border: 0;
+}
+
+.form-group [type=file] {
+  margin-top: 6px;
 }
 </style>

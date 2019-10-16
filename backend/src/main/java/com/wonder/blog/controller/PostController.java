@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -85,14 +86,30 @@ public class PostController {
     return postImageService.addPostImage(postImage);
   }
 
+  @RequestMapping(method = RequestMethod.DELETE, value ="/{postId}/images/{imageId}")
+  public PostImage uploadPostImage(@PathVariable int imageId, @RequestBody PostImage postImage) throws IOException {
+    AwsS3Util awsS3Util = new AwsS3Util();
+    awsS3Util.delete(postImage.getS3_key());
+    postImageService.deletePostImage(imageId);
+    return postImage;
+  }
+
   @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
   public int deletePost(@PathVariable int id) throws CustomException {
     SecurityContext securityContext = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
 
+    Post post = postService.getPost(id);
+    Collection<PostImage> postImages = postImageService.getPostImagesByPost(post);
+
+    AwsS3Util awsS3Util = new AwsS3Util();
+
+    for (PostImage postImage : postImages) {
+      awsS3Util.delete(postImage.getS3_key());
+    }
+
     User user = userService.getByUserEmail(userContext.getEmail());
     postService.deletePost(id, user);
-
     return id;
   }
 }
