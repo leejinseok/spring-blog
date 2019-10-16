@@ -13,7 +13,7 @@ export default async function ({ $axios, store, redirect }) {
         return redirect('/admin');
       }
     } catch (e) {
-      console.error(e.message);
+      console.error('authenticated', e.message);
     }
   }
 }

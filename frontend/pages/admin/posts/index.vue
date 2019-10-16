@@ -6,6 +6,7 @@
         <li class="breadcrumb-item active" aria-current="page">게시글</li>
       </ol>
     </nav>
+    <button type="button" class="btn btn-secondary btn-sm" @click="logout">로그아웃</button>
     <div class="container">
       <div class="table-container">
         <table class="table">
@@ -61,6 +62,21 @@ export default {
 
     return {
       posts: data.content
+    }
+  },
+  methods: {
+    logout: async function() {
+      try {
+        const result = await this.$axios({
+          url: '/api/v1/auth/logout',
+          method: 'post'
+        });
+
+        this.$store.commit('user/reset');
+        this.$router.push('/admin');
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 }

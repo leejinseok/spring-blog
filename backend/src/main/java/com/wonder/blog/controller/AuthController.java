@@ -8,6 +8,7 @@ import com.wonder.blog.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,22 +31,16 @@ public class AuthController {
     return new ResponseEntity<>(userDto, HttpStatus.CREATED);
   }
 
-  @PostMapping("/login")
-  public ResponseEntity<UserDto> login(@RequestParam String email, @RequestParam String password) {
-    UserDto userDto = new UserDto(authService.login(email, password));
-    return new ResponseEntity<>(userDto, HttpStatus.OK);
-  }
-
   @GetMapping("/session")
   public ResponseEntity<UserContext> session() {
-    UserContext userContext = (UserContext) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    SecurityContext securityContext = SecurityContextHolder.getContext();
+    UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
     return new ResponseEntity<>(userContext, HttpStatus.OK);
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<UserContext> logout(HttpServletResponse response) {
-    UserContext userContext = (UserContext) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  public ResponseEntity<String> logout(HttpServletResponse response) {
     CookieUtil.clear(response, JWT_TOKEN_NAME);
-    return new ResponseEntity<>(userContext, HttpStatus.OK);
+    return new ResponseEntity<>("success", HttpStatus.OK);
   }
 }

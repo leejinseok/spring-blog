@@ -26,9 +26,11 @@ import java.util.*;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private static final String API_ROOT_URL = "/api/v1/**";
   private static final String LOGIN_URL = "/api/v1/auth/login";
+  private static final String LOGOUT_URL = "/api/v1/auth/logout";
   private static final String REFRESH_TOKEN_URL = "/api/v1/auth/token";
   private static final String POSTS_URL = "/api/v1/posts";
   private static final String POST_URL = "/api/v1/posts/*";
+
 
   @Autowired
   ObjectMapper objectMapper;
@@ -52,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     permitAllMap.put(REFRESH_TOKEN_URL, HttpMethod.PATCH);
     permitAllMap.put(POSTS_URL, HttpMethod.GET);
     permitAllMap.put(POST_URL, HttpMethod.GET);
+    permitAllMap.put(LOGOUT_URL, HttpMethod.POST);
 
     SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(permitAllMap, API_ROOT_URL);
     http.cors().disable();
