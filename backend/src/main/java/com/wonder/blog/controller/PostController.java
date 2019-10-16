@@ -1,11 +1,7 @@
 package com.wonder.blog.controller;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.wonder.blog.dto.PostDto;
+import com.wonder.blog.dto.PostImageDto;
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.entity.User;
@@ -26,7 +22,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -58,10 +53,6 @@ public class PostController {
 
   @RequestMapping(method = RequestMethod.GET, value = "/{id}")
   public ResponseEntity<PostDto> getPost(@PathVariable int id) {
-    Post post = postService.getPost(id);
-    if (post == null) {
-      throw new DataNotFoundException("Post id: " + id + " not founded");
-    }
     return new ResponseEntity<>(new PostDto(postService.getPost(id)), HttpStatus.OK);
   }
 
@@ -70,44 +61,20 @@ public class PostController {
     return new ResponseEntity<>(new PostDto(postService.updatePost(id, post.getTitle(), post.getContent())), HttpStatus.OK);
   }
 
-  @RequestMapping(method = RequestMethod.PUT, value ="/{id}/images")
-  public PostImage uploadPostImage(@PathVariable int id, @RequestParam("file") MultipartFile file) throws IOException {
-
-    AwsS3Util awsS3Util = new AwsS3Util();
-    String key = id + "/" + UUID.randomUUID() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
-    awsS3Util.upload(key, file);
-
-    Post post = postService.getPost(id);
-    PostImage postImage = new PostImage();
-    postImage.setPost(post);
-    postImage.setS3Key(key);
-    postImage.setCreatedAt(LocalDateTime.now());
-
-    return postImageService.addPostImage(postImage);
+  @RequestMapping(method = RequestMethod.PUT, value ="/{postId}/images")
+  public PostImageDto uploadPostImage(@PathVariable int postId, @RequestParam("file") MultipartFile file) throws IOException {
+    return new PostImageDto(postImageService.addPostImage(postId, file));
   }
 
   @RequestMapping(method = RequestMethod.DELETE, value ="/{postId}/images/{imageId}")
   public PostImage deletePostImage(@PathVariable int imageId, @RequestBody PostImage postImage) throws IOException {
-    AwsS3Util awsS3Util = new AwsS3Util();
-    awsS3Util.delete(postImage.getS3Key());
-    postImageService.deletePostImage(imageId);
+    postImageService.deletePostImage(postImage);
     return postImage;
   }
 
   @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
   public int deletePost(@PathVariable int id) throws CustomException {
-    Post post = postService.getPost(id);
-    Collection<PostImage> postImages = postImageService.getPostImagesByPost(post);
-
-    AwsS3Util awsS3Util = new AwsS3Util();
-    for (PostImage postImage : postImages) {
-      awsS3Util.delete(postImage.getS3Key());
-    }
-
-    SecurityContext securityContext = SecurityContextHolder.getContext();
-    UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
-    User user = userService.getByUserEmail(userContext.getEmail());
-    postService.deletePost(id, user);
+    postService.deletePost(id);
     return id;
   }
 }

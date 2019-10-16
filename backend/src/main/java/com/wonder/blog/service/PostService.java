@@ -1,11 +1,13 @@
 package com.wonder.blog.service;
 
 import com.wonder.blog.entity.Post;
+import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.exception.DataNotFoundException;
 import com.wonder.blog.repository.PostRepository;
 import com.wonder.blog.security.UserContext;
+import com.wonder.blog.util.AwsS3Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Service
 public class PostService {
@@ -27,6 +30,9 @@ public class PostService {
   @Autowired
   UserService userService;
 
+  @Autowired
+  PostImageService postImageService;
+
   public Post addPost(String title, String text) {
     SecurityContext context = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) context.getAuthentication().getPrincipal();
@@ -36,6 +42,7 @@ public class PostService {
     post.setContent(text);
     post.setUser(user);
     post.setCreatedAt(LocalDateTime.now());
+    post.setUpdatedAt(LocalDateTime.now());
 
     return postRepository.save(post);
   }
@@ -45,7 +52,11 @@ public class PostService {
   }
 
   public Post getPost(Integer id) {
-    return postRepository.findPostById(id);
+    Post post= postRepository.findPostById(id);
+    if (post == null) {
+      throw new DataNotFoundException("Post id: " + id + " not founded");
+    }
+    return post;
   }
 
   public Post updatePost(int id, String title, String content) {
@@ -60,11 +71,23 @@ public class PostService {
     return postRepository.save(post);
   }
 
-  public void deletePost(int id, User user) {
+  public void deletePost(int id) {
+    SecurityContext securityContext = SecurityContextHolder.getContext();
+    UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
+    User user = userService.getByUserEmail(userContext.getEmail());
+
     Post post = getPost(id);
     if (post.getUser() == null || post.getUser().getId() != user.getId()) {
       throw new CustomException("This post not your own");
     }
+
+    Collection<PostImage> postImages = postImageService.getPostImagesByPost(post);
+
+    AwsS3Util awsS3Util = new AwsS3Util();
+    for (PostImage postImage : postImages) {
+      awsS3Util.delete(postImage.getS3Key());
+    }
+
     postRepository.deleteById(id);
   }
 }

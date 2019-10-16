@@ -31,7 +31,9 @@ public class PostDto {
     this.id = post.getId();
     this.title = post.getTitle();
     this.content = post.getContent();
-    this.postImages = post.getPostImages().stream().map(item -> new PostImageDto(item)).collect(Collectors.toList());
+    if (post.getPostImages() != null) {
+      this.postImages = post.getPostImages().stream().map(item -> new PostImageDto(item)).collect(Collectors.toList());
+    }
     this.createdAt = post.getCreatedAt();
     this.updatedAt = post.getUpdatedAt();
   }
