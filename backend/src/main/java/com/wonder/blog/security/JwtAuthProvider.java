@@ -20,14 +20,8 @@ public class JwtAuthProvider implements AuthenticationProvider {
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     String token = (String) authentication.getCredentials();
 
-    try {
-      UserContext userContext = jwtUtil.decodeToken(token);
-      return new JwtAuthToken(userContext, userContext.getAuthorities());
-    } catch (ExpiredJwtException e) {
-      throw new ExpiredJwtException(e.getHeader(), e.getClaims(), e.getMessage());
-    } catch (Exception e) {
-      return null;
-    }
+    UserContext userContext = jwtUtil.decodeToken(token);
+    return new JwtAuthToken(userContext, userContext.getAuthorities());
   }
 
   @Override

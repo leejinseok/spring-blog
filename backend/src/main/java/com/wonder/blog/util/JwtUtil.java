@@ -41,7 +41,7 @@ public class JwtUtil {
       .compact();
   }
 
-  public UserContext decodeToken(String token) throws ExpiredJwtException , Exception {
+  public UserContext decodeToken(String token) {
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     byte[] secretByte = DatatypeConverter.parseBase64Binary(secretKey);
     Key signingKey = new SecretKeySpec(secretByte, signatureAlgorithm.getJcaName());
