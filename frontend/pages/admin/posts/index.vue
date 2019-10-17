@@ -32,9 +32,17 @@
 
           </tbody>
         </table>
-        <nuxt-link to="/admin/posts/register" class="btn btn-primary">
-          글쓰기
-        </nuxt-link>
+
+        <div v-if="paginator._result.range.length" class="pagination-container clearfix">
+          <div v-html="rendered">
+          </div>
+        </div>
+        
+        <div class="button-container">
+          <nuxt-link to="/admin/posts/register" class="btn btn-primary">
+            글쓰기
+          </nuxt-link>
+        </div>
       </div>
     </div>
   </div>
@@ -42,6 +50,8 @@
 
 <script>
 import LogoutBtn from '~/components/admin/LogoutBtn';
+import pagination from 'pagination';
+
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -51,7 +61,7 @@ export default {
   async asyncData(context) {
     const { $axios, route } = context;
     const size = route.query.size || 10;
-    const page = route.query.page || 0;
+    const page = route.query.page || 1;
     const sort = route.query.sort || 'createdAt,desc';
 
     const { data } = await $axios({
@@ -59,13 +69,22 @@ export default {
       method: 'get',
       params: {
         size,
-        page,
+        page: page - 1,
         sort
       }
     });
 
+    const paginator = new pagination.SearchPaginator({
+      prelink:'/admin/posts', 
+      current: data.number + 1, 
+      rowsPerPage: data.size, 
+      totalResult: data.totalElements
+    });
+
     return {
-      posts: data.content
+      posts: data.content,
+      paginator,
+      rendered: paginator.render()
     }
   },
   methods: {
@@ -83,5 +102,13 @@ h2 {
 
 .table-container {
   margin-top: 14px;
+}
+
+.pagination-container .paginator a {
+  padding: 12px;
+  float: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

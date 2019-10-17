@@ -29,7 +29,6 @@
               «
             </a>
           </li>
-
           <li v-for="(item, index) in paginator.range" :key="index" :class="{active: item === paginator.current}">
             <nuxt-link :to="{path: item.prefix, query: {page: item}}">
               {{ item }}
