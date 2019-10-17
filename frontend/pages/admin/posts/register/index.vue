@@ -5,6 +5,7 @@
         <li class="breadcrumb-item"><a href="#">관리자페이지</a></li>
         <li class="breadcrumb-item active"><nuxt-link to="/admin/posts">게시글</nuxt-link></li>
         <li class="breadcrumb-item active" aria-current="page">글쓰기</li>
+        <LogoutBtn />
       </ol>
     </nav>
     <div class="container">
@@ -30,9 +31,13 @@
 
 <script>
 import qs from 'qs';
+import LogoutBtn from '~/components/admin/LogoutBtn';
 
 export default {
   layout: 'admin',
+  components: {
+    LogoutBtn
+  },
   data() {
     return {
       title: '',

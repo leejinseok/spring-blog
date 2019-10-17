@@ -7,12 +7,9 @@ export default async function ({ $axios, store, redirect }) {
         method: 'get'
       });
   
-      if (data) {
-        store.commit('user/set', data);
-      } else {
-        return redirect('/admin');
-      }
+      store.commit('user/set', data);
     } catch (e) {
+      redirect('/admin');
       console.error('authenticated', e.message);
     }
   }

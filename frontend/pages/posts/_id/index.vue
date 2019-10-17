@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Header from '~/components/Header/Header';
+import Header from '~/components/Header';
 import { displayDate } from '~/plugins/util/date';
 
 export default {

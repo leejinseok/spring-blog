@@ -5,6 +5,7 @@
         <li class="breadcrumb-item"><a href="#">관리자페이지</a></li>
         <li class="breadcrumb-item active"><nuxt-link to="/admin/posts">게시글</nuxt-link></li>
         <li class="breadcrumb-item active" aria-current="page">{{ post.title }}</li>
+        <LogoutBtn />
       </ol>
     </nav>
     <div class="container">
@@ -33,8 +34,13 @@
 </template>
 
 <script>
+import LogoutBtn from '~/components/admin/LogoutBtn';
+
 export default {
   layout: 'admin',
+  components: {
+    LogoutBtn
+  },
   async asyncData(context) {
     const { $axios, route } = context;
     const { data: post } = await $axios({

@@ -4,9 +4,9 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#">관리자페이지</a></li>
         <li class="breadcrumb-item active" aria-current="page">게시글</li>
+        <LogoutBtn />
       </ol>
     </nav>
-    <button type="button" class="btn btn-secondary btn-sm" @click="logout">로그아웃</button>
     <div class="container">
       <div class="table-container">
         <table class="table">
@@ -41,9 +41,13 @@
 </template>
 
 <script>
+import LogoutBtn from '~/components/admin/LogoutBtn';
 export default {
   layout: 'admin',
   middleware: 'authenticated',
+  components: {
+    LogoutBtn
+  },
   async asyncData(context) {
     const { $axios, route } = context;
     const size = route.query.size || 10;
@@ -65,19 +69,7 @@ export default {
     }
   },
   methods: {
-    logout: async function() {
-      try {
-        const result = await this.$axios({
-          url: '/api/v1/auth/logout',
-          method: 'post'
-        });
-
-        this.$store.commit('user/reset');
-        this.$router.push('/admin');
-      } catch (e) {
-        console.error(e);
-      }
-    }
+ 
   }
 }
 </script>
