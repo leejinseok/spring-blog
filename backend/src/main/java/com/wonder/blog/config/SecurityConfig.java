@@ -1,7 +1,11 @@
 package com.wonder.blog.config;
 
+import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wonder.blog.common.AccessDeniedHandler;
+import com.wonder.blog.common.UnauthorizedHandler;
 import com.wonder.blog.security.*;
+import jdk.vm.ci.meta.ExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +49,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   JwtAuthProvider jwtAuthProvider;
 
+  @Autowired
+  UnauthorizedHandler unauthorizedHandler;
+
+  @Autowired
+  AccessDeniedHandler accessDeniedHandler;
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     Map<String, HttpMethod> permitAllMap = new HashMap<>();
@@ -54,6 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     permitAllMap.put(POST_URL, HttpMethod.GET);
 
     SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(permitAllMap, API_ROOT_URL);
+
     http.cors().disable();
     http.csrf().disable();
     http.authorizeRequests()
@@ -64,6 +75,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     http.addFilterBefore(new JwtAuthFilter(matcher, this.authenticationManager), UsernamePasswordAuthenticationFilter.class)
       .authenticationProvider(jwtAuthProvider);
+
+    http.exceptionHandling()
+      .accessDeniedHandler(accessDeniedHandler)
+      .authenticationEntryPoint(unauthorizedHandler);
   }
 
   @Bean

@@ -1,7 +1,8 @@
 package com.wonder.blog.security;
 
 import com.wonder.blog.util.CookieUtil;
-import org.springframework.http.HttpMethod;
+import com.wonder.blog.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,22 +12,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import static com.wonder.blog.config.SecurityConfig.*;
 import static com.wonder.blog.security.AjaxAuthFilter.JWT_TOKEN_NAME;
 
 public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
@@ -38,11 +30,16 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-    String accessToken = CookieUtil.getValue(request, JWT_TOKEN_NAME);
-    if (accessToken == null || accessToken == "" ) {
-      throw new AuthenticationServiceException("accessToken is not provided");
+    String token = CookieUtil.getValue(request, JWT_TOKEN_NAME);
+    if (token == null || token == "" ) {
+      throw new AuthenticationServiceException("token is not provided");
     }
-    return this.getAuthenticationManager().authenticate(new JwtAuthToken(accessToken));
+
+    try {
+      return this.getAuthenticationManager().authenticate(new JwtAuthToken(token));
+    } catch (ExpiredJwtException e) {
+      throw new AuthenticationServiceException(e.getMessage());
+    }
   }
 
   @Override

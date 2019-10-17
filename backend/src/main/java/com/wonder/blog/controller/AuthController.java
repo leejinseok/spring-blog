@@ -2,7 +2,6 @@ package com.wonder.blog.controller;
 
 import com.wonder.blog.dto.UserDto;
 import com.wonder.blog.security.UserContext;
-import com.wonder.blog.service.AuthService;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +21,9 @@ public class AuthController {
   @Autowired
   UserService userService;
 
-  @Autowired
-  AuthService authService;
-
   @PostMapping("/signup")
   public ResponseEntity<UserDto> addUser(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
-    UserDto userDto = new UserDto(userService.addUser(name, email, password));
-    return new ResponseEntity<>(userDto, HttpStatus.CREATED);
+    return new ResponseEntity<>(new UserDto(userService.addUser(name, email, password)), HttpStatus.CREATED);
   }
 
   @GetMapping("/session")
