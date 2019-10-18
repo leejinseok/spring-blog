@@ -3,7 +3,6 @@ package com.wonder.blog.security;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wonder.blog.util.CookieUtil;
-import com.wonder.blog.util.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -56,7 +55,7 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
   }
 
   @Override
-  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
     SecurityContextHolder.clearContext();
 
     Map<String, Object> map = new HashMap<>();
