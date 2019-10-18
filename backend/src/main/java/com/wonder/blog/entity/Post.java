@@ -15,10 +15,12 @@ import java.util.List;
 public class Post {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Integer id;
+  private int id;
 
+  @Column(length = 50)
   private String title;
 
+  @Column(columnDefinition = "text")
   private String content;
 
   @ManyToOne
@@ -37,11 +39,11 @@ public class Post {
   @LastModifiedDate
   private LocalDateTime updatedAt;
 
-  public Integer getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(int id) {
     this.id = id;
   }
 

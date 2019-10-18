@@ -33,13 +33,13 @@ public class PostService {
   @Autowired
   PostImageService postImageService;
 
-  public Post addPost(String title, String text) {
+  public Post addPost(String title, String content) {
     SecurityContext context = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) context.getAuthentication().getPrincipal();
     User user = userService.getByUserEmail(userContext.getEmail());
     Post post = new Post();
     post.setTitle(title);
-    post.setContent(text);
+    post.setContent(content);
     post.setUser(user);
     post.setCreatedAt(LocalDateTime.now());
     post.setUpdatedAt(LocalDateTime.now());

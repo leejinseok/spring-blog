@@ -26,8 +26,8 @@ public class JwtUtil {
     Claims claims = Jwts.claims().setSubject(userContext.getEmail());
     claims.put("scopes", userContext.getAuthorities().stream().map(s -> s.toString()).collect(Collectors.toList()));
     LocalDateTime currentTime = LocalDateTime.now();
-    LocalDateTime expireTime = currentTime.plusDays(1);
-//    LocalDateTime expireTime = currentTime.plusSeconds(1);
+//    LocalDateTime expireTime = currentTime.plusDays(1);
+    LocalDateTime expireTime = currentTime.plusSeconds(1);
 
     byte[] secretByte = DatatypeConverter.parseBase64Binary(secretKey);
     Key signingKey = new SecretKeySpec(secretByte, signatureAlgorithm.getJcaName());

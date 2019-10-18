@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wonder.blog.util.CookieUtil;
 import com.wonder.blog.util.JwtUtil;
+import jdk.vm.ci.meta.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,12 +37,12 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   };
 
   @Override
-  public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+  public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
     String email = request.getParameter("email");
     String password = request.getParameter("password");
 
     if (email.isEmpty() || password.isEmpty()) {
-      throw new AuthenticationServiceException("Email and Password must provided");
+      throw new AuthenticationServiceException("Email and Password must be provided");
     }
 
     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
@@ -56,7 +58,7 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
     CookieUtil.create(response, JWT_TOKEN_NAME, token, false, -1, "localhost");
 
     Map<String, Object> map = new HashMap<>();
-    map.put("timestamp", LocalDateTime.now().toString());
+    map.put("timestamp", LocalDateTime.now());
     map.put("status", HttpStatus.OK.value());
     map.put("user", userContext);
 
@@ -73,9 +75,18 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
     SecurityContextHolder.clearContext();
+
+    Map<String, Object> map = new HashMap<>();
+    map.put("timestamp", LocalDateTime.now().toString());
+    map.put("status", HttpStatus.UNAUTHORIZED.value());
+    map.put("message", failed.getMessage());
+
+    Gson gson = new GsonBuilder().create();
+    String json = gson.toJson(map);
+
     response.setStatus(HttpStatus.UNAUTHORIZED.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.getWriter().write(failed.getMessage());
+    response.getWriter().write(json);
     response.getWriter().flush();
     response.getWriter().close();
   }
