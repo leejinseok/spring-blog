@@ -45,8 +45,7 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
       throw new AuthenticationServiceException("Email and Password must be provided");
     }
 
-    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
-    return this.getAuthenticationManager().authenticate(token);
+    return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(email, password));
   }
 
   @Override

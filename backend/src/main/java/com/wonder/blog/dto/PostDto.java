@@ -17,6 +17,7 @@ public class PostDto {
   private String title;
   private String content;
   private Collection<PostImageDto> postImages;
+  private UserDto user;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
@@ -29,8 +30,17 @@ public class PostDto {
     if (post.getPostImages() != null) {
       this.postImages = post.getPostImages().stream().map(item -> new PostImageDto(item)).collect(Collectors.toList());
     }
+    this.user = new UserDto(post.getUser());
     this.createdAt = post.getCreatedAt();
     this.updatedAt = post.getUpdatedAt();
+  }
+
+  public UserDto getUser() {
+    return user;
+  }
+
+  public void setUser(UserDto user) {
+    this.user = user;
   }
 
   public Integer getId() {

@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/v1/posts")
@@ -41,11 +39,6 @@ public class PostController {
     Page page = postService.getPosts(pageable);
     return new ResponseEntity<>(page, HttpStatus.OK);
   }
-
-//  @GetMapping
-//  public ResponseEntity<List<PostDto>> getPosts(Pageable pageable) {
-//    return new ResponseEntity<>(postService.getPosts(pageable).stream().map(post -> new PostDto(post)).collect(Collectors.toList()), HttpStatus.OK);
-//  }
 
   @GetMapping("/{id}")
   public ResponseEntity<PostDto> getPost(@PathVariable int id) {
