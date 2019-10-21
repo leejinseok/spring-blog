@@ -28,15 +28,13 @@ public class AuthController {
 
   @GetMapping("/session")
   public ResponseEntity<UserContext> session() {
-    SecurityContext securityContext = SecurityContextHolder.getContext();
-    UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
+    UserContext userContext = (UserContext) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     return new ResponseEntity<>(userContext, HttpStatus.OK);
   }
 
   @PostMapping("/logout")
   public ResponseEntity<UserContext> logout(HttpServletResponse response) {
-    SecurityContext securityContext = SecurityContextHolder.getContext();
-    UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
+    UserContext userContext = (UserContext) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     CookieUtil.clear(response, JWT_TOKEN_NAME);
     return new ResponseEntity<>(userContext, HttpStatus.OK);
   }
