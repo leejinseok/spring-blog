@@ -25,7 +25,7 @@ export default {
   },
   data() {
     return {
-      email: 'sonaky47@nate.com',
+      email: 'sonaky47@naver.com',
       password: '1111'
     }
   },

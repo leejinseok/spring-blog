@@ -2,8 +2,8 @@ package com.wonder.blog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,6 +18,7 @@ public class Post {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int id;
 
+  @NotNull
   @Column(length = 50, nullable = false)
   private String title;
 

@@ -12,9 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -30,7 +32,7 @@ public class PostController {
   UserService userService;
 
   @PostMapping
-  public ResponseEntity<PostDto> addPost(@RequestBody Post post) {
+  public ResponseEntity<PostDto> addPost(@Valid @RequestBody Post post) {
     return new ResponseEntity<>(new PostDto(postService.addPost(post.getTitle(), post.getContent())), HttpStatus.CREATED);
   }
 
