@@ -35,7 +35,7 @@ public class PostController {
   }
 
   @GetMapping
-  public ResponseEntity<Page<Post>> getPosts(Pageable pageable) {
+  public ResponseEntity getPosts(Pageable pageable) {
     Page page = postService.getPosts(pageable);
     return new ResponseEntity<>(page, HttpStatus.OK);
   }
