@@ -1,6 +1,5 @@
 package com.wonder.blog.controller;
 
-import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.service.PostImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
