@@ -37,6 +37,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
@@ -44,8 +45,6 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   private JwtUtil jwtUtil;
   private UserService userService;
   private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-
 
   public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
     super(loginUrl);
@@ -64,12 +63,12 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
       throw new AuthenticationServiceException("Email and Password must be provided");
     }
 
-    User user = userService.getByUserEmail(email);
-    if (user == null) {
+    Optional<User> user = userService.getByUserEmail(email);
+    if (!user.isPresent()) {
       throw new UsernameNotFoundException("User not found: " + email);
     }
 
-    if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
+    if (!bCryptPasswordEncoder.matches(password, user.get().getPassword())) {
       throw new BadCredentialsException("Authentication Failed. Email or Password not valid");
     }
 
@@ -80,7 +79,6 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
     UserContext userContext = (UserContext) authResult.getPrincipal();
-
     String token = jwtUtil.generateToken(userContext);
     CookieUtil.create(response, JWT_TOKEN_NAME, token, false, -1, "localhost");
     String json = new GsonBuilder().create().toJson(new ApiResponse(HttpStatus.OK.value(), "success", userContext));

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -36,11 +37,11 @@ public class PostService {
   public Post addPost(String title, String content) {
     SecurityContext context = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) context.getAuthentication().getPrincipal();
-    User user = userService.getByUserEmail(userContext.getEmail());
+    Optional<User> user = userService.getByUserEmail(userContext.getEmail());
     Post post = new Post();
     post.setTitle(title);
     post.setContent(content);
-    post.setUser(user);
+    post.setUser(user.get());
     post.setCreatedAt(LocalDateTime.now());
     post.setUpdatedAt(LocalDateTime.now());
 
@@ -74,10 +75,10 @@ public class PostService {
   public void deletePost(int id) {
     SecurityContext securityContext = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
-    User user = userService.getByUserEmail(userContext.getEmail());
+    Optional<User> user = userService.getByUserEmail(userContext.getEmail());
 
     Post post = getPost(id);
-    if (post.getUser() == null || post.getUser().getId() != user.getId()) {
+    if (post.getUser() == null || post.getUser().getId() != user.get().getId()) {
       throw new CustomException("This post not your own");
     }
 
