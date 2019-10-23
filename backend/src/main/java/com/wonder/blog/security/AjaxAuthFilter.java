@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -36,9 +37,6 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
     super(loginUrl);
     this.setAuthenticationManager(authenticationManager);
-    this.setJwtUtil(jwtUtil);
-    this.setUserService(userService);
-    this.setbCryptPasswordEncoder(bCryptPasswordEncoder);
   };
 
   @Override

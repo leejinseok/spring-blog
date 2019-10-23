@@ -19,12 +19,6 @@ import java.util.List;
 
 @Component
 public class AjaxAuthProvider implements AuthenticationProvider {
-  @Autowired
-  UserService userService;
-
-  @Autowired
-  BCryptPasswordEncoder bCryptPasswordEncoder;
-
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     String email = (String) authentication.getPrincipal();

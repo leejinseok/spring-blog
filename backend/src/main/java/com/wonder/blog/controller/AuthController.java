@@ -20,8 +20,12 @@ import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 @RestController
 @RequestMapping(path = "/api/v1/auth")
 public class AuthController {
+  private final UserService userService;
+
   @Autowired
-  UserService userService;
+  public AuthController(UserService userService) {
+    this.userService = userService;
+  }
 
   @PostMapping("/signup")
   public ResponseEntity<UserDto> addUser(@RequestBody @Valid User user) {

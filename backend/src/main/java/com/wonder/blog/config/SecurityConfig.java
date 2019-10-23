@@ -37,31 +37,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private static final String POST_URL = "/api/v1/posts/*";
 
   @Autowired
-  ObjectMapper objectMapper;
-
+  private AuthenticationManager authenticationManager;
   @Autowired
-  PasswordEncoder passwordEncoder;
-
+  private AjaxAuthProvider ajaxAuthProvider;
   @Autowired
-  AuthenticationManager authenticationManager;
-
+  private JwtAuthProvider jwtAuthProvider;
   @Autowired
-  AjaxAuthProvider ajaxAuthProvider;
-
+  private UnauthorizedHandler unauthorizedHandler;
   @Autowired
-  JwtAuthProvider jwtAuthProvider;
-
+  private AccessDeniedHandler accessDeniedHandler;
   @Autowired
-  UnauthorizedHandler unauthorizedHandler;
-
+  private JwtUtil jwtUtil;
   @Autowired
-  AccessDeniedHandler accessDeniedHandler;
-
-  @Autowired
-  JwtUtil jwtUtil;
-
-  @Autowired
-  UserService userService;
+  private UserService userService;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {

@@ -12,9 +12,12 @@ import java.util.Collection;
 @RestController
 @RequestMapping(path = "/api/v1/users")
 public class UserController {
+  private final UserRepository userRepository;
 
   @Autowired
-  private UserRepository userRepository;
+  public UserController(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   @RequestMapping
   public @ResponseBody Iterable<User> getAllUsers() {

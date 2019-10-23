@@ -5,8 +5,10 @@ import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.exception.DataNotFoundException;
 import com.wonder.blog.repository.PostImageRepository;
 import com.wonder.blog.util.AwsS3Util;
+import lombok.NoArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,11 +19,14 @@ import java.util.UUID;
 
 @Service
 public class PostImageService {
-  @Autowired
-  PostImageRepository postImageRepository;
+  private PostImageRepository postImageRepository;
+  private PostService postService;
 
   @Autowired
-  PostService postService;
+  public PostImageService(PostImageRepository postImageRepository, @Lazy PostService postService) {
+    this.postImageRepository = postImageRepository;
+    this.postService = postService;
+  }
 
   public PostImage addPostImage(int postId, MultipartFile file) throws IOException {
     AwsS3Util awsS3Util = new AwsS3Util();

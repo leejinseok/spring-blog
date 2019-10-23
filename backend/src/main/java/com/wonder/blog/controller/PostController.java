@@ -6,13 +6,11 @@ import com.wonder.blog.entity.Post;
 import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.service.PostImageService;
 import com.wonder.blog.service.PostService;
-import com.wonder.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,14 +20,14 @@ import java.io.IOException;
 @RestController
 @RequestMapping(path = "/api/v1/posts")
 public class PostController {
-  @Autowired
-  PostService postService;
+  private final PostService postService;
+  private final PostImageService postImageService;
 
   @Autowired
-  PostImageService postImageService;
-
-  @Autowired
-  UserService userService;
+  public PostController(PostService postService, PostImageService postImageService) {
+   this.postService = postService;
+   this.postImageService = postImageService;
+  }
 
   @PostMapping
   public ResponseEntity<PostDto> addPost(@Valid @RequestBody Post post) {

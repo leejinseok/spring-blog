@@ -8,7 +8,9 @@ import com.wonder.blog.exception.DataNotFoundException;
 import com.wonder.blog.repository.PostRepository;
 import com.wonder.blog.security.UserContext;
 import com.wonder.blog.util.AwsS3Util;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContext;
@@ -22,17 +24,16 @@ import java.util.Optional;
 
 @Service
 public class PostService {
-  @Autowired
-  EntityManager entityManager;
+  private PostRepository postRepository;
+  private UserService userService;
+  private PostImageService postImageService;
 
   @Autowired
-  PostRepository postRepository;
-
-  @Autowired
-  UserService userService;
-
-  @Autowired
-  PostImageService postImageService;
+  public PostService(PostRepository postRepository, UserService userService, @Lazy PostImageService postImageService) {
+    this.postRepository = postRepository;
+    this.userService = userService;
+    this.postImageService = postImageService;
+  }
 
   public Post addPost(Post post) {
     SecurityContext context = SecurityContextHolder.getContext();
