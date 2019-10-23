@@ -19,17 +19,18 @@ import java.util.UUID;
 
 @Service
 public class PostImageService {
-  private PostImageRepository postImageRepository;
-  private PostService postService;
+  private final PostImageRepository postImageRepository;
+  private final PostService postService;
+  private final AwsS3Util awsS3Util;
 
   @Autowired
-  public PostImageService(PostImageRepository postImageRepository, @Lazy PostService postService) {
+  public PostImageService(PostImageRepository postImageRepository, @Lazy PostService postService, AwsS3Util awsS3Util) {
     this.postImageRepository = postImageRepository;
     this.postService = postService;
+    this.awsS3Util = awsS3Util;
   }
 
   public PostImage addPostImage(int postId, MultipartFile file) throws IOException {
-    AwsS3Util awsS3Util = new AwsS3Util();
     String key = postId + "/" + UUID.randomUUID() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
     awsS3Util.upload(key, file);
 
@@ -52,7 +53,6 @@ public class PostImageService {
 
   public void deletePostImage(int id) {
     PostImage postImage = getPostImageById(id);
-    AwsS3Util awsS3Util = new AwsS3Util();
     awsS3Util.delete(postImage.getS3Key());
     postImageRepository.deleteById(postImage.getId());
   }

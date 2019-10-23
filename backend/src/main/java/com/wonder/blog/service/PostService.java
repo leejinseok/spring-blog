@@ -27,12 +27,14 @@ public class PostService {
   private final PostRepository postRepository;
   private final UserService userService;
   private final PostImageService postImageService;
+  private final AwsS3Util awsS3Util;
 
   @Autowired
-  public PostService(PostRepository postRepository, UserService userService, @Lazy PostImageService postImageService) {
+  public PostService(PostRepository postRepository, UserService userService, @Lazy PostImageService postImageService, AwsS3Util awsS3Util) {
     this.postRepository = postRepository;
     this.userService = userService;
     this.postImageService = postImageService;
+    this.awsS3Util = awsS3Util;
   }
 
   public Post addPost(Post post) {
@@ -70,10 +72,7 @@ public class PostService {
       throw new CustomException("This post not your own");
     }
 
-    Collection<PostImage> postImages = postImageService.getPostImagesByPost(post);
-
-    AwsS3Util awsS3Util = new AwsS3Util();
-    for (PostImage postImage : postImages) {
+    for (PostImage postImage : postImageService.getPostImagesByPost(post)) {
       awsS3Util.delete(postImage.getS3Key());
     }
 

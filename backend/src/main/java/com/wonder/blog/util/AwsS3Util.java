@@ -7,10 +7,12 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+@Component
 public class AwsS3Util {
   private final static String BUCKET_NAME = "leejinseok-blog";
   private final static String ACCESS_KEY = "AKIA5HDDOS7EKFWDOJ7W";

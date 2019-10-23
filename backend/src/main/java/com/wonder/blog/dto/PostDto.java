@@ -25,7 +25,7 @@ public class PostDto {
     this.id = post.getId();
     this.title = post.getTitle();
     this.content = post.getContent();
-    if (post.getPostImages().size() > 0) {
+    if (post.getPostImages() != null) {
       this.postImages = post.getPostImages().stream().map(PostImageDto::new).collect(Collectors.toList());
     }
     this.user = new UserDto(post.getUser());
