@@ -15,11 +15,13 @@ public class User {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
+  @Column
   private String name;
 
   @Column(unique = true)
   private String email;
 
+  @Column
   private String password;
 
   public Integer getId() {

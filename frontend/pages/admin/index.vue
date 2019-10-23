@@ -50,7 +50,8 @@ export default {
         $store.commit('user/set', result.data.user);
         $router.push('/admin/posts');
       } catch (e) {
-        console.log(e);
+        alert('로그인 실패');
+        console.log(e.message);
       }
     }
   }

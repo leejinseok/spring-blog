@@ -1,7 +1,7 @@
 package com.wonder.blog.security;
 
 import com.google.gson.GsonBuilder;
-import com.wonder.blog.common.ApiResponse;
+import com.wonder.blog.common.DefaultResponse;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
@@ -68,7 +68,7 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
     UserContext userContext = (UserContext) authResult.getPrincipal();
     String token = jwtUtil.generateToken(userContext);
     CookieUtil.create(response, JWT_TOKEN_NAME, token, false, -1, "localhost");
-    String json = new GsonBuilder().create().toJson(new ApiResponse(HttpStatus.OK.value(), "success", userContext));
+    String json = new GsonBuilder().create().toJson(new DefaultResponse(HttpStatus.OK.value(), "success", userContext));
     response.setStatus(HttpStatus.OK.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.getWriter().write(json);
@@ -79,7 +79,7 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
     SecurityContextHolder.clearContext();
-    String json = new GsonBuilder().create().toJson(new ApiResponse(HttpStatus.UNAUTHORIZED.value(), failed.getMessage()));
+    String json = new GsonBuilder().create().toJson(new DefaultResponse(HttpStatus.UNAUTHORIZED.value(), failed.getMessage()));
     response.setStatus(HttpStatus.UNAUTHORIZED.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.getWriter().write(json);

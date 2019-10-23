@@ -16,7 +16,7 @@ public class UnauthorizedHandler implements AuthenticationEntryPoint {
 
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-    ApiResponse apiResponse = new ApiResponse(403, "Access Denied");
+    DefaultResponse apiResponse = new DefaultResponse(403, "Access Denied");
     OutputStream out = response.getOutputStream();
     ObjectMapper mapper = new ObjectMapper();
     mapper.writeValue(out, apiResponse);

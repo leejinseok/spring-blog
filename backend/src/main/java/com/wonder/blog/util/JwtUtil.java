@@ -19,39 +19,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-@Configurable
 public class JwtUtil {
-  private static String secretKey = "thisisblogapp";
+  private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+  private static final String secretKey = "thisisblogapp";
   public static final String JWT_TOKEN_NAME = "JWT-TOKEN";
 
-  public String generateToken(UserContext userContext) {
-    SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
+  public String generateToken(UserContext userContext) {
     Claims claims = Jwts.claims().setSubject(userContext.getEmail());
     claims.put("scopes", userContext.getAuthorities().stream().map(s -> s.toString()).collect(Collectors.toList()));
     LocalDateTime currentTime = LocalDateTime.now();
-//    LocalDateTime expireTime = currentTime.plusDays(1);
-    LocalDateTime expireTime = currentTime.plusSeconds(1);
-
-    byte[] secretByte = DatatypeConverter.parseBase64Binary(secretKey);
-    Key signingKey = new SecretKeySpec(secretByte, signatureAlgorithm.getJcaName());
+    LocalDateTime expireTime = currentTime.plusDays(1);
+//    LocalDateTime expireTime = currentTime.plusSeconds(1);
 
     return Jwts.builder()
       .setClaims(claims)
       .setIssuer("blog")
       .setIssuedAt(Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant()))
       .setExpiration(Date.from(expireTime.atZone(ZoneId.systemDefault()).toInstant()))
-      .signWith(signatureAlgorithm, signingKey)
+      .signWith(signatureAlgorithm, generateSigingKey())
       .compact();
   }
 
   public UserContext decodeToken(String token) {
-    SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-    byte[] secretByte = DatatypeConverter.parseBase64Binary(secretKey);
-    Key signingKey = new SecretKeySpec(secretByte, signatureAlgorithm.getJcaName());
-
     Jws<Claims> claims = Jwts.parser()
-      .setSigningKey(signingKey)
+      .setSigningKey(generateSigingKey())
       .parseClaimsJws(token);
 
     String subject = claims.getBody().getSubject();
@@ -61,5 +53,10 @@ public class JwtUtil {
       .collect(Collectors.toList());
 
     return UserContext.create(subject, authorities);
+  }
+
+  private Key generateSigingKey() {
+    byte[] secretByte = DatatypeConverter.parseBase64Binary(secretKey);
+    return new SecretKeySpec(secretByte, signatureAlgorithm.getJcaName());
   }
 }

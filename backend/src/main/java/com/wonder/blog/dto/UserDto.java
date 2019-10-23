@@ -1,7 +1,5 @@
 package com.wonder.blog.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wonder.blog.entity.User;
 
 public class UserDto {
