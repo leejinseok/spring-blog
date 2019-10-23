@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wonder.blog.common.ApiResponse;
+import com.wonder.blog.common.ApplicationContextHolder;
 import com.wonder.blog.util.CookieUtil;
 import com.wonder.blog.util.JwtUtil;
 import jdk.vm.ci.meta.Local;
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
@@ -33,13 +35,12 @@ import java.util.Map;
 import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
 public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
+  private JwtUtil jwtUtil;
 
-  @Autowired
-  JwtUtil jwtUtil;
-
-  public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager) {
+  public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
     super(loginUrl);
     this.setAuthenticationManager(authenticationManager);
+    this.jwtUtil = jwtUtil;
   };
 
   @Override

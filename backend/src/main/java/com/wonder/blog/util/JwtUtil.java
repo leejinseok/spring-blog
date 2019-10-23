@@ -2,6 +2,7 @@ package com.wonder.blog.util;
 
 import com.wonder.blog.security.UserContext;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Configurable
 public class JwtUtil {
   private static String secretKey = "thisisblogapp";
   public static final String JWT_TOKEN_NAME = "JWT-TOKEN";

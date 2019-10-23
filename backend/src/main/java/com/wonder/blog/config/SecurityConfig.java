@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wonder.blog.common.AccessDeniedHandler;
 import com.wonder.blog.common.UnauthorizedHandler;
 import com.wonder.blog.security.*;
+import com.wonder.blog.util.JwtUtil;
 import jdk.vm.ci.meta.ExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -55,6 +56,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   AccessDeniedHandler accessDeniedHandler;
 
+  @Autowired
+  JwtUtil jwtUtil;
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     Map<String, HttpMethod> permitAllMap = new HashMap<>();
@@ -70,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.authorizeRequests()
       .antMatchers(LOGIN_URL).permitAll();
 
-    http.addFilterBefore(new AjaxAuthFilter(LOGIN_URL, this.authenticationManager), UsernamePasswordAuthenticationFilter.class)
+    http.addFilterBefore(new AjaxAuthFilter(LOGIN_URL, this.authenticationManager, jwtUtil), UsernamePasswordAuthenticationFilter.class)
       .authenticationProvider(ajaxAuthProvider);
 
     http.addFilterBefore(new JwtAuthFilter(matcher, this.authenticationManager), UsernamePasswordAuthenticationFilter.class)
