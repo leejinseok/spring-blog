@@ -21,10 +21,12 @@ import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 @RequestMapping(path = "/api/v1/auth")
 public class AuthController {
   private final UserService userService;
+  private final CookieUtil cookieUtil;
 
   @Autowired
-  public AuthController(UserService userService) {
+  public AuthController(UserService userService, CookieUtil cookieUtil) {
     this.userService = userService;
+    this.cookieUtil = cookieUtil;
   }
 
   @PostMapping("/signup")
@@ -41,7 +43,7 @@ public class AuthController {
   @PostMapping("/logout")
   public ResponseEntity<UserContext> logout(HttpServletResponse response) {
     UserContext userContext = (UserContext) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    CookieUtil.clear(response, JWT_TOKEN_NAME);
+    cookieUtil.clear(response, JWT_TOKEN_NAME);
     return new ResponseEntity<>(userContext, HttpStatus.OK);
   }
 }

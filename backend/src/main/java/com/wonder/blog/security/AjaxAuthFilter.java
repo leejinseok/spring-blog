@@ -2,6 +2,7 @@ package com.wonder.blog.security;
 
 import com.google.gson.GsonBuilder;
 import com.wonder.blog.common.DefaultResponse;
+import com.wonder.blog.config.AppProperties;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
@@ -27,16 +28,20 @@ import java.io.IOException;
 import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
 public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
-  private JwtUtil jwtUtil;
-  private UserService userService;
-  private BCryptPasswordEncoder bCryptPasswordEncoder;
+  private final JwtUtil jwtUtil;
+  private final CookieUtil cookieUtil;
+  private final UserService userService;
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
+  private final AppProperties appProperties;
 
-  public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+  public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager, JwtUtil jwtUtil, CookieUtil cookieUtil, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, AppProperties appProperties) {
     super(loginUrl);
     this.setAuthenticationManager(authenticationManager);
     this.jwtUtil = jwtUtil;
+    this.cookieUtil = cookieUtil;
     this.userService = userService;
     this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    this.appProperties = appProperties;
   };
 
   @Override
@@ -60,7 +65,8 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
     UserContext userContext = (UserContext) authResult.getPrincipal();
     String token = jwtUtil.generateToken(userContext);
-    CookieUtil.create(response, JWT_TOKEN_NAME, token, false, -1, "localhost");
+
+    cookieUtil.create(response, JWT_TOKEN_NAME, token, false, -1, appProperties.getBaseUrl());
     String json = new GsonBuilder().create().toJson(new DefaultResponse(HttpStatus.OK.value(), "success", userContext));
     response.setStatus(HttpStatus.OK.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);

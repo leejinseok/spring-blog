@@ -23,15 +23,17 @@ import java.io.IOException;
 import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
 public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
+  private final CookieUtil cookieUtil;
 
-  public JwtAuthFilter(SkipPathRequestMatcher matcher, AuthenticationManager authenticationManager) {
+  public JwtAuthFilter(SkipPathRequestMatcher matcher, AuthenticationManager authenticationManager, CookieUtil cookieUtil) {
     super(matcher);
     this.setAuthenticationManager(authenticationManager);
+    this.cookieUtil = cookieUtil;
   };
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-    String token = CookieUtil.getValue(request, JWT_TOKEN_NAME);
+    String token = cookieUtil.getValue(request, JWT_TOKEN_NAME);
     if (token == null || token == "" ) {
       throw new AuthenticationServiceException("token is not provided");
     }

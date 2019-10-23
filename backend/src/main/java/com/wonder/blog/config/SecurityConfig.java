@@ -6,6 +6,7 @@ import com.wonder.blog.common.AccessDeniedHandler;
 import com.wonder.blog.common.UnauthorizedHandler;
 import com.wonder.blog.security.*;
 import com.wonder.blog.service.UserService;
+import com.wonder.blog.util.CookieUtil;
 import com.wonder.blog.util.JwtUtil;
 import jdk.vm.ci.meta.ExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private JwtUtil jwtUtil;
   @Autowired
   private UserService userService;
+  @Autowired
+  CookieUtil cookieUtil;
+  @Autowired
+  AppProperties appProperties;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -66,10 +71,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.authorizeRequests()
       .antMatchers(LOGIN_URL).permitAll();
 
-    http.addFilterBefore(new AjaxAuthFilter(LOGIN_URL, this.authenticationManager, jwtUtil, userService, bCryptPasswordEncoder()), UsernamePasswordAuthenticationFilter.class)
+    http.addFilterBefore(new AjaxAuthFilter(LOGIN_URL, this.authenticationManager, jwtUtil, cookieUtil, userService, bCryptPasswordEncoder(), appProperties), UsernamePasswordAuthenticationFilter.class)
       .authenticationProvider(ajaxAuthProvider);
 
-    http.addFilterBefore(new JwtAuthFilter(matcher, this.authenticationManager), UsernamePasswordAuthenticationFilter.class)
+    http.addFilterBefore(new JwtAuthFilter(matcher, this.authenticationManager, cookieUtil), UsernamePasswordAuthenticationFilter.class)
       .authenticationProvider(jwtAuthProvider);
 
     http.exceptionHandling()
