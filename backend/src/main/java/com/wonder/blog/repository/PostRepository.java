@@ -10,9 +10,11 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Integer> {
-  Post findPostById(Integer id);
+  @Override
+  Optional<Post> findById(Integer integer);
 
   @Override
   Page<Post> findAll(Pageable pageable);

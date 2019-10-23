@@ -33,11 +33,11 @@ public class PostController {
 
   @PostMapping
   public ResponseEntity<PostDto> addPost(@Valid @RequestBody Post post) {
-    return new ResponseEntity<>(new PostDto(postService.addPost(post.getTitle(), post.getContent())), HttpStatus.CREATED);
+    return new ResponseEntity<>(new PostDto(postService.addPost(post)), HttpStatus.CREATED);
   }
 
   @GetMapping
-  public ResponseEntity getPosts(Pageable pageable) {
+  public ResponseEntity getPosts(final Pageable pageable) {
     Page page = postService.getPosts(pageable);
     return new ResponseEntity<>(page, HttpStatus.OK);
   }

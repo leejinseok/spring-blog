@@ -34,14 +34,11 @@ public class PostService {
   @Autowired
   PostImageService postImageService;
 
-  public Post addPost(String title, String content) {
+  public Post addPost(Post post) {
     SecurityContext context = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) context.getAuthentication().getPrincipal();
     Optional<User> user = userService.getByUserEmail(userContext.getEmail());
-    Post post = new Post();
-    post.setTitle(title);
-    post.setContent(content);
-    post.setUser(user.get());
+    user.ifPresent(post::setUser);
     post.setCreatedAt(LocalDateTime.now());
     post.setUpdatedAt(LocalDateTime.now());
 
@@ -52,20 +49,17 @@ public class PostService {
     return postRepository.findAll(pageable);
   }
 
-  public Post getPost(Integer id) {
-    Post post= postRepository.findPostById(id);
-    if (post == null) {
+  public Post getPost(int id) {
+    Optional<Post> post = postRepository.findById(id);
+    if (!post.isPresent()) {
       throw new DataNotFoundException("Post id: " + id + " not founded");
     }
-    return post;
+
+    return post.get();
   }
 
   public Post updatePost(int id, String title, String content) {
     Post post = getPost(id);
-    if (post == null) {
-      throw new DataNotFoundException("Post id: " + id + " not founded");
-    }
-
     post.setTitle(title);
     post.setContent(content);
     post.setUpdatedAt(LocalDateTime.now());
@@ -75,10 +69,13 @@ public class PostService {
   public void deletePost(int id) {
     SecurityContext securityContext = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
-    Optional<User> user = userService.getByUserEmail(userContext.getEmail());
+
+    String email = userContext.getEmail();
+    User user = userService.getByUserEmail(userContext.getEmail())
+      .orElseThrow(() -> new DataNotFoundException(email + " is not founded"));
 
     Post post = getPost(id);
-    if (post.getUser() == null || post.getUser().getId() != user.get().getId()) {
+    if (post.getUser() == null || post.getUser().getId().equals(user.getId())) {
       throw new CustomException("This post not your own");
     }
 
