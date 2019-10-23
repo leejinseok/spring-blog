@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.*;
 
 @ControllerAdvice
 public class ExceptionController {

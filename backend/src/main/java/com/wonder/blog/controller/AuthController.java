@@ -1,6 +1,7 @@
 package com.wonder.blog.controller;
 
 import com.wonder.blog.dto.UserDto;
+import com.wonder.blog.entity.User;
 import com.wonder.blog.security.UserContext;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
@@ -12,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
@@ -22,8 +24,8 @@ public class AuthController {
   UserService userService;
 
   @PostMapping("/signup")
-  public ResponseEntity<UserDto> addUser(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
-    return new ResponseEntity<>(new UserDto(userService.addUser(name, email, password)), HttpStatus.CREATED);
+  public ResponseEntity<UserDto> addUser(@RequestBody @Valid User user) {
+    return new ResponseEntity<>(new UserDto(userService.addUser(user)), HttpStatus.CREATED);
   }
 
   @GetMapping("/session")

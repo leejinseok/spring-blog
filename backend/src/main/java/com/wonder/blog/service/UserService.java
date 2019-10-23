@@ -21,12 +21,8 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User addUser(String name, String email, String password) {
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(bCryptPasswordEncoder.encode(password));
-
+    public User addUser(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 }
