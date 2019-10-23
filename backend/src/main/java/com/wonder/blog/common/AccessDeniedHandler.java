@@ -12,12 +12,12 @@ import java.io.OutputStream;
 
 @Component
 public class AccessDeniedHandler implements org.springframework.security.web.access.AccessDeniedHandler {
+
   @Override
   public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-    DefaultResponse apiResponse = new DefaultResponse(403, "Access Denied");
     OutputStream out = response.getOutputStream();
     ObjectMapper mapper = new ObjectMapper();
-    mapper.writeValue(out, apiResponse);
+    mapper.writeValue(out, new DefaultResponse(403, "Access Denied"));
     out.flush();
   }
 }

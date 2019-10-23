@@ -42,7 +42,7 @@ public class DefaultResponse {
 
   @Override
   public String toString() {
-    return "ApiResponse [statusCode=" + status + ", message=" + message +"]";
+    return "DefaultResponse [statusCode=" + status + ", message=" + message +"]";
   }
 
 }

@@ -16,6 +16,7 @@
         <div class="form-group">
           <textarea class="form-control" v-model="post.content"></textarea>
         </div>
+
         <div class="form-group images">
           <div class="wrapper-image" v-for="(postImage, index) in post.postImages" :key="postImage.id">
             <button type="button" @click="removeImage(postImage, index)" title="이미지삭제">X</button>

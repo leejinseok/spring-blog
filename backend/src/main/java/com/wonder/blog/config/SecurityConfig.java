@@ -71,7 +71,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.authorizeRequests()
       .antMatchers(LOGIN_URL).permitAll();
 
-    http.addFilterBefore(new AjaxAuthFilter(LOGIN_URL, this.authenticationManager, jwtUtil, cookieUtil, userService, bCryptPasswordEncoder(), appProperties), UsernamePasswordAuthenticationFilter.class)
+    http
+      .addFilterBefore(new AjaxAuthFilter(
+          LOGIN_URL,
+          this.authenticationManager,
+          jwtUtil, cookieUtil,
+          userService,
+          bCryptPasswordEncoder(),
+          appProperties),
+        UsernamePasswordAuthenticationFilter.class)
       .authenticationProvider(ajaxAuthProvider);
 
     http.addFilterBefore(new JwtAuthFilter(matcher, this.authenticationManager, cookieUtil), UsernamePasswordAuthenticationFilter.class)
