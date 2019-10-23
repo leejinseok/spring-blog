@@ -46,8 +46,8 @@ public class PostController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<PostDto> updatePost(@PathVariable int id, @RequestBody Post post) {
-    return new ResponseEntity<>(new PostDto(postService.updatePost(id, post.getTitle(), post.getContent())), HttpStatus.OK);
+  public ResponseEntity<PostDto> updatePost(@PathVariable int id, @RequestBody @Valid Post post) {
+    return new ResponseEntity<>(new PostDto(postService.updatePost(id, post)), HttpStatus.OK);
   }
 
   @PutMapping("/{id}/images")

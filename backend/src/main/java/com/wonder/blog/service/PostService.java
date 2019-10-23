@@ -54,10 +54,8 @@ public class PostService {
     return postRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Post id: " + id + " not founded"));
   }
 
-  public Post updatePost(int id, String title, String content) {
-    Post post = getPost(id);
-    post.setTitle(title);
-    post.setContent(content);
+  public Post updatePost(int id, Post post) {
+    post.setId(id);
     post.setUpdatedAt(LocalDateTime.now());
     return postRepository.save(post);
   }
