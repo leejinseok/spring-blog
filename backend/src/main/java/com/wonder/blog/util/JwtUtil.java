@@ -2,6 +2,7 @@ package com.wonder.blog.util;
 
 import com.wonder.blog.security.UserContext;
 import io.jsonwebtoken.*;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil {
   private static String secretKey = "thisisblogapp";
+  public static final String JWT_TOKEN_NAME = "JWT-TOKEN";
 
   public String generateToken(UserContext userContext) {
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -26,8 +28,8 @@ public class JwtUtil {
     Claims claims = Jwts.claims().setSubject(userContext.getEmail());
     claims.put("scopes", userContext.getAuthorities().stream().map(s -> s.toString()).collect(Collectors.toList()));
     LocalDateTime currentTime = LocalDateTime.now();
-    LocalDateTime expireTime = currentTime.plusDays(1);
-//    LocalDateTime expireTime = currentTime.plusSeconds(1);
+//    LocalDateTime expireTime = currentTime.plusDays(1);
+    LocalDateTime expireTime = currentTime.plusSeconds(1);
 
     byte[] secretByte = DatatypeConverter.parseBase64Binary(secretKey);
     Key signingKey = new SecretKeySpec(secretByte, signatureAlgorithm.getJcaName());

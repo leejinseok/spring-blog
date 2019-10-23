@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
-import static com.wonder.blog.security.AjaxAuthFilter.JWT_TOKEN_NAME;
+import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
 @RestController
 @RequestMapping(path = "/api/v1/auth")

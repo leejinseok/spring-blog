@@ -2,6 +2,7 @@ package com.wonder.blog.security;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.wonder.blog.common.ApiResponse;
 import com.wonder.blog.util.CookieUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.wonder.blog.security.AjaxAuthFilter.JWT_TOKEN_NAME;
+import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
+
 
 public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -58,13 +60,15 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
   protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
     SecurityContextHolder.clearContext();
 
-    Map<String, Object> map = new HashMap<>();
-    map.put("timestamp", LocalDateTime.now().toString());
-    map.put("status", HttpStatus.UNAUTHORIZED.value());
-    map.put("message", failed.getMessage());
+//    Map<String, Object> map = new HashMap<>();
+//    map.put("timestamp", LocalDateTime.now().toString());
+//    map.put("status", HttpStatus.UNAUTHORIZED.value());
+//    map.put("message", failed.getMessage());
 
-    Gson gson = new GsonBuilder().create();
-    String json = gson.toJson(map);
+//    ApiResponse apiResponse = new ApiResponse(403, failed.getMessage());
+
+    String json = new GsonBuilder().create().toJson(new ApiResponse(403, failed.getMessage()));
+//    String json = gson.toJson(apiResponse);
 
     response.setStatus(HttpStatus.UNAUTHORIZED.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);

@@ -3,10 +3,12 @@ package com.wonder.blog.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.wonder.blog.common.ApiResponse;
 import com.wonder.blog.util.CookieUtil;
 import com.wonder.blog.util.JwtUtil;
 import jdk.vm.ci.meta.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,8 +30,12 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
+
 public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
-  public static final String JWT_TOKEN_NAME = "JWT-TOKEN";
+
+  @Autowired
+  JwtUtil jwtUtil;
 
   public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager) {
     super(loginUrl);
@@ -52,18 +58,9 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
     UserContext userContext = (UserContext) authResult.getPrincipal();
 
-    JwtUtil jwtUtil = new JwtUtil();
     String token = jwtUtil.generateToken(userContext);
     CookieUtil.create(response, JWT_TOKEN_NAME, token, false, -1, "localhost");
-
-    Map<String, Object> map = new HashMap<>();
-    map.put("timestamp", LocalDateTime.now());
-    map.put("status", HttpStatus.OK.value());
-    map.put("user", userContext);
-
-    Gson gson = new GsonBuilder().create();
-    String json = gson.toJson(map);
-
+    String json = new GsonBuilder().create().toJson(new ApiResponse(HttpStatus.OK.value(), "success", userContext));
     response.setStatus(HttpStatus.OK.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.getWriter().write(json);
