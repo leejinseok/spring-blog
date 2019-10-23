@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wonder.blog.common.ApiResponse;
 import com.wonder.blog.common.ApplicationContextHolder;
+import com.wonder.blog.entity.User;
+import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
 import com.wonder.blog.util.JwtUtil;
 import jdk.vm.ci.meta.Local;
@@ -15,11 +17,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -36,11 +42,17 @@ import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
 public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   private JwtUtil jwtUtil;
+  private UserService userService;
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+
+
+  public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
     super(loginUrl);
     this.setAuthenticationManager(authenticationManager);
-    this.jwtUtil = jwtUtil;
+    this.setJwtUtil(jwtUtil);
+    this.setUserService(userService);
+    this.setbCryptPasswordEncoder(bCryptPasswordEncoder);
   };
 
   @Override
@@ -52,7 +64,17 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
       throw new AuthenticationServiceException("Email and Password must be provided");
     }
 
+    User user = userService.getByUserEmail(email);
+    if (user == null) {
+      throw new UsernameNotFoundException("User not found: " + email);
+    }
+
+    if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
+      throw new BadCredentialsException("Authentication Failed. Email or Password not valid");
+    }
+
     return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(email, password));
+
   }
 
   @Override
@@ -72,19 +94,23 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
     SecurityContextHolder.clearContext();
-
-    Map<String, Object> map = new HashMap<>();
-    map.put("timestamp", LocalDateTime.now().toString());
-    map.put("status", HttpStatus.UNAUTHORIZED.value());
-    map.put("message", failed.getMessage());
-
-    Gson gson = new GsonBuilder().create();
-    String json = gson.toJson(map);
-
+    String json = new GsonBuilder().create().toJson(new ApiResponse(HttpStatus.UNAUTHORIZED.value(), failed.getMessage()));
     response.setStatus(HttpStatus.UNAUTHORIZED.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.getWriter().write(json);
     response.getWriter().flush();
     response.getWriter().close();
+  }
+
+  private void setJwtUtil(JwtUtil jwtUtil) {
+    this.jwtUtil = jwtUtil;
+  }
+
+  private void setUserService(UserService userService) {
+    this.userService = userService;
+  }
+
+  private void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
+    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
   }
 }

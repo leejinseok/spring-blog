@@ -28,21 +28,11 @@ public class AjaxAuthProvider implements AuthenticationProvider {
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     String email = (String) authentication.getPrincipal();
-    String password = (String) authentication.getCredentials();
-    User user = userService.getByUserEmail(email);
-
-    if (user == null) {
-      throw new UsernameNotFoundException("User not found: " + email);
-    }
-
-    if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
-      throw new BadCredentialsException("Authentication Failed. Email or Password not valid");
-    }
 
     List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
     authorities.add(new SimpleGrantedAuthority("USER"));
 
-    UserContext userContext = UserContext.create(user.getEmail(), authorities);
+    UserContext userContext = UserContext.create(email, authorities);
     return new UsernamePasswordAuthenticationToken(userContext, null, userContext.getAuthorities());
   }
 

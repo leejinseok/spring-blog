@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.wonder.blog.common.ApiResponse;
 import com.wonder.blog.util.CookieUtil;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
