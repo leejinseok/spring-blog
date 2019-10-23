@@ -1,7 +1,9 @@
 package com.wonder.blog.dto;
 
 import com.wonder.blog.entity.PostImage;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class PostImageDto {
   private static final String BASE_URL = "https://leejinseok-blog.s3.ap-northeast-2.amazonaws.com/";
 

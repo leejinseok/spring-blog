@@ -5,6 +5,7 @@ import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.entity.User;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
 public class PostDto {
   private Integer id;
   private String title;
@@ -20,8 +22,6 @@ public class PostDto {
   private UserDto user;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
-
-  public PostDto() {}
 
   public PostDto(Post post) {
     this.id = post.getId();
