@@ -37,9 +37,8 @@ public class PostController {
   }
 
   @GetMapping
-  public ResponseEntity getPosts(final Pageable pageable) {
-    Page page = postService.getPosts(pageable);
-    return new ResponseEntity<>(page, HttpStatus.OK);
+  public ResponseEntity<Page> getPosts(final Pageable pageable) {
+    return new ResponseEntity<>(postService.getPosts(pageable), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
@@ -54,8 +53,7 @@ public class PostController {
 
   @PutMapping("/{id}/images")
   public ResponseEntity<PostImageDto> uploadPostImage(@PathVariable int id, @RequestParam("file") MultipartFile file) throws IOException {
-    PostImageDto postImageDto = new PostImageDto(postImageService.addPostImage(id, file));
-    return new ResponseEntity<>(postImageDto, HttpStatus.OK);
+    return new ResponseEntity<>(new PostImageDto(postImageService.addPostImage(id, file)), HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
