@@ -41,6 +41,7 @@ public class PostController {
 
   @GetMapping("/{id}")
   public ResponseEntity<PostDto> getPost(@PathVariable int id) {
+    PostDto postDto = new PostDto(postService.getPost(id));
     return new ResponseEntity<>(new PostDto(postService.getPost(id)), HttpStatus.OK);
   }
 

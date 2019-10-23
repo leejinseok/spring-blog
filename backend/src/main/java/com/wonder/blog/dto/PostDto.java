@@ -3,16 +3,14 @@ package com.wonder.blog.dto;
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.entity.User;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ToString
 @NoArgsConstructor
 public class PostDto {
   private Integer id;

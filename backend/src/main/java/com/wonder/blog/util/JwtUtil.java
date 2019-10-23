@@ -26,13 +26,13 @@ public class JwtUtil {
 
   public static final String JWT_TOKEN_NAME = "JWT-TOKEN";
   private final String issuer = "blog";
+  private final int plusDays = 1;
 
 
   public String generateToken(UserContext userContext) {
     Claims claims = Jwts.claims().setSubject(userContext.getEmail());
     claims.put("scopes", userContext.getAuthorities().stream().map(Object::toString).collect(Collectors.toList()));
     LocalDateTime currentTime = LocalDateTime.now();
-    int plusDays = 1;
     LocalDateTime expireTime = currentTime.plusDays(plusDays);
 
     return Jwts.builder()
@@ -46,13 +46,10 @@ public class JwtUtil {
 
   public UserContext decodeToken(String token) {
     Jws<Claims> claims = generateClaims(token);
-    String subject = claims.getBody().getSubject();
     List<String> scopes = claims.getBody().get("scopes", List.class);
-    List<GrantedAuthority> authorities = scopes.stream()
-      .map(SimpleGrantedAuthority::new)
-      .collect(Collectors.toList());
+    List<GrantedAuthority> authorities = scopes.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
-    return UserContext.create(subject, authorities);
+    return UserContext.create(claims.getBody().getSubject(), authorities);
   }
 
   private Key generateSigingKey() {

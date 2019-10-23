@@ -73,7 +73,7 @@ public class PostService {
     User user = userService.getUserByEmail(userContext.getEmail());
 
     Post post = getPost(id);
-    if (post.getUser().getId().equals(user.getId())) {
+    if (!post.getUser().getId().equals(user.getId())) {
       throw new CustomException("This post not your own");
     }
 

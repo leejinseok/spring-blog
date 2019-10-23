@@ -15,17 +15,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
 
 import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
@@ -34,9 +31,13 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   private UserService userService;
   private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+
   public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
     super(loginUrl);
     this.setAuthenticationManager(authenticationManager);
+    this.jwtUtil = jwtUtil;
+    this.userService = userService;
+    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
   };
 
   @Override
@@ -49,13 +50,11 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
     }
 
     User user = userService.getUserByEmail(email);
-
     if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
       throw new BadCredentialsException("Authentication Failed. Email or Password not valid");
     }
 
     return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(email, password));
-
   }
 
   @Override
@@ -80,17 +79,5 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
     response.getWriter().write(json);
     response.getWriter().flush();
     response.getWriter().close();
-  }
-
-  private void setJwtUtil(JwtUtil jwtUtil) {
-    this.jwtUtil = jwtUtil;
-  }
-
-  private void setUserService(UserService userService) {
-    this.userService = userService;
-  }
-
-  private void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
-    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
   }
 }
