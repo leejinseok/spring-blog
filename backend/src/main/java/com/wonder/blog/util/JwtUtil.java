@@ -23,11 +23,9 @@ import java.util.stream.Collectors;
 public class JwtUtil {
   private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
   private static final String secretKey = "thisisblogapp";
-
   public static final String JWT_TOKEN_NAME = "JWT-TOKEN";
   private final String issuer = "blog";
   private final int plusDays = 1;
-
 
   public String generateToken(UserContext userContext) {
     Claims claims = Jwts.claims().setSubject(userContext.getEmail());
@@ -48,7 +46,6 @@ public class JwtUtil {
     Jws<Claims> claims = generateClaims(token);
     List<String> scopes = claims.getBody().get("scopes", List.class);
     List<GrantedAuthority> authorities = scopes.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-
     return UserContext.create(claims.getBody().getSubject(), authorities);
   }
 

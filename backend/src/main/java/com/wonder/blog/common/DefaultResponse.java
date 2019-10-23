@@ -5,13 +5,13 @@ public class DefaultResponse {
   private String message;
   private Object result;
 
-  public DefaultResponse(int status, String message, Object result){
+  public DefaultResponse(int status, String message, Object result) {
     this.status = status;
     this.message = message;
     this.result = result;
   }
 
-  public DefaultResponse(int status, String message){
+  public DefaultResponse(int status, String message) {
     this.status = status;
     this.message = message;
   }
