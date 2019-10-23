@@ -37,8 +37,8 @@ public class PostService {
   public Post addPost(Post post) {
     SecurityContext context = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) context.getAuthentication().getPrincipal();
-    Optional<User> user = userService.getByUserEmail(userContext.getEmail());
-    user.ifPresent(post::setUser);
+    User user = userService.getUserByEmail(userContext.getEmail());
+    post.setUser(user);
     post.setCreatedAt(LocalDateTime.now());
     post.setUpdatedAt(LocalDateTime.now());
 
@@ -69,13 +69,10 @@ public class PostService {
   public void deletePost(int id) {
     SecurityContext securityContext = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
-
-    String email = userContext.getEmail();
-    User user = userService.getByUserEmail(userContext.getEmail())
-      .orElseThrow(() -> new DataNotFoundException(email + " is not founded"));
+    User user = userService.getUserByEmail(userContext.getEmail());
 
     Post post = getPost(id);
-    if (post.getUser() == null || post.getUser().getId().equals(user.getId())) {
+    if (post.getUser().getId().equals(user.getId())) {
       throw new CustomException("This post not your own");
     }
 

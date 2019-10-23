@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -42,12 +41,12 @@ public class PostImageService {
     return postImageRepository.findAllByPost(post);
   }
 
-  public Optional<PostImage> getPostImageById(int id) {
-    return postImageRepository.findById(id);
+  public PostImage getPostImageById(int id) {
+    return postImageRepository.findById(id).orElseThrow(() -> new DataNotFoundException(id + " id postImage not found"));
   }
 
   public void deletePostImage(int id) {
-    PostImage postImage = getPostImageById(id).orElseThrow(() -> new DataNotFoundException(id + " id postImage not found"));
+    PostImage postImage = getPostImageById(id);
     AwsS3Util awsS3Util = new AwsS3Util();
     awsS3Util.delete(postImage.getS3Key());
     postImageRepository.deleteById(postImage.getId());

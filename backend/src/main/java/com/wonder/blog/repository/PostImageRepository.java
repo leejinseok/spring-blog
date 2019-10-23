@@ -8,5 +8,4 @@ import java.util.Collection;
 
 public interface PostImageRepository extends JpaRepository<PostImage, Integer> {
   Collection<PostImage> findAllByPost(Post post);
-
 }

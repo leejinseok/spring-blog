@@ -50,12 +50,9 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
       throw new AuthenticationServiceException("Email and Password must be provided");
     }
 
-    Optional<User> user = userService.getByUserEmail(email);
-    if (!user.isPresent()) {
-      throw new UsernameNotFoundException("User not found: " + email);
-    }
+    User user = userService.getUserByEmail(email);
 
-    if (!bCryptPasswordEncoder.matches(password, user.get().getPassword())) {
+    if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
       throw new BadCredentialsException("Authentication Failed. Email or Password not valid");
     }
 
