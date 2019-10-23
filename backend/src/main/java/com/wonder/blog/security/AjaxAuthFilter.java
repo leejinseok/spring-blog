@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 import com.wonder.blog.common.DefaultResponse;
 import com.wonder.blog.config.AppProperties;
 import com.wonder.blog.entity.User;
+import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
 import com.wonder.blog.util.JwtUtil;
@@ -53,7 +54,13 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
       throw new AuthenticationServiceException("Email and Password must be provided");
     }
 
-    User user = userService.getUserByEmail(email);
+    User user;
+    try {
+      user = userService.getUserByEmail(email);
+    } catch (CustomException e) {
+      throw new BadCredentialsException(e.getMessage());
+    }
+
     if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
       throw new BadCredentialsException("Authentication Failed. Email or Password not valid");
     }
