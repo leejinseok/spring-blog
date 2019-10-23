@@ -42,14 +42,19 @@ export default {
     LogoutBtn
   },
   async asyncData(context) {
-    const { $axios, route } = context;
-    const { data: post } = await $axios({
-      url: `/api/v1/posts/${route.params.id}`,
-      method: 'get'
-    });
+    const { $axios, route, redirect } = context;
 
-    return {
-      post
+    try {
+      const { data: post } = await $axios({
+        url: `/api/v1/posts/${route.params.id}`,
+        method: 'get'
+      });
+      return {
+        post
+      }
+    } catch (e) {
+      console.error(e.message);
+      redirect('/admin/posts');
     }
   },
   methods: {
