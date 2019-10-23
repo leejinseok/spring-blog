@@ -31,7 +31,6 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   private UserService userService;
   private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
   public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
     super(loginUrl);
     this.setAuthenticationManager(authenticationManager);

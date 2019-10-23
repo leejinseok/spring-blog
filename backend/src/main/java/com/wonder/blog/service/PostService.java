@@ -24,9 +24,9 @@ import java.util.Optional;
 
 @Service
 public class PostService {
-  private PostRepository postRepository;
-  private UserService userService;
-  private PostImageService postImageService;
+  private final PostRepository postRepository;
+  private final UserService userService;
+  private final PostImageService postImageService;
 
   @Autowired
   public PostService(PostRepository postRepository, UserService userService, @Lazy PostImageService postImageService) {
@@ -51,12 +51,7 @@ public class PostService {
   }
 
   public Post getPost(int id) {
-    Optional<Post> post = postRepository.findById(id);
-    if (!post.isPresent()) {
-      throw new DataNotFoundException("Post id: " + id + " not founded");
-    }
-
-    return post.get();
+    return postRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Post id: " + id + " not founded"));
   }
 
   public Post updatePost(int id, String title, String content) {
