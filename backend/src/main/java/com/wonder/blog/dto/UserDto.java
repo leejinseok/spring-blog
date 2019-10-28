@@ -1,9 +1,13 @@
 package com.wonder.blog.dto;
 
 import com.wonder.blog.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
+@Getter @Setter
 public class UserDto {
   private Integer id;
   private String name;

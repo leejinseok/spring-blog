@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @ToString
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
+@Getter @Setter
 public class PostDto {
   private Integer id;
   private String title;
@@ -31,61 +32,5 @@ public class PostDto {
     this.user = new UserDto(post.getUser());
     this.createdAt = post.getCreatedAt();
     this.updatedAt = post.getUpdatedAt();
-  }
-
-  public UserDto getUser() {
-    return user;
-  }
-
-  public void setUser(UserDto user) {
-    this.user = user;
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getContent() {
-    return content;
-  }
-
-  public void setContent(String content) {
-    this.content = content;
-  }
-
-  public Collection<PostImageDto> getPostImages() {
-    return postImages;
-  }
-
-  public void setPostImages(Collection<PostImageDto> postImages) {
-    this.postImages = postImages;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(LocalDateTime updatedAt) {
-    this.updatedAt = updatedAt;
   }
 }
