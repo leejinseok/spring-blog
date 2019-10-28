@@ -1,30 +1,22 @@
 package com.wonder.blog.config;
 
-import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wonder.blog.common.AccessDeniedHandler;
-import com.wonder.blog.common.UnauthorizedHandler;
+import com.wonder.blog.common.RequestMapping;
 import com.wonder.blog.security.*;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
 import com.wonder.blog.util.JwtUtil;
-import jdk.vm.ci.meta.ExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Configuration
@@ -44,10 +36,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private JwtAuthProvider jwtAuthProvider;
   @Autowired
-  private UnauthorizedHandler unauthorizedHandler;
-  @Autowired
-  private AccessDeniedHandler accessDeniedHandler;
-  @Autowired
   private JwtUtil jwtUtil;
   @Autowired
   private UserService userService;
@@ -58,36 +46,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    Map<String, HttpMethod> permitAllMap = new HashMap<>();
-    permitAllMap.put(LOGIN_URL, HttpMethod.POST);
-    permitAllMap.put(REFRESH_TOKEN_URL, HttpMethod.PATCH);
-    permitAllMap.put(POSTS_URL, HttpMethod.GET);
-    permitAllMap.put(POST_URL, HttpMethod.GET);
+    List<RequestMapping> pathsToSkip = getPathsToSkip();
+    SkipPathRequestMatcher skipPathRequestMatcher = new SkipPathRequestMatcher(pathsToSkip, API_ROOT_URL);
 
-    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(permitAllMap, API_ROOT_URL);
-
-    http.cors().disable();
-    http.csrf().disable();
+    http.cors().disable().csrf().disable();
     http.authorizeRequests()
-      .antMatchers(LOGIN_URL).permitAll();
-
+      .antMatchers(LOGIN_URL).permitAll()
+      .antMatchers(POSTS_URL).permitAll()
+      .antMatchers(POST_URL).permitAll();
     http
       .addFilterBefore(new AjaxAuthFilter(
           LOGIN_URL,
           this.authenticationManager,
-          jwtUtil, cookieUtil,
+          jwtUtil,
+          cookieUtil,
           userService,
           bCryptPasswordEncoder(),
           appProperties),
         UsernamePasswordAuthenticationFilter.class)
       .authenticationProvider(ajaxAuthProvider);
 
-    http.addFilterBefore(new JwtAuthFilter(matcher, this.authenticationManager, cookieUtil), UsernamePasswordAuthenticationFilter.class)
+    http.addFilterBefore(new JwtAuthFilter(skipPathRequestMatcher, this.authenticationManager, cookieUtil), UsernamePasswordAuthenticationFilter.class)
       .authenticationProvider(jwtAuthProvider);
+  }
 
-    http.exceptionHandling()
-      .accessDeniedHandler(accessDeniedHandler)
-      .authenticationEntryPoint(unauthorizedHandler);
+  private List<RequestMapping> getPathsToSkip() {
+    List<RequestMapping> pathsToSkip = new ArrayList<>();
+    pathsToSkip.add(new RequestMapping(LOGIN_URL, HttpMethod.POST));
+    pathsToSkip.add(new RequestMapping(REFRESH_TOKEN_URL, HttpMethod.PATCH));
+    pathsToSkip.add(new RequestMapping(POSTS_URL, HttpMethod.GET));
+    pathsToSkip.add(new RequestMapping(POST_URL, HttpMethod.GET));
+    return pathsToSkip;
   }
 
   @Bean
