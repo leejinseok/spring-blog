@@ -14,7 +14,6 @@ public class SkipPathRequestMatcher implements RequestMatcher {
   private OrRequestMatcher matchers;
   private RequestMatcher processiongMatcher;
 
-
   public SkipPathRequestMatcher(List<RequestMapping> pathsToSkip, String processingPath) {
     List<RequestMatcher> requestMatchers = new ArrayList<>();
 
