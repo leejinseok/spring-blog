@@ -10,17 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SkipPathRequestMatcher implements RequestMatcher {
+
   private OrRequestMatcher matchers;
   private RequestMatcher processiongMatcher;
 
+
   public SkipPathRequestMatcher(List<RequestMapping> pathsToSkip, String processingPath) {
-    List<RequestMatcher> m = new ArrayList<>();
+    List<RequestMatcher> requestMatchers = new ArrayList<>();
+
     pathsToSkip.forEach(e -> {
       AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher(e.getUrl(), e.getMethod().name());
-      m.add(antPathRequestMatcher);
+      requestMatchers.add(antPathRequestMatcher);
     });
 
-    matchers = new OrRequestMatcher(m);
+    matchers = new OrRequestMatcher(requestMatchers);
     processiongMatcher = new AntPathRequestMatcher(processingPath);
   }
 

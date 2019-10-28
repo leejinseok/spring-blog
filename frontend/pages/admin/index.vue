@@ -70,7 +70,7 @@ h2 {
 }
 
 .form-container form {
-  max-width: 300px;
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
 }
