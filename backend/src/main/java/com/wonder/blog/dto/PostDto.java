@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
-@ToString
 public class PostDto {
   private Integer id;
   private String title;

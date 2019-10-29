@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @NoArgsConstructor @AllArgsConstructor
