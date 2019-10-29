@@ -12,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
@@ -29,7 +28,7 @@ public class AuthController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<UserDto> addUser(@RequestBody @Valid User user) {
+  public ResponseEntity<UserDto> addUser(@RequestBody User user) {
     return new ResponseEntity<>(new UserDto(userService.addUser(user)), HttpStatus.CREATED);
   }
 

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtAuthProvider implements AuthenticationProvider {
-
   private final JwtUtil jwtUtil;
 
   @Autowired

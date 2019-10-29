@@ -1,20 +1,16 @@
 package com.wonder.blog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "posts")
+@NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 public class Post {
 
@@ -22,7 +18,6 @@ public class Post {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int id;
 
-  @NotNull
   @Column(length = 50, nullable = false)
   private String title;
 

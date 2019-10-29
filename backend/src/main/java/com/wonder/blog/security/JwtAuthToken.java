@@ -6,7 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.List;
 
 public class JwtAuthToken extends AbstractAuthenticationToken {
-
   private String token;
   private UserContext userContext;
 

@@ -19,6 +19,7 @@ import java.util.List;
 
 @Component
 public class AjaxAuthProvider implements AuthenticationProvider {
+
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     String email = (String) authentication.getPrincipal();

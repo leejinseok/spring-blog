@@ -30,12 +30,12 @@ public class PostController {
   }
 
   @PostMapping
-  public ResponseEntity<PostDto> addPost(@Valid @RequestBody Post post) {
+  public ResponseEntity<PostDto> addPost(@RequestBody Post post) {
     return new ResponseEntity<>(new PostDto(postService.addPost(post)), HttpStatus.CREATED);
   }
 
   @GetMapping
-  public ResponseEntity<Page> getPosts(final Pageable pageable) {
+  public ResponseEntity<Page> getPosts(Pageable pageable) {
     return new ResponseEntity<>(postService.getPosts(pageable), HttpStatus.OK);
   }
 
@@ -45,7 +45,7 @@ public class PostController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<PostDto> updatePost(@PathVariable int id, @RequestBody @Valid Post post) {
+  public ResponseEntity<PostDto> updatePost(@PathVariable int id, @RequestBody Post post) {
     return new ResponseEntity<>(new PostDto(postService.updatePost(id, post)), HttpStatus.OK);
   }
 

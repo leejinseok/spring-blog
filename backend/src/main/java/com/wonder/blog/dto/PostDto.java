@@ -10,9 +10,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ToString
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
+@ToString
 public class PostDto {
   private Integer id;
   private String title;
