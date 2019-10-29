@@ -27,6 +27,7 @@ buildSrc/build
 /src/asciidoc/build
 /src/main/resources/application-dev.properties
 /src/main/resources/application-prod.properties
+/src/main/resources/application-test.properties
 target/
 
 # Eclipse artifacts, including WTP generated manifests
