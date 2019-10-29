@@ -51,9 +51,10 @@ public class PostImageService {
     return postImageRepository.findById(id).orElseThrow(() -> new DataNotFoundException(id + " id postImage not found"));
   }
 
-  public void deletePostImage(int id) {
+  public int deletePostImage(int id) {
     PostImage postImage = getPostImageById(id);
     awsS3Util.delete(postImage.getS3Key());
     postImageRepository.deleteById(postImage.getId());
+    return id;
   }
 }

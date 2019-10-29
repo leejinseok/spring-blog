@@ -16,7 +16,6 @@ public class PostImageController {
 
   @DeleteMapping("/{id}")
   public int deletePostImage(@PathVariable("id") int id) {
-    postImageService.deletePostImage(id);
-    return id;
+    return postImageService.deletePostImage(id);
   }
 }
