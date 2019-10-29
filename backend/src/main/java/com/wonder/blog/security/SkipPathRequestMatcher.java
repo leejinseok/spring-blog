@@ -1,6 +1,6 @@
 package com.wonder.blog.security;
 
-import com.wonder.blog.common.RequestMapping;
+import com.wonder.blog.common.RequestMapper;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -13,7 +13,7 @@ public class SkipPathRequestMatcher implements RequestMatcher {
   private OrRequestMatcher matchers;
   private RequestMatcher processiongMatcher;
 
-  public SkipPathRequestMatcher(List<RequestMapping> pathsToSkip, String processingPath) {
+  public SkipPathRequestMatcher(List<RequestMapper> pathsToSkip, String processingPath) {
     List<RequestMatcher> requestMatchers = new ArrayList<>();
 
     pathsToSkip.forEach(e -> {

@@ -8,7 +8,7 @@ import org.springframework.http.HttpMethod;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
-public class RequestMapping {
+public class RequestMapper {
   private String url;
   private HttpMethod method;
 }

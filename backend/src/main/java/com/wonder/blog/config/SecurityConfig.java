@@ -1,6 +1,6 @@
 package com.wonder.blog.config;
 
-import com.wonder.blog.common.RequestMapping;
+import com.wonder.blog.common.RequestMapper;
 import com.wonder.blog.security.*;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
@@ -80,12 +80,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return jwtAuthFilter;
   }
 
-  private List<RequestMapping> pathsToSkip() {
-    List<RequestMapping> list = new ArrayList<>();
-    list.add(new RequestMapping(LOGIN_URL, HttpMethod.POST));
-    list.add(new RequestMapping(REFRESH_TOKEN_URL, HttpMethod.PATCH));
-    list.add(new RequestMapping(POSTS_URL, HttpMethod.GET));
-    list.add(new RequestMapping(POST_URL, HttpMethod.GET));
+  private List<RequestMapper> pathsToSkip() {
+    List<RequestMapper> list = new ArrayList<>();
+    list.add(new RequestMapper(LOGIN_URL, HttpMethod.POST));
+    list.add(new RequestMapper(REFRESH_TOKEN_URL, HttpMethod.PATCH));
+    list.add(new RequestMapper(POSTS_URL, HttpMethod.GET));
+    list.add(new RequestMapper(POST_URL, HttpMethod.GET));
     return list;
   }
 
