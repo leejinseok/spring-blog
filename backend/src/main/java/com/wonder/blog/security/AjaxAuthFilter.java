@@ -1,7 +1,7 @@
 package com.wonder.blog.security;
 
-import com.google.gson.GsonBuilder;
 import com.wonder.blog.common.DefaultResponse;
+import com.wonder.blog.common.ResponseWriter;
 import com.wonder.blog.config.AppProperties;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.exception.CustomException;
@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -69,22 +68,23 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
     UserContext userContext = (UserContext) authResult.getPrincipal();
     cookieUtil.create(response, JWT_TOKEN_NAME, jwtUtil.generateToken(userContext), false, -1, appProperties.getBaseUrl());
-    String json = new GsonBuilder().create().toJson(new DefaultResponse(HttpStatus.OK.value(), "success", userContext));
-    response.setStatus(HttpStatus.OK.value());
-    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.getWriter().write(json);
-    response.getWriter().flush();
-    response.getWriter().close();
+    ResponseWriter.builder()
+      .defaultResponse(new DefaultResponse(HttpStatus.OK.value(), "success", userContext))
+      .contentType(MediaType.APPLICATION_JSON_VALUE)
+      .response(response)
+      .build()
+      .write();
+
   }
 
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
     SecurityContextHolder.clearContext();
-    String json = new GsonBuilder().create().toJson(new DefaultResponse(HttpStatus.UNAUTHORIZED.value(), failed.getMessage()));
-    response.setStatus(HttpStatus.UNAUTHORIZED.value());
-    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.getWriter().write(json);
-    response.getWriter().flush();
-    response.getWriter().close();
+    ResponseWriter.builder()
+      .defaultResponse(new DefaultResponse(HttpStatus.UNAUTHORIZED.value(), failed.getMessage()))
+      .contentType(MediaType.APPLICATION_JSON_VALUE)
+      .response(response)
+      .build()
+      .write();
   }
 }
