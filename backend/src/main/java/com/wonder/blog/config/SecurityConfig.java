@@ -5,7 +5,9 @@ import com.wonder.blog.security.*;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
 import com.wonder.blog.util.JwtUtil;
+import org.graalvm.compiler.lir.CompositeValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -75,7 +78,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private JwtAuthFilter jwtAuthFilter() {
     List<RequestMapping> pathsToSkip = getPathsToSkip();
     SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip, API_ROOT_URL);
-
     JwtAuthFilter jwtAuthFilter = new JwtAuthFilter(matcher);
     jwtAuthFilter.setAuthenticationManager(authenticationManager);
     jwtAuthFilter.setCookieUtil(cookieUtil);
