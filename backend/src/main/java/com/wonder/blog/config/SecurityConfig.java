@@ -23,6 +23,7 @@ import java.util.*;
 @EnableWebSecurity
 @EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
   private static final String API_ROOT_URL = "/api/v1/**";
   private static final String LOGIN_URL = "/api/v1/auth/login";
   private static final String REFRESH_TOKEN_URL = "/api/v1/auth/token";
