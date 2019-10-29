@@ -20,8 +20,12 @@ public class ResponseWriter {
   public void write() throws IOException {
     response.setStatus(defaultResponse.getStatus());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.getWriter().write(new GsonBuilder().create().toJson(defaultResponse));
+    response.getWriter().write(jsonDefaultResponse());
     response.getWriter().flush();
     response.getWriter().close();
+  }
+
+  private String jsonDefaultResponse() {
+    return new GsonBuilder().create().toJson(defaultResponse);
   }
 }
