@@ -5,9 +5,7 @@ import com.wonder.blog.security.*;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
 import com.wonder.blog.util.JwtUtil;
-import org.graalvm.compiler.lir.CompositeValue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -50,13 +47,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.cors().disable().csrf().disable();
+
     http.authorizeRequests()
-      .antMatchers(LOGIN_URL).permitAll()
-      .antMatchers(POSTS_URL).permitAll()
-      .antMatchers(POST_URL).permitAll();
+      .antMatchers(HttpMethod.GET, LOGIN_URL).permitAll()
+      .antMatchers(HttpMethod.GET, POSTS_URL).permitAll()
+      .antMatchers(HttpMethod.GET, POST_URL).permitAll();
+
     http
-      .addFilterBefore(ajaxAuthFilter(),
-        UsernamePasswordAuthenticationFilter.class)
+      .addFilterBefore(ajaxAuthFilter(), UsernamePasswordAuthenticationFilter.class)
       .authenticationProvider(ajaxAuthProvider);
 
     http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -83,12 +81,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   private List<RequestMapping> pathsToSkip() {
-    List<RequestMapping> pathsToSkip = new ArrayList<>();
-    pathsToSkip.add(new RequestMapping(LOGIN_URL, HttpMethod.POST));
-    pathsToSkip.add(new RequestMapping(REFRESH_TOKEN_URL, HttpMethod.PATCH));
-    pathsToSkip.add(new RequestMapping(POSTS_URL, HttpMethod.GET));
-    pathsToSkip.add(new RequestMapping(POST_URL, HttpMethod.GET));
-    return pathsToSkip;
+    List<RequestMapping> list = new ArrayList<>();
+    list.add(new RequestMapping(LOGIN_URL, HttpMethod.POST));
+    list.add(new RequestMapping(REFRESH_TOKEN_URL, HttpMethod.PATCH));
+    list.add(new RequestMapping(POSTS_URL, HttpMethod.GET));
+    list.add(new RequestMapping(POST_URL, HttpMethod.GET));
+    return list;
   }
 
   @Bean
