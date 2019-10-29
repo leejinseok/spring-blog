@@ -26,7 +26,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 
 import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;

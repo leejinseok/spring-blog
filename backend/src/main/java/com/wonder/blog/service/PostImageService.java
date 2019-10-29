@@ -19,6 +19,7 @@ import java.util.UUID;
 
 @Service
 public class PostImageService {
+
   private final PostImageRepository postImageRepository;
   private final PostService postService;
   private final AwsS3Util awsS3Util;
