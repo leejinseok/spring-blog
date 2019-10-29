@@ -36,9 +36,7 @@ public class PostController {
 
   @GetMapping
   public ResponseEntity<PageDto> getPosts(Pageable pageable) {
-    Page<Post> page = postService.getPosts(pageable);
-    PageDto pageDto = new PageDto(page.getContent(), page.getNumber(), page.getSize(), page.getTotalElements());
-    return new ResponseEntity<>(pageDto, HttpStatus.OK);
+    return new ResponseEntity<>(new PageDto(postService.getPosts(pageable)), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
@@ -58,7 +56,6 @@ public class PostController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Integer> deletePost(@PathVariable int id) throws CustomException {
-    postService.deletePost(id);
-    return new ResponseEntity<>(id, HttpStatus.OK);
+    return new ResponseEntity<>(postService.deletePost(id), HttpStatus.OK);
   }
 }

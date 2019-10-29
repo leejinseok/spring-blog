@@ -40,7 +40,9 @@ public class PostService {
   public Post addPost(Post post) {
     SecurityContext context = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) context.getAuthentication().getPrincipal();
+
     User user = userService.getUserByEmail(userContext.getEmail());
+
     post.setUser(user);
     post.setCreatedAt(LocalDateTime.now());
     post.setUpdatedAt(LocalDateTime.now());
@@ -62,7 +64,7 @@ public class PostService {
     return postRepository.save(post);
   }
 
-  public void deletePost(int id) {
+  public int deletePost(int id) {
     SecurityContext securityContext = SecurityContextHolder.getContext();
     UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
     User user = userService.getUserByEmail(userContext.getEmail());
@@ -77,5 +79,7 @@ public class PostService {
     }
 
     postRepository.deleteById(id);
+
+    return id;
   }
 }
