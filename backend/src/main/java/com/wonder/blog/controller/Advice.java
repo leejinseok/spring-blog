@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ExceptionController {
+public class Advice {
 
   @ExceptionHandler(CustomException.class)
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
