@@ -1,7 +1,6 @@
 package com.wonder.blog.controller.service;
 
 import com.wonder.blog.common.TestDescription;
-import com.wonder.blog.entity.Post;
 import com.wonder.blog.exception.DataNotFoundException;
 import com.wonder.blog.service.PostService;
 import org.junit.Rule;
@@ -10,14 +9,9 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.awt.print.PageFormat;
-import java.awt.print.Pageable;
-import java.awt.print.Printable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

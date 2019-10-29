@@ -75,15 +75,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   private JwtAuthFilter jwtAuthFilter() {
-    List<RequestMapping> pathsToSkip = getPathsToSkip();
-    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip, API_ROOT_URL);
+    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip(), API_ROOT_URL);
     JwtAuthFilter jwtAuthFilter = new JwtAuthFilter(matcher);
     jwtAuthFilter.setAuthenticationManager(authenticationManager);
     jwtAuthFilter.setCookieUtil(cookieUtil);
     return jwtAuthFilter;
   }
 
-  private List<RequestMapping> getPathsToSkip() {
+  private List<RequestMapping> pathsToSkip() {
     List<RequestMapping> pathsToSkip = new ArrayList<>();
     pathsToSkip.add(new RequestMapping(LOGIN_URL, HttpMethod.POST));
     pathsToSkip.add(new RequestMapping(REFRESH_TOKEN_URL, HttpMethod.PATCH));
