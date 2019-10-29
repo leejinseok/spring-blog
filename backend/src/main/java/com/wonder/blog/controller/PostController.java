@@ -1,5 +1,6 @@
 package com.wonder.blog.controller;
 
+import com.wonder.blog.dto.PageDto;
 import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.dto.PostImageDto;
 import com.wonder.blog.entity.Post;
@@ -14,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -35,8 +35,10 @@ public class PostController {
   }
 
   @GetMapping
-  public ResponseEntity<Page> getPosts(Pageable pageable) {
-    return new ResponseEntity<>(postService.getPosts(pageable), HttpStatus.OK);
+  public ResponseEntity<PageDto> getPosts(Pageable pageable) {
+    Page<Post> page = postService.getPosts(pageable);
+    PageDto pageDto = new PageDto(page.getContent(), page.getNumber(), page.getSize(), page.getTotalElements());
+    return new ResponseEntity<>(pageDto, HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
