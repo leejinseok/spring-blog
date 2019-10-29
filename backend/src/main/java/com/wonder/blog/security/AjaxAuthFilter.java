@@ -8,6 +8,8 @@ import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
 import com.wonder.blog.util.JwtUtil;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,25 +26,21 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 
 import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
+@Getter @Setter
 public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
-  private final JwtUtil jwtUtil;
-  private final CookieUtil cookieUtil;
-  private final UserService userService;
-  private final BCryptPasswordEncoder bCryptPasswordEncoder;
-  private final AppProperties appProperties;
+  private JwtUtil jwtUtil;
+  private CookieUtil cookieUtil;
+  private UserService userService;
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
+  private AppProperties appProperties;
 
-  public AjaxAuthFilter(String loginUrl, AuthenticationManager authenticationManager, JwtUtil jwtUtil, CookieUtil cookieUtil, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, AppProperties appProperties) {
+  public AjaxAuthFilter(String loginUrl) {
     super(loginUrl);
-    this.setAuthenticationManager(authenticationManager);
-    this.jwtUtil = jwtUtil;
-    this.cookieUtil = cookieUtil;
-    this.userService = userService;
-    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    this.appProperties = appProperties;
   };
 
   @Override
@@ -72,7 +70,6 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
     UserContext userContext = (UserContext) authResult.getPrincipal();
     String token = jwtUtil.generateToken(userContext);
-
     cookieUtil.create(response, JWT_TOKEN_NAME, token, false, -1, appProperties.getBaseUrl());
     String json = new GsonBuilder().create().toJson(new DefaultResponse(HttpStatus.OK.value(), "success", userContext));
     response.setStatus(HttpStatus.OK.value());

@@ -16,5 +16,4 @@ public class DefaultResponse {
     this.status = status;
     this.message = message;
   }
-
 }

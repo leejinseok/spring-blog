@@ -46,28 +46,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    List<RequestMapping> pathsToSkip = getPathsToSkip();
-    SkipPathRequestMatcher skipPathRequestMatcher = new SkipPathRequestMatcher(pathsToSkip, API_ROOT_URL);
-
     http.cors().disable().csrf().disable();
     http.authorizeRequests()
       .antMatchers(LOGIN_URL).permitAll()
       .antMatchers(POSTS_URL).permitAll()
       .antMatchers(POST_URL).permitAll();
     http
-      .addFilterBefore(new AjaxAuthFilter(
-          LOGIN_URL,
-          this.authenticationManager,
-          jwtUtil,
-          cookieUtil,
-          userService,
-          bCryptPasswordEncoder(),
-          appProperties),
+      .addFilterBefore(ajaxAuthFilter(),
         UsernamePasswordAuthenticationFilter.class)
       .authenticationProvider(ajaxAuthProvider);
 
-    http.addFilterBefore(new JwtAuthFilter(skipPathRequestMatcher, this.authenticationManager, cookieUtil), UsernamePasswordAuthenticationFilter.class)
+    http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
       .authenticationProvider(jwtAuthProvider);
+  }
+
+  private AjaxAuthFilter ajaxAuthFilter() {
+    AjaxAuthFilter filter = new AjaxAuthFilter(LOGIN_URL);
+    filter.setAuthenticationManager(authenticationManager);
+    filter.setJwtUtil(jwtUtil);
+    filter.setCookieUtil(cookieUtil);
+    filter.setUserService(userService);
+    filter.setBCryptPasswordEncoder(bCryptPasswordEncoder());
+    filter.setAppProperties(appProperties);
+    return filter;
+  }
+
+  private JwtAuthFilter jwtAuthFilter() {
+    List<RequestMapping> pathsToSkip = getPathsToSkip();
+    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip, API_ROOT_URL);
+
+    JwtAuthFilter jwtAuthFilter = new JwtAuthFilter(matcher);
+    jwtAuthFilter.setAuthenticationManager(authenticationManager);
+    jwtAuthFilter.setCookieUtil(cookieUtil);
+    return jwtAuthFilter;
   }
 
   private List<RequestMapping> getPathsToSkip() {

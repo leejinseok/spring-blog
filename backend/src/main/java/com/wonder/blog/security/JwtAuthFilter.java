@@ -4,6 +4,8 @@ import com.google.gson.GsonBuilder;
 import com.wonder.blog.common.DefaultResponse;
 import com.wonder.blog.util.CookieUtil;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,13 +24,12 @@ import java.io.IOException;
 
 import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
+@Getter @Setter
 public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
-  private final CookieUtil cookieUtil;
+  private CookieUtil cookieUtil;
 
-  public JwtAuthFilter(SkipPathRequestMatcher matcher, AuthenticationManager authenticationManager, CookieUtil cookieUtil) {
+  public JwtAuthFilter(SkipPathRequestMatcher matcher) {
     super(matcher);
-    this.setAuthenticationManager(authenticationManager);
-    this.cookieUtil = cookieUtil;
   };
 
   @Override
