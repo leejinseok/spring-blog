@@ -36,11 +36,11 @@ public class PostImageService {
     awsS3Util.upload(key, file);
 
     Post post = postService.getPost(postId);
-    PostImage postImage = new PostImage();
-    postImage.setPost(post);
-    postImage.setS3Key(key);
-    postImage.setCreatedAt(LocalDateTime.now());
-
+    PostImage postImage = PostImage.builder()
+      .post(post)
+      .s3Key(key)
+      .createdAt(LocalDateTime.now())
+      .build();
     return postImageRepository.save(postImage);
   }
 

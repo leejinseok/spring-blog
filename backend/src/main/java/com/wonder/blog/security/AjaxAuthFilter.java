@@ -68,8 +68,7 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
     UserContext userContext = (UserContext) authResult.getPrincipal();
-    String token = jwtUtil.generateToken(userContext);
-    cookieUtil.create(response, JWT_TOKEN_NAME, token, false, -1, appProperties.getBaseUrl());
+    cookieUtil.create(response, JWT_TOKEN_NAME, jwtUtil.generateToken(userContext), false, -1, appProperties.getBaseUrl());
     String json = new GsonBuilder().create().toJson(new DefaultResponse(HttpStatus.OK.value(), "success", userContext));
     response.setStatus(HttpStatus.OK.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
