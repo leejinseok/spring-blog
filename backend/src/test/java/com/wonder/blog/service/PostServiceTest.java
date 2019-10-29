@@ -1,4 +1,4 @@
-package com.wonder.blog.controller.service;
+package com.wonder.blog.service;
 
 import com.wonder.blog.common.TestDescription;
 import com.wonder.blog.exception.DataNotFoundException;

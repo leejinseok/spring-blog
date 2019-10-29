@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
@@ -53,7 +54,7 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
     User user;
     try {
       user = userService.getUserByEmail(email);
-    } catch (CustomException e) {
+    } catch (UsernameNotFoundException e) {
       throw new BadCredentialsException(e.getMessage());
     }
 

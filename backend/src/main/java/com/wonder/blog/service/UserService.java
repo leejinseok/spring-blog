@@ -4,6 +4,7 @@ import com.wonder.blog.entity.User;
 import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class UserService {
     }
 
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new CustomException(email + " user not founded"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email + " user not founded"));
     }
 
     public User addUser(User user) {
