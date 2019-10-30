@@ -69,7 +69,7 @@ public class PostService {
 
     Post post = getPost(id);
     if (!post.getUser().getId().equals(user.getId())) {
-      throw new CustomException("This post not your own");
+      throw new CustomException("This post not yours");
     }
 
     for (PostImage postImage : postImageService.getPostImagesByPost(post)) {

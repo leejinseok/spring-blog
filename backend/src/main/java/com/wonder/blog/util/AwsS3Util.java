@@ -46,9 +46,8 @@ public class AwsS3Util {
   }
 
   private AmazonS3 amazonS3() {
-    AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey(), secretKey());
     return AmazonS3ClientBuilder.standard()
-      .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+      .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey(), secretKey())))
       .withRegion(Regions.AP_NORTHEAST_2)
       .build();
   }
