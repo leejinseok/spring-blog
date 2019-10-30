@@ -1,5 +1,6 @@
 package com.wonder.blog.service;
 
+import com.wonder.blog.common.CurrentUser;
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.entity.User;
@@ -38,9 +39,7 @@ public class PostService {
   }
 
   public Post addPost(Post post) {
-    SecurityContext context = SecurityContextHolder.getContext();
-    UserContext userContext = (UserContext) context.getAuthentication().getPrincipal();
-
+    UserContext userContext = CurrentUser.create();
     User user = userService.getUserByEmail(userContext.getEmail());
 
     post.setUser(user);
@@ -65,8 +64,7 @@ public class PostService {
   }
 
   public int deletePost(int id) {
-    SecurityContext securityContext = SecurityContextHolder.getContext();
-    UserContext userContext = (UserContext) securityContext.getAuthentication().getPrincipal();
+    UserContext userContext = CurrentUser.create();
     User user = userService.getUserByEmail(userContext.getEmail());
 
     Post post = getPost(id);

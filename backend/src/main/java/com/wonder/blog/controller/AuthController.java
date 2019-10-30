@@ -1,5 +1,6 @@
 package com.wonder.blog.controller;
 
+import com.wonder.blog.common.CurrentUser;
 import com.wonder.blog.dto.UserDto;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.security.UserContext;
@@ -34,13 +35,13 @@ public class AuthController {
 
   @GetMapping("/session")
   public ResponseEntity<UserContext> session() {
-    UserContext userContext = (UserContext) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    UserContext userContext = CurrentUser.create();
     return new ResponseEntity<>(userContext, HttpStatus.OK);
   }
 
   @PostMapping("/logout")
   public ResponseEntity<UserContext> logout(HttpServletResponse response) {
-    UserContext userContext = (UserContext) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    UserContext userContext = CurrentUser.create();
     cookieUtil.clear(response, JWT_TOKEN_NAME);
     return new ResponseEntity<>(userContext, HttpStatus.OK);
   }
