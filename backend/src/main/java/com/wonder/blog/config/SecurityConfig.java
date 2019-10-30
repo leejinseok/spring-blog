@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -53,12 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .antMatchers(HttpMethod.GET, POSTS_URL).permitAll()
       .antMatchers(HttpMethod.GET, POST_URL).permitAll();
 
-    http
-      .addFilterBefore(ajaxAuthFilter(), UsernamePasswordAuthenticationFilter.class)
-      .authenticationProvider(ajaxAuthProvider);
-
-    http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
-      .authenticationProvider(jwtAuthProvider);
+    http.addFilterBefore(ajaxAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
   }
 
   private AjaxAuthFilter ajaxAuthFilter() {
@@ -87,6 +84,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     list.add(new RequestMapper(POSTS_URL, HttpMethod.GET));
     list.add(new RequestMapper(POST_URL, HttpMethod.GET));
     return list;
+  }
+
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth
+      .authenticationProvider(ajaxAuthProvider)
+      .authenticationProvider(jwtAuthProvider);
   }
 
   @Bean

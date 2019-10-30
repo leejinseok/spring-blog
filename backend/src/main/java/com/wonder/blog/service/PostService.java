@@ -79,7 +79,6 @@ public class PostService {
     }
 
     postRepository.deleteById(id);
-
     return id;
   }
 }
