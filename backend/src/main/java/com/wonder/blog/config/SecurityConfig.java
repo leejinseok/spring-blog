@@ -50,12 +50,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.cors().disable().csrf().disable();
 
     http.authorizeRequests()
-      .antMatchers(HttpMethod.GET, LOGIN_URL).permitAll()
-      .antMatchers(HttpMethod.GET, POSTS_URL).permitAll()
-      .antMatchers(HttpMethod.GET, POST_URL).permitAll();
+      .antMatchers(HttpMethod.GET, LOGIN_URL).permitAll();
 
-    http.addFilterBefore(ajaxAuthFilter(), UsernamePasswordAuthenticationFilter.class);
-    http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(ajaxAuthFilter(), UsernamePasswordAuthenticationFilter.class).authenticationProvider(ajaxAuthProvider);
+    http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class).authenticationProvider(jwtAuthProvider);
   }
 
   private AjaxAuthFilter ajaxAuthFilter() {
@@ -84,13 +82,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     list.add(new RequestMapper(POSTS_URL, HttpMethod.GET));
     list.add(new RequestMapper(POST_URL, HttpMethod.GET));
     return list;
-  }
-
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth
-      .authenticationProvider(ajaxAuthProvider)
-      .authenticationProvider(jwtAuthProvider);
   }
 
   @Bean

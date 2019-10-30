@@ -11,7 +11,7 @@ public class UserContext {
   private final String email;
   private final List<GrantedAuthority> authorities;
 
-  private UserContext(String email, List<GrantedAuthority> authorities) {
+  public UserContext(String email, List<GrantedAuthority> authorities) {
     this.email = email;
     this.authorities = authorities;
   }
