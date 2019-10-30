@@ -16,26 +16,25 @@ import java.io.IOException;
 
 @Component
 public class AwsS3Util {
-  private final static String BUCKET_NAME = "leejinseok-blog";
-  private AmazonS3 amazonS3;
+  private final AmazonS3 amazonS3;
   private final AwsProperties awsProperties;
 
   @Autowired
   public AwsS3Util(AwsProperties awsProperties) {
     this.awsProperties = awsProperties;
-    AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey(), secretKey());
-    amazonS3 = AmazonS3ClientBuilder.standard()
-      .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-      .withRegion(Regions.AP_NORTHEAST_2)
-      .build();
+    this.amazonS3 = amazonS3();
   }
 
   public PutObjectResult upload(String key, MultipartFile file) throws IOException {
-    return amazonS3.putObject(new PutObjectRequest(BUCKET_NAME, key, file.getInputStream(), new ObjectMetadata()).withCannedAcl(CannedAccessControlList.PublicRead));
+    return amazonS3.putObject(new PutObjectRequest(bucketName(), key, file.getInputStream(), new ObjectMetadata()).withCannedAcl(CannedAccessControlList.PublicRead));
   }
 
   public void delete(String key) {
-    amazonS3.deleteObject(BUCKET_NAME, key);
+    amazonS3.deleteObject(bucketName(), key);
+  }
+
+  private String bucketName() {
+    return awsProperties.getS3().get("bucket-name");
   }
 
   private String accessKey() {
@@ -44,5 +43,13 @@ public class AwsS3Util {
 
   private String secretKey() {
     return awsProperties.getS3().get("secret-key");
+  }
+
+  private AmazonS3 amazonS3() {
+    AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey(), secretKey());
+    return AmazonS3ClientBuilder.standard()
+      .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+      .withRegion(Regions.AP_NORTHEAST_2)
+      .build();
   }
 }
