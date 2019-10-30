@@ -7,6 +7,11 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
+import com.wonder.blog.config.AppProperties;
+import com.wonder.blog.config.AwsProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,12 +20,14 @@ import java.io.IOException;
 @Component
 public class AwsS3Util {
   private final static String BUCKET_NAME = "leejinseok-blog";
-  private final static String ACCESS_KEY = "AKIA5HDDOS7EKFWDOJ7W";
-  private final static String SECRET_KEY = "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";
   private AmazonS3 amazonS3;
+  private final AwsProperties awsProperties;
 
-  public AwsS3Util() {
-    AWSCredentials awsCredentials = new BasicAWSCredentials(ACCESS_KEY,SECRET_KEY);
+  @Autowired
+  public AwsS3Util(AwsProperties awsProperties) {
+    this.awsProperties = awsProperties;
+
+    AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey(), secretKey());
     amazonS3 = AmazonS3ClientBuilder.standard()
       .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
       .withRegion(Regions.AP_NORTHEAST_2)
@@ -33,5 +40,13 @@ public class AwsS3Util {
 
   public void delete(String key) {
     amazonS3.deleteObject(BUCKET_NAME, key);
+  }
+
+  private String accessKey() {
+    return awsProperties.getS3().get("access-key");
+  }
+
+  private String secretKey() {
+    return awsProperties.getS3().get("secret-key");
   }
 }
