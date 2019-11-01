@@ -6,6 +6,7 @@ import com.wonder.blog.entity.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,9 +26,7 @@ public class PostDto {
     this.id = post.getId();
     this.title = post.getTitle();
     this.content = post.getContent();
-    if (post.getPostImages() != null) {
-      this.postImages = post.getPostImages().stream().map(PostImageDto::new).collect(Collectors.toList());
-    }
+    this.postImages = post.getPostImages().stream().map(PostImageDto::new).collect(Collectors.toList());
     this.user = new UserDto(post.getUser());
     this.createdAt = post.getCreatedAt();
     this.updatedAt = post.getUpdatedAt();
