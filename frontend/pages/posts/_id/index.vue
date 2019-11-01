@@ -21,6 +21,8 @@
         <p class="createdAt">{{ displayDate(post.createdAt) }} 작성</p>
         <p class="updatedAt">{{ displayDate(post.updatedAt) }} 최종수정</p>
       </div>
+
+      <div id="disqus_thread"></div>
     </div>
   </div>
 </template>
@@ -45,8 +47,23 @@ export default {
       post
     };
   },
+  mounted: function() {
+    this.initDisqus();
+  },
   methods: {
-    displayDate
+    displayDate,
+    initDisqus: function() {
+      var disqus_config = function () {
+        this.page.url = 'localhost';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = ''; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      };
+      (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://leejinseok-io.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    }
   }
 }
 </script>

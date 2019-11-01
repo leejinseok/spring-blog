@@ -14,13 +14,8 @@ public class AppConfig {
     @Bean
     public ApplicationRunner applicationRunner() {
         return new ApplicationRunner() {
-
-            @Autowired
-            AwsProperties awsProperties;
-
             @Override
             public void run(ApplicationArguments args) throws Exception {
-                System.out.println(awsProperties.getS3().get("bucket-name"));
             }
         };
     }
