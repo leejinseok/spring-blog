@@ -11,6 +11,7 @@ import com.wonder.blog.security.UserContext;
 import com.wonder.blog.util.AwsS3Util;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
@@ -39,7 +41,6 @@ public class PostService {
     this.awsS3Util = awsS3Util;
   }
 
-
   public Post addPost(Post post) {
     UserContext userContext = CurrentUser.create();
     User user = userService.getUserByEmail(userContext.getEmail());
@@ -51,10 +52,12 @@ public class PostService {
     return postRepository.save(post);
   }
 
+  @Transactional(readOnly = true)
   public Page<Post> getPosts(Pageable pageable) {
     return postRepository.findAll(pageable);
   }
 
+  @Transactional(readOnly = true)
   public Post getPost(int id) {
     return postRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Post id: " + id + " not founded"));
   }

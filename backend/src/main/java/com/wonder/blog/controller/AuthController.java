@@ -7,7 +7,6 @@ import com.wonder.blog.security.UserContext;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

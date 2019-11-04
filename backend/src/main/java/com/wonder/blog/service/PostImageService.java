@@ -11,6 +11,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -38,10 +39,12 @@ public class PostImageService {
     return postImageRepository.save(postImage);
   }
 
+  @Transactional(readOnly = true)
   public Collection<PostImage> getPostImagesByPost(Post post) {
     return postImageRepository.findAllByPost(post);
   }
 
+  @Transactional(readOnly = true)
   public PostImage getPostImageById(int id) {
     return postImageRepository.findById(id).orElseThrow(() -> new DataNotFoundException(id + " id postImage not found"));
   }

@@ -8,7 +8,6 @@ import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.service.PostImageService;
 import com.wonder.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
