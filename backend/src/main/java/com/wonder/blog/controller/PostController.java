@@ -7,6 +7,7 @@ import com.wonder.blog.entity.Post;
 import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.service.PostImageService;
 import com.wonder.blog.service.PostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,15 +19,10 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping(path = "/api/v1/posts")
+@RequiredArgsConstructor
 public class PostController {
   private final PostService postService;
   private final PostImageService postImageService;
-
-  @Autowired
-  public PostController(PostService postService, PostImageService postImageService) {
-   this.postService = postService;
-   this.postImageService = postImageService;
-  }
 
   @PostMapping
   public ResponseEntity<PostDto> addPost(@RequestBody Post post) {

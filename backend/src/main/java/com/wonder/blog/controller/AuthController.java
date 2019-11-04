@@ -6,6 +6,7 @@ import com.wonder.blog.entity.User;
 import com.wonder.blog.security.UserContext;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/api/v1/auth")
 public class AuthController {
   private final UserService userService;
   private final CookieUtil cookieUtil;
-
-  @Autowired
-  public AuthController(UserService userService, CookieUtil cookieUtil) {
-    this.userService = userService;
-    this.cookieUtil = cookieUtil;
-  }
 
   @PostMapping("/signup")
   public ResponseEntity<UserDto> addUser(@RequestBody User user) {

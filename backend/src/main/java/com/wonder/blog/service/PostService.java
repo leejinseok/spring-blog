@@ -10,6 +10,7 @@ import com.wonder.blog.repository.PostRepository;
 import com.wonder.blog.security.UserContext;
 import com.wonder.blog.util.AwsS3Util;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,7 @@ public class PostService {
     this.postImageService = postImageService;
     this.awsS3Util = awsS3Util;
   }
+
 
   public Post addPost(Post post) {
     UserContext userContext = CurrentUser.create();
