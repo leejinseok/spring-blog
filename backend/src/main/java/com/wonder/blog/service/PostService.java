@@ -27,19 +27,20 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Lazy))
 public class PostService {
   private final PostRepository postRepository;
   private final UserService userService;
   private final PostImageService postImageService;
   private final AwsS3Util awsS3Util;
 
-  @Autowired
-  public PostService(PostRepository postRepository, UserService userService, @Lazy PostImageService postImageService, AwsS3Util awsS3Util) {
-    this.postRepository = postRepository;
-    this.userService = userService;
-    this.postImageService = postImageService;
-    this.awsS3Util = awsS3Util;
-  }
+//  @Autowired
+//  public PostService(PostRepository postRepository, UserService userService, @Lazy PostImageService postImageService, AwsS3Util awsS3Util) {
+//    this.postRepository = postRepository;
+//    this.userService = userService;
+//    this.postImageService = postImageService;
+//    this.awsS3Util = awsS3Util;
+//  }
 
   public Post addPost(Post post) {
     UserContext userContext = CurrentUser.create();
