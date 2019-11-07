@@ -43,7 +43,6 @@ public class PostDto {
     private String title;
     @NotEmpty
     private String content;
-    @Nullable
     private MultipartFile file;
   }
 }

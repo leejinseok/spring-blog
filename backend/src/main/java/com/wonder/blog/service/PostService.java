@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.comparator.Comparators;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
@@ -64,15 +65,18 @@ public class PostService {
     post.setCreatedAt(LocalDateTime.now());
     post.setUpdatedAt(LocalDateTime.now());
 
-    PostImage postImage = new PostImage();
-    postImage.setCreatedAt(LocalDateTime.now());
-    postImage.setPost(post);
-
-    post.getPostImages().add(postImage);
     postRepository.save(post);
 
-    postImage.setS3Key(awsS3Util.generateS3Key(post.getId(), dto.getFile().getOriginalFilename()));
-    awsS3Util.upload(postImage.getS3Key(), dto.getFile());
+    MultipartFile file = dto.getFile();
+    if (file != null) {
+      PostImage postImage = new PostImage();
+      postImage.setCreatedAt(LocalDateTime.now());
+      postImage.setPost(post);
+
+      post.getPostImages().add(postImage);
+      postImage.setS3Key(awsS3Util.generateS3Key(post.getId(), dto.getFile().getOriginalFilename()));
+      awsS3Util.upload(postImage.getS3Key(), dto.getFile());
+    }
 
     return post;
   }
