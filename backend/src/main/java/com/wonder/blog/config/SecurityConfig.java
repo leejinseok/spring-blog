@@ -23,12 +23,6 @@ import java.util.*;
 @EnableWebSecurity
 @EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-  private static final String API_ROOT_URL = "/api/v1/**";
-  private static final String LOGIN_URL = "/api/v1/auth/login";
-  private static final String REFRESH_TOKEN_URL = "/api/v1/auth/token";
-  private static final String POSTS_URL = "/api/v1/posts";
-  private static final String POST_URL = "/api/v1/posts/*";
-
   @Autowired
   private AuthenticationManager authenticationManager;
   @Autowired
@@ -47,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.cors().disable().csrf().disable();
-    http.authorizeRequests().antMatchers(HttpMethod.GET, LOGIN_URL).permitAll();
+    http.authorizeRequests().antMatchers(HttpMethod.GET, MatcherUrl.LOGIN_URL.value()).permitAll();
 
     http
       .addFilterBefore(ajaxAuthFilter(), UsernamePasswordAuthenticationFilter.class).authenticationProvider(ajaxAuthProvider)
@@ -55,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   private AjaxAuthFilter ajaxAuthFilter() {
-    AjaxAuthFilter filter = new AjaxAuthFilter(LOGIN_URL);
+    AjaxAuthFilter filter = new AjaxAuthFilter(MatcherUrl.LOGIN_URL.value());
     filter.setAuthenticationManager(authenticationManager);
     filter.setJwtUtil(jwtUtil);
     filter.setCookieUtil(cookieUtil);
@@ -66,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   private JwtAuthFilter jwtAuthFilter() {
-    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip(), API_ROOT_URL);
+    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip(), MatcherUrl.API_ROOT_URL.value());
     JwtAuthFilter jwtAuthFilter = new JwtAuthFilter(matcher);
     jwtAuthFilter.setAuthenticationManager(authenticationManager);
     jwtAuthFilter.setCookieUtil(cookieUtil);
@@ -75,10 +69,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private List<RequestMapper> pathsToSkip() {
     List<RequestMapper> list = new ArrayList<>();
-    list.add(new RequestMapper(LOGIN_URL, HttpMethod.POST));
-    list.add(new RequestMapper(REFRESH_TOKEN_URL, HttpMethod.PATCH));
-    list.add(new RequestMapper(POSTS_URL, HttpMethod.GET));
-    list.add(new RequestMapper(POST_URL, HttpMethod.GET));
+    list.add(new RequestMapper(MatcherUrl.LOGIN_URL.value(), HttpMethod.POST));
+    list.add(new RequestMapper(MatcherUrl.REFRESH_TOKEN_URL.value(), HttpMethod.PATCH));
+    list.add(new RequestMapper(MatcherUrl.POSTS_URL.value(), HttpMethod.GET));
+    list.add(new RequestMapper(MatcherUrl.POST_URL.value(), HttpMethod.GET));
+    list.add(new RequestMapper(MatcherUrl.SIGNUP_URL.value(), HttpMethod.POST));
     return list;
   }
 
