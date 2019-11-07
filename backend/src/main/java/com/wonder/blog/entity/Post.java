@@ -26,10 +26,10 @@ public class Post {
   private String content;
 
   @ManyToOne
-  @JoinColumn()
+  @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true)
+  @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
   @JsonIgnore
   private Collection<PostImage> postImages = new ArrayList<>();
 

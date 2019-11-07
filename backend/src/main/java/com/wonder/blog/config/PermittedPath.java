@@ -1,6 +1,6 @@
 package com.wonder.blog.config;
 
-public enum  MatcherUrl {
+public enum PermittedPath {
 
   API_ROOT_URL("/api/v1/**"),
   LOGIN_URL("/api/v1/auth/login"),
@@ -11,7 +11,7 @@ public enum  MatcherUrl {
 
   final private String value;
 
-  MatcherUrl(String value){
+  PermittedPath(String value){
     this.value = value;
   }
 

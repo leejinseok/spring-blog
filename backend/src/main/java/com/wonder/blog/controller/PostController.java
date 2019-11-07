@@ -14,7 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -25,8 +28,8 @@ public class PostController {
   private final PostImageService postImageService;
 
   @PostMapping
-  public ResponseEntity<PostDto> addPost(@RequestBody Post post) {
-    return new ResponseEntity<>(new PostDto(postService.addPost(post)), HttpStatus.CREATED);
+  public ResponseEntity<PostDto> addPost(@ModelAttribute @Valid PostDto.RegisterReq dto) throws IOException {
+    return new ResponseEntity<>(new PostDto(postService.addPost(dto)), HttpStatus.CREATED);
   }
 
   @GetMapping

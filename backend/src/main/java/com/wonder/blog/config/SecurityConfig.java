@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.cors().disable().csrf().disable();
-    http.authorizeRequests().antMatchers(HttpMethod.GET, MatcherUrl.LOGIN_URL.value()).permitAll();
+    http.authorizeRequests().antMatchers(HttpMethod.GET, PermittedPath.LOGIN_URL.value()).permitAll();
 
     http
       .addFilterBefore(ajaxAuthFilter(), UsernamePasswordAuthenticationFilter.class).authenticationProvider(ajaxAuthProvider)
@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   private AjaxAuthFilter ajaxAuthFilter() {
-    AjaxAuthFilter filter = new AjaxAuthFilter(MatcherUrl.LOGIN_URL.value());
+    AjaxAuthFilter filter = new AjaxAuthFilter(PermittedPath.LOGIN_URL.value());
     filter.setAuthenticationManager(authenticationManager);
     filter.setJwtUtil(jwtUtil);
     filter.setCookieUtil(cookieUtil);
@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   private JwtAuthFilter jwtAuthFilter() {
-    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip(), MatcherUrl.API_ROOT_URL.value());
+    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip(), PermittedPath.API_ROOT_URL.value());
     JwtAuthFilter jwtAuthFilter = new JwtAuthFilter(matcher);
     jwtAuthFilter.setAuthenticationManager(authenticationManager);
     jwtAuthFilter.setCookieUtil(cookieUtil);
@@ -69,11 +69,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private List<RequestMapper> pathsToSkip() {
     List<RequestMapper> list = new ArrayList<>();
-    list.add(new RequestMapper(MatcherUrl.LOGIN_URL.value(), HttpMethod.POST));
-    list.add(new RequestMapper(MatcherUrl.REFRESH_TOKEN_URL.value(), HttpMethod.PATCH));
-    list.add(new RequestMapper(MatcherUrl.POSTS_URL.value(), HttpMethod.GET));
-    list.add(new RequestMapper(MatcherUrl.POST_URL.value(), HttpMethod.GET));
-    list.add(new RequestMapper(MatcherUrl.SIGNUP_URL.value(), HttpMethod.POST));
+    list.add(new RequestMapper(PermittedPath.LOGIN_URL.value(), HttpMethod.POST));
+    list.add(new RequestMapper(PermittedPath.REFRESH_TOKEN_URL.value(), HttpMethod.PATCH));
+    list.add(new RequestMapper(PermittedPath.POSTS_URL.value(), HttpMethod.GET));
+    list.add(new RequestMapper(PermittedPath.POST_URL.value(), HttpMethod.GET));
+    list.add(new RequestMapper(PermittedPath.SIGNUP_URL.value(), HttpMethod.POST));
     return list;
   }
 

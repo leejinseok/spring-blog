@@ -1,6 +1,7 @@
 package com.wonder.blog.service;
 
 import com.wonder.blog.common.CurrentUser;
+import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.entity.User;
@@ -12,6 +13,7 @@ import com.wonder.blog.util.AwsS3Util;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -20,14 +22,21 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.comparator.Comparators;
 
 import javax.persistence.EntityManager;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Lazy))
+@Slf4j
 public class PostService {
 
   private final PostRepository postRepository;
@@ -43,15 +52,29 @@ public class PostService {
 //    this.awsS3Util = awsS3Util;
 //  }
 
-  public Post addPost(Post post) {
+  @Transactional
+  public Post addPost(PostDto.RegisterReq dto) throws IOException {
     UserContext userContext = CurrentUser.create();
     User user = userService.getUserByEmail(userContext.getEmail());
 
+    Post post = new Post();
+    post.setTitle(dto.getTitle());
+    post.setContent(dto.getContent());
     post.setUser(user);
     post.setCreatedAt(LocalDateTime.now());
     post.setUpdatedAt(LocalDateTime.now());
 
-    return postRepository.save(post);
+    PostImage postImage = new PostImage();
+    postImage.setCreatedAt(LocalDateTime.now());
+    postImage.setPost(post);
+
+    post.getPostImages().add(postImage);
+    postRepository.save(post);
+
+    postImage.setS3Key(awsS3Util.generateS3Key(post.getId(), dto.getFile().getOriginalFilename()));
+    awsS3Util.upload(postImage.getS3Key(), dto.getFile());
+
+    return post;
   }
 
   @Transactional(readOnly = true)

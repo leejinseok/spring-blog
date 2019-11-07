@@ -47,29 +47,21 @@ export default {
   methods: {
     submit: async function(event) {
       event.preventDefault();
-      const data = {
-        title: this.$data.title,
-        content: this.$data.content
-      };
 
+      const data = new FormData();
+      data.append('title', this.title);
+      data.append('content', this.content);
+      data.append('file', this.$refs.file.files[0]);
+      
       try {
         let result = await this.$axios({
           url: '/api/v1/posts',
           method: 'post',
+          header: {
+            'Content-Type': 'multipart/form-data'
+          },
           data
         });
-
-        const file = this.$refs.file.files[0];
-        if (file) {
-          const formData = new FormData();
-          formData.append('file', file);
-          result = await this.$axios({
-            url: `/api/v1/posts/${result.data.id}/images`,
-            method: 'put',
-            data: formData
-          });
-        }
-        
         this.$router.push('/admin/posts');
       } catch (e) {
         console.log(e);

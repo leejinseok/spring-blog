@@ -4,7 +4,11 @@ import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.entity.User;
 import lombok.*;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,5 +35,15 @@ public class PostDto {
     this.user = new UserDto(post.getUser());
     this.createdAt = post.getCreatedAt();
     this.updatedAt = post.getUpdatedAt();
+  }
+
+  @Getter @Setter
+  public static class RegisterReq {
+    @NotEmpty
+    private String title;
+    @NotEmpty
+    private String content;
+    @Nullable
+    private MultipartFile file;
   }
 }
