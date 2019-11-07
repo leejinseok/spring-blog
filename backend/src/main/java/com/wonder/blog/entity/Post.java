@@ -29,8 +29,7 @@ public class Post {
   @JoinColumn()
   private User user;
 
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-  @JoinColumn(name = "post_id")
+  @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true)
   @JsonIgnore
   private Collection<PostImage> postImages = new ArrayList<>();
 

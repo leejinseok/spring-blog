@@ -10,6 +10,7 @@ import com.wonder.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(path = "/api/v1/posts", produces = "application/json;charset=utf-8")
+@RequestMapping(path = "/api/v1/posts")
 @RequiredArgsConstructor
 public class PostController {
   private final PostService postService;
