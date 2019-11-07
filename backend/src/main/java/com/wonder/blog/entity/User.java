@@ -1,15 +1,12 @@
 package com.wonder.blog.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor @Builder
 @Getter @Setter
 public class User {
 

@@ -58,23 +58,24 @@ public class PostService {
     UserContext userContext = CurrentUser.create();
     User user = userService.getUserByEmail(userContext.getEmail());
 
-    Post post = new Post();
-    post.setTitle(dto.getTitle());
-    post.setContent(dto.getContent());
-    post.setUser(user);
-    post.setCreatedAt(LocalDateTime.now());
-    post.setUpdatedAt(LocalDateTime.now());
+    Post post = Post.builder()
+      .title(dto.getTitle())
+      .content(dto.getContent())
+      .user(user)
+      .createdAt(LocalDateTime.now())
+      .build();
 
     postRepository.save(post);
 
     MultipartFile file = dto.getFile();
     if (file != null) {
-      PostImage postImage = new PostImage();
-      postImage.setCreatedAt(LocalDateTime.now());
-      postImage.setPost(post);
+      PostImage postImage = PostImage.builder()
+        .createdAt(LocalDateTime.now())
+        .post(post)
+        .s3Key(awsS3Util.generateS3Key(post.getId(), dto.getFile().getOriginalFilename()))
+        .build();
 
       post.getPostImages().add(postImage);
-      postImage.setS3Key(awsS3Util.generateS3Key(post.getId(), dto.getFile().getOriginalFilename()));
       awsS3Util.upload(postImage.getS3Key(), dto.getFile());
     }
 
@@ -99,7 +100,7 @@ public class PostService {
     return newPost;
   }
 
-  public int deletePost(int id) {
+  public void deletePost(int id) {
     UserContext userContext = CurrentUser.create();
     User user = userService.getUserByEmail(userContext.getEmail());
 
@@ -113,6 +114,5 @@ public class PostService {
     }
 
     postRepository.deleteById(id);
-    return id;
   }
 }

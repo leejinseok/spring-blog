@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "posts")
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor @Builder
 @Getter @Setter
 public class Post {
 

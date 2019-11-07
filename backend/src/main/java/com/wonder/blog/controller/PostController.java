@@ -50,7 +50,8 @@ public class PostController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Integer> deletePost(@PathVariable int id) throws CustomException {
-    return new ResponseEntity<>(postService.deletePost(id), HttpStatus.OK);
+  public ResponseEntity<Void> deletePost(@PathVariable int id) throws CustomException {
+    postService.deletePost(id);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }

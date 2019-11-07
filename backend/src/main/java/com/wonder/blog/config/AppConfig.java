@@ -20,11 +20,13 @@ public class AppConfig {
             UserService userService;
 
             @Override
-            public void run(ApplicationArguments args) throws Exception {
-                User user = new User();
-                user.setEmail("sonaky47@naver.com");
-                user.setPassword("1111");
-                user.setName("leejinseok");
+            public void run(ApplicationArguments args) {
+                User user = User.builder()
+                  .email("sonaky47@naver.com")
+                  .password("1111")
+                  .name("leejinseok")
+                  .build();
+
                 userService.addUser(user);
             }
         };
