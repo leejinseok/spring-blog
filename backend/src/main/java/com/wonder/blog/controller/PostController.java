@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(path = "/api/v1/posts")
+@RequestMapping(path = "/api/v1/posts", produces = "application/json;charset=utf-8")
 @RequiredArgsConstructor
 public class PostController {
   private final PostService postService;

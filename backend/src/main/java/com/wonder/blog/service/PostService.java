@@ -29,6 +29,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Lazy))
 public class PostService {
+
   private final PostRepository postRepository;
   private final UserService userService;
   private final PostImageService postImageService;
@@ -64,9 +65,11 @@ public class PostService {
   }
 
   public Post updatePost(int id, Post post) {
-    post.setId(id);
-    post.setUpdatedAt(LocalDateTime.now());
-    return postRepository.save(post);
+    Post newPost = getPost(id);
+    newPost.setTitle(post.getTitle());
+    newPost.setContent(post.getContent());
+    newPost.setUpdatedAt(LocalDateTime.now());
+    return newPost;
   }
 
   public int deletePost(int id) {
