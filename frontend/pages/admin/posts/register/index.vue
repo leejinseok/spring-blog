@@ -51,10 +51,12 @@ export default {
       const data = new FormData();
       data.append('title', this.title);
       data.append('content', this.content);
-      data.append('file', this.$refs.file.files[0]);
+      if (this.$refs.file.files[0]) {
+        data.append('file', this.$refs.file.files[0]);
+      }
       
       try {
-        let result = await this.$axios({
+        const result = await this.$axios({
           url: '/api/v1/posts',
           method: 'post',
           header: {
@@ -64,8 +66,7 @@ export default {
         });
         this.$router.push('/admin/posts');
       } catch (e) {
-        console.log(e);
-        console.log(e.message);
+        console.log(e.response.data);
         alert('에러발생');
       }
     }
