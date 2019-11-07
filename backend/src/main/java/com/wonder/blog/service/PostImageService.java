@@ -36,6 +36,7 @@ public class PostImageService {
       .s3Key(key)
       .createdAt(LocalDateTime.now())
       .build();
+
     return postImageRepository.save(postImage);
   }
 

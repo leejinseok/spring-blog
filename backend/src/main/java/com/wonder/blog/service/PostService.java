@@ -58,12 +58,11 @@ public class PostService {
     UserContext userContext = CurrentUser.create();
     User user = userService.getUserByEmail(userContext.getEmail());
 
-    Post post = Post.builder()
-      .title(dto.getTitle())
-      .content(dto.getContent())
-      .user(user)
-      .createdAt(LocalDateTime.now())
-      .build();
+    Post post = new Post();
+    post.setTitle(dto.getTitle());
+    post.setContent(dto.getContent());
+    post.setUser(user);
+    post.setCreatedAt(LocalDateTime.now());
 
     postRepository.save(post);
 
