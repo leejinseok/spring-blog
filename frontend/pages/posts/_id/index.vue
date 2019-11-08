@@ -19,7 +19,7 @@
       <div class="date">
         <p class="user">{{ post.user.name }}</p>
         <p class="createdAt">{{ displayDate(post.createdAt) }} 작성</p>
-        <p class="updatedAt">{{ displayDate(post.updatedAt) }} 최종수정</p>
+        <p class="updatedAt" v-if="post.udpatedAt">{{ displayDate(post.updatedAt) }} 최종수정</p>
       </div>
 
       <div id="disqus_thread"></div>
