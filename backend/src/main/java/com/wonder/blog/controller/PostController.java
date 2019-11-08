@@ -3,7 +3,6 @@ package com.wonder.blog.controller;
 import com.wonder.blog.dto.PageDto;
 import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.dto.PostImageDto;
-import com.wonder.blog.entity.Post;
 import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.service.PostImageService;
 import com.wonder.blog.service.PostService;
@@ -18,7 +17,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(path = "/api/v1/posts", produces = "application/json; charset=utf-8")
+@RequestMapping(path = "/api/v1/posts")
 @RequiredArgsConstructor
 public class PostController {
   private final PostService postService;

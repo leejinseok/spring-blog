@@ -1,6 +1,8 @@
 package com.wonder.blog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.wonder.blog.serializer.UserSerializer;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -27,6 +29,7 @@ public class Post {
 
   @ManyToOne
   @JoinColumn(name = "user_id")
+  @JsonSerialize(using = UserSerializer.class)
   private User user;
 
   @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
