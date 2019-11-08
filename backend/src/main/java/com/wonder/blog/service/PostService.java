@@ -91,26 +91,25 @@ public class PostService {
     return postRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Post id: " + id + " not founded"));
   }
 
-  public Post updatePost(int id, Post post) {
-    Post newPost = getPost(id);
-    newPost.setTitle(post.getTitle());
-    newPost.setContent(post.getContent());
-    newPost.setUpdatedAt(LocalDateTime.now());
-    return newPost;
+  public Post updatePost(int id, PostDto.RegisterReq dto) {
+    Post post = getPost(id);
+    post.setTitle(dto.getTitle());
+    post.setContent(dto.getContent());
+    post.setUpdatedAt(LocalDateTime.now());
+    return post;
   }
 
   public void deletePost(int id) {
-    UserContext userContext = CurrentUser.create();
-    User user = userService.getUserByEmail(userContext.getEmail());
+    User user = userService.getUserByEmail(CurrentUser.create().getEmail());
 
     Post post = getPost(id);
     if (!post.getUser().getId().equals(user.getId())) {
       throw new CustomException("This post not yours");
     }
 
-    for (PostImage postImage : postImageService.getPostImagesByPost(post)) {
-      awsS3Util.delete(postImage.getS3Key());
-    }
+    postImageService.getPostImagesByPost(post).forEach(e -> {
+      awsS3Util.delete(e.getS3Key());
+    });
 
     postRepository.deleteById(id);
   }
