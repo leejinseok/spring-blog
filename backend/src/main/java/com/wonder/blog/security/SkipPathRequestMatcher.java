@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SkipPathRequestMatcher implements RequestMatcher {
+
   private OrRequestMatcher matchers;
   private RequestMatcher processiongMatcher;
 

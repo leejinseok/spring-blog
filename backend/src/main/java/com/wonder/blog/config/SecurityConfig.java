@@ -23,6 +23,7 @@ import java.util.*;
 @EnableWebSecurity
 @EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
   @Autowired
   private AuthenticationManager authenticationManager;
   @Autowired

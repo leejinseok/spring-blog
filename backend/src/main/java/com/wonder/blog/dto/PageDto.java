@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 public class PageDto {
+
   private List content;
   private int number;
   private int size;

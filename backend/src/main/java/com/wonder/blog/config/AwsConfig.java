@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 public class AwsConfig {
+
   private final AwsProperties properties;
 
   @Bean

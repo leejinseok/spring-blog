@@ -8,6 +8,7 @@ import lombok.Setter;
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 public class DefaultResponse {
+
   private int status;
   private String message;
   private Object result;

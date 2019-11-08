@@ -8,6 +8,7 @@ import java.util.List;
 
 @Getter @Setter
 public class UserContext {
+
   private final String email;
   private final List<GrantedAuthority> authorities;
 

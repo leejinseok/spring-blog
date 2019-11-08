@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api/v1/posts/images")
 @RequiredArgsConstructor
 public class PostImageController {
+
   private final PostImageService postImageService;
 
   @DeleteMapping("/{id}")

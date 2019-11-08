@@ -12,6 +12,7 @@ import java.io.IOException;
 @Builder
 @Getter @Setter
 public class ResponseWriter {
+
   private int status;
   private String contentType;
   private HttpServletResponse response;

@@ -32,6 +32,7 @@ import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
 @Getter @Setter
 public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
+
   private JwtUtil jwtUtil;
   private CookieUtil cookieUtil;
   private UserService userService;

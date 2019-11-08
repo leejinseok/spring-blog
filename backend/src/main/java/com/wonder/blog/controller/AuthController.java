@@ -19,6 +19,7 @@ import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v1/auth")
 public class AuthController {
+
   private final UserService userService;
   private final CookieUtil cookieUtil;
 

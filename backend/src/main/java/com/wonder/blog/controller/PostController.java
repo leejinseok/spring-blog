@@ -20,6 +20,7 @@ import java.io.IOException;
 @RequestMapping(path = "/api/v1/posts")
 @RequiredArgsConstructor
 public class PostController {
+
   private final PostService postService;
   private final PostImageService postImageService;
 

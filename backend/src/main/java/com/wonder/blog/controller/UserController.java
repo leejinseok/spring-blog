@@ -16,6 +16,7 @@ import java.util.Collection;
 @RequestMapping(path = "/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
+
   private final UserRepository userRepository;
 
   @GetMapping

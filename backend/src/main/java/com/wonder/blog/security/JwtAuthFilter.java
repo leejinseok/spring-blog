@@ -25,6 +25,7 @@ import static com.wonder.blog.util.JwtUtil.JWT_TOKEN_NAME;
 
 @Getter @Setter
 public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
+
   private CookieUtil cookieUtil;
 
   public JwtAuthFilter(SkipPathRequestMatcher matcher) {

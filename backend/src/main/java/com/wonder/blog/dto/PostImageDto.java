@@ -9,8 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 public class PostImageDto {
-  private static final String BASE_URL = "https://leejinseok-blog.s3.ap-northeast-2.amazonaws.com/";
 
+  private final String BASE_URL = "https://leejinseok-blog.s3.ap-northeast-2.amazonaws.com/";
   private int id;
   private String s3Key;
   private String url;
