@@ -43,7 +43,7 @@ public class PostService {
   private final PostRepository postRepository;
   private final UserService userService;
 
-  public Post addPost(PostDto.RegisterReq dto) throws IOException {
+  public Post addPost(PostDto.RegisterReq dto) {
     Post post = new Post();
     post.setTitle(dto.getTitle());
     post.setContent(dto.getContent());
@@ -73,7 +73,6 @@ public class PostService {
 
   public void deletePost(int id) {
     User user = userService.getUserByEmail(CurrentUser.create().getEmail());
-
     Post post = getPost(id);
     if (!post.getUser().getId().equals(user.getId())) {
       throw new CustomException("This post is not yours");
