@@ -4,7 +4,6 @@ import com.wonder.blog.common.DefaultResponse;
 import com.wonder.blog.common.ResponseWriter;
 import com.wonder.blog.config.AppProperties;
 import com.wonder.blog.entity.User;
-import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
 import com.wonder.blog.util.JwtUtil;
