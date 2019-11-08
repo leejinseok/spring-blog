@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
+
   private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
   private static final String secretKey = "thisisblogapp";
   public static final String JWT_TOKEN_NAME = "JWT-TOKEN";

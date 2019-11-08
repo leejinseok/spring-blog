@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class CookieUtil {
+
   private final AppProperties appProperties;
 
   public CookieUtil(AppProperties appProperties) {

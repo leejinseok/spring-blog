@@ -36,7 +36,6 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Lazy))
 @Slf4j
 public class PostService {
 
@@ -45,13 +44,13 @@ public class PostService {
   private final PostImageService postImageService;
   private final AwsS3Util awsS3Util;
 
-//  @Autowired
-//  public PostService(PostRepository postRepository, UserService userService, @Lazy PostImageService postImageService, AwsS3Util awsS3Util) {
-//    this.postRepository = postRepository;
-//    this.userService = userService;
-//    this.postImageService = postImageService;
-//    this.awsS3Util = awsS3Util;
-//  }
+  @Autowired
+  public PostService(PostRepository postRepository, UserService userService, @Lazy PostImageService postImageService, AwsS3Util awsS3Util) {
+    this.postRepository = postRepository;
+    this.userService = userService;
+    this.postImageService = postImageService;
+    this.awsS3Util = awsS3Util;
+  }
 
   @Transactional
   public Post addPost(PostDto.RegisterReq dto) throws IOException {
@@ -71,11 +70,11 @@ public class PostService {
       PostImage postImage = PostImage.builder()
         .createdAt(LocalDateTime.now())
         .post(post)
-        .s3Key(awsS3Util.generateS3Key(post.getId(), dto.getFile().getOriginalFilename()))
+        .s3Key(awsS3Util.generateS3Key(post.getId(), file.getOriginalFilename()))
         .build();
 
       post.getPostImages().add(postImage);
-      awsS3Util.upload(postImage.getS3Key(), dto.getFile());
+      awsS3Util.upload(postImage.getS3Key(), file);
     }
 
     return post;
@@ -92,6 +91,7 @@ public class PostService {
   }
 
   public Post updatePost(int id, PostDto.RegisterReq dto) {
+    // 영속성으로 분류되어 set 만으로 update가 가능하다는 점 ...
     Post post = getPost(id);
     post.setTitle(dto.getTitle());
     post.setContent(dto.getContent());
@@ -104,7 +104,7 @@ public class PostService {
 
     Post post = getPost(id);
     if (!post.getUser().getId().equals(user.getId())) {
-      throw new CustomException("This post not yours");
+      throw new CustomException("This post is not yours");
     }
 
     postImageService.getPostImagesByPost(post).forEach(e -> {
