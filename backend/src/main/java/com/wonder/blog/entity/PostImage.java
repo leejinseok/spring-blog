@@ -41,7 +41,13 @@ public class PostImage {
   @LastModifiedDate
   private LocalDateTime updatedAt;
 
-  @PostRemove
-  private void postRemove() {
+  @PrePersist
+  private void prePersist() {
+    this.createdAt = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  private void preUpdate() {
+    this.updatedAt = LocalDateTime.now();
   }
 }

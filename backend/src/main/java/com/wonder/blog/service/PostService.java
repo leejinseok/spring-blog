@@ -48,7 +48,6 @@ public class PostService {
     post.setTitle(dto.getTitle());
     post.setContent(dto.getContent());
     post.setUser(userService.getUserByEmail(CurrentUser.create().getEmail()));
-    post.setCreatedAt(LocalDateTime.now());
     return postRepository.save(post);
   }
 
@@ -62,12 +61,12 @@ public class PostService {
     return postRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Post id: " + id + " not founded"));
   }
 
+  @Transactional
   public Post updatePost(int id, PostDto.RegisterReq dto) {
     // 영속성으로 분류되어 set 만으로 update가 가능하다는 점 ...
     Post post = getPost(id);
     post.setTitle(dto.getTitle());
     post.setContent(dto.getContent());
-    post.setUpdatedAt(LocalDateTime.now());
     return post;
   }
 
