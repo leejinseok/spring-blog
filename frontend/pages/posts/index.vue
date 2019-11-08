@@ -50,8 +50,9 @@
 
 <script>
 import Header from '~/components/Header';
-import getPosts from '~/api/posts';
+import { findAll } from '~/api/posts';
 import { mapState } from 'vuex';
+import pagination from 'pagination';
 
 export default {
   components: {
@@ -65,16 +66,22 @@ export default {
   },
   async asyncData(context) {
     const { store, route, $axios } = context;
-    await getPosts(store, route, $axios);
-  },
-  data() {
+    const result = await findAll(route.query, $axios);
+    const paginator = pagination.create('search', {
+      prelink:'/posts', 
+      current: result.data.number + 1, 
+      rowsPerPage: result.data.size, 
+      totalResult: result.data.totalElements
+    });
+    store.commit('posts/set', {
+      data: result.data.content,
+      paginator: paginator.getPaginationData()
+    });
   },
   watch: {
     '$route': function() {
       this.fetchPosts();
     }
-  },
-  mounted: async function() {
   },
   methods: {
     displayDate: function (val) {

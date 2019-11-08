@@ -51,6 +51,7 @@
 <script>
 import LogoutBtn from '~/components/admin/LogoutBtn';
 import pagination from 'pagination';
+import { findAll } from '~/api/posts';
 
 export default {
   layout: 'admin',
@@ -87,9 +88,6 @@ export default {
       rendered: paginator.render()
     }
   },
-  methods: {
- 
-  }
 }
 </script>
 

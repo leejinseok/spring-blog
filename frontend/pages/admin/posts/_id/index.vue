@@ -93,6 +93,7 @@ export default {
         this.$router.push('/admin/posts');
       } catch (e) {
         console.log(e);
+        console.log(e.response);
         alert('에러발생');
       }
     },
