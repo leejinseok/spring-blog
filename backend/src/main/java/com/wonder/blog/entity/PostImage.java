@@ -1,6 +1,9 @@
 package com.wonder.blog.entity;
 
+import com.wonder.blog.service.PostService;
+import com.wonder.blog.util.AwsS3Util;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -37,4 +40,8 @@ public class PostImage {
 
   @LastModifiedDate
   private LocalDateTime updatedAt;
+
+  @PostRemove
+  private void postRemove() {
+  }
 }

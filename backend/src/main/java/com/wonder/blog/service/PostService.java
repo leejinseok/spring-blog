@@ -36,48 +36,20 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class PostService {
 
   private final PostRepository postRepository;
   private final UserService userService;
-  private final PostImageService postImageService;
-  private final AwsS3Util awsS3Util;
 
-  @Autowired
-  public PostService(PostRepository postRepository, UserService userService, @Lazy PostImageService postImageService, AwsS3Util awsS3Util) {
-    this.postRepository = postRepository;
-    this.userService = userService;
-    this.postImageService = postImageService;
-    this.awsS3Util = awsS3Util;
-  }
-
-  @Transactional
   public Post addPost(PostDto.RegisterReq dto) throws IOException {
-    UserContext userContext = CurrentUser.create();
-    User user = userService.getUserByEmail(userContext.getEmail());
-
     Post post = new Post();
     post.setTitle(dto.getTitle());
     post.setContent(dto.getContent());
-    post.setUser(user);
+    post.setUser(userService.getUserByEmail(CurrentUser.create().getEmail()));
     post.setCreatedAt(LocalDateTime.now());
-
-    postRepository.save(post);
-
-    MultipartFile file = dto.getFile();
-    if (file != null) {
-      PostImage postImage = PostImage.builder()
-        .createdAt(LocalDateTime.now())
-        .post(post)
-        .s3Key(awsS3Util.generateS3Key(post.getId(), file.getOriginalFilename()))
-        .build();
-
-      post.getPostImages().add(postImage);
-      awsS3Util.upload(postImage.getS3Key(), file);
-    }
-
-    return post;
+    return postRepository.save(post);
   }
 
   @Transactional(readOnly = true)
@@ -106,10 +78,6 @@ public class PostService {
     if (!post.getUser().getId().equals(user.getId())) {
       throw new CustomException("This post is not yours");
     }
-
-    postImageService.getPostImagesByPost(post).forEach(e -> {
-      awsS3Util.delete(e.getS3Key());
-    });
 
     postRepository.deleteById(id);
   }

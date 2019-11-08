@@ -3,6 +3,8 @@ package com.wonder.blog.controller;
 import com.wonder.blog.dto.PageDto;
 import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.dto.PostImageDto;
+import com.wonder.blog.entity.Post;
+import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.service.PostImageService;
 import com.wonder.blog.service.PostService;
@@ -26,7 +28,15 @@ public class PostController {
 
   @PostMapping
   public ResponseEntity<PostDto> addPost(@ModelAttribute @Valid PostDto.RegisterReq dto) throws IOException {
-    return new ResponseEntity<>(new PostDto(postService.addPost(dto)), HttpStatus.CREATED);
+    Post post = postService.addPost(dto);
+
+    MultipartFile file = dto.getFile();
+    if (file != null) {
+      PostImage postImage = postImageService.addPostImage(post, file);
+      post.getPostImages().add(postImage);
+    }
+
+    return new ResponseEntity<>(new PostDto(post), HttpStatus.CREATED);
   }
 
   @GetMapping
@@ -46,11 +56,12 @@ public class PostController {
 
   @PutMapping("/{id}/images")
   public ResponseEntity<PostImageDto> uploadPostImage(@PathVariable int id, @RequestParam("file") MultipartFile file) throws IOException {
-    return new ResponseEntity<>(new PostImageDto(postImageService.addPostImage(id, file)), HttpStatus.OK);
+    return new ResponseEntity<>(new PostImageDto(postImageService.addPostImage(postService.getPost(id), file)), HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deletePost(@PathVariable int id) throws CustomException {
+    postImageService.deletePostImageByPost(postService.getPost(id));
     postService.deletePost(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
