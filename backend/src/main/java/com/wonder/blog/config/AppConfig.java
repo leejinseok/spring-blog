@@ -21,6 +21,7 @@ public class AppConfig {
     @Profile("dev")
     public ApplicationRunner applicationRunner() {
         return new ApplicationRunner() {
+
             @Autowired
             UserRepository userRepository;
 
