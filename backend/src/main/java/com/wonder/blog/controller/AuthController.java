@@ -35,9 +35,8 @@ public class AuthController {
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<UserContext> logout(HttpServletResponse response) {
-    UserContext userContext = CurrentUser.create();
+  public ResponseEntity<Void> logout(HttpServletResponse response) {
     cookieUtil.clear(response, JWT_TOKEN_NAME);
-    return new ResponseEntity<>(userContext, HttpStatus.OK);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }
