@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(path = "/api/v1/posts")
+@RequestMapping(path = "/api/v1/posts", produces = "application/json; charset=utf-8")
 @RequiredArgsConstructor
 public class PostController {
   private final PostService postService;
@@ -40,8 +40,8 @@ public class PostController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<PostDto> updatePost(@PathVariable int id, @RequestBody Post post) {
-    return new ResponseEntity<>(new PostDto(postService.updatePost(id, post)), HttpStatus.OK);
+  public ResponseEntity<PostDto> updatePost(@PathVariable int id, @RequestBody PostDto.RegisterReq dto) {
+    return new ResponseEntity<>(new PostDto(postService.updatePost(id, dto)), HttpStatus.OK);
   }
 
   @PutMapping("/{id}/images")

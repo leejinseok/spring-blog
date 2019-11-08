@@ -63,11 +63,15 @@ export default {
       if (!confirm('정말 수정하시겠습니까?')) return;
       
       const data = this.post;
+
       try {
         const result = await this.$axios({
           url: `/api/v1/posts/${data.id}`,
           method: 'put',
-          data
+          data: {
+            title: this.post.title,
+            content: this.post.content
+          }
         });
 
         this.$router.push('/admin/posts');
