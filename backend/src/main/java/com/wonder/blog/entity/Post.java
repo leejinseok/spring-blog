@@ -27,6 +27,14 @@ public class Post {
   @Column(columnDefinition = "text")
   private String content;
 
+  @Column(nullable = false, updatable = false)
+  @CreatedDate
+  private LocalDateTime createdAt;
+
+  @Column
+  @LastModifiedDate
+  private LocalDateTime updatedAt;
+
   @ManyToOne
   @JoinColumn(name = "user_id")
   @JsonSerialize(using = UserSerializer.class)
@@ -36,12 +44,9 @@ public class Post {
   @JsonIgnore
   private Collection<PostImage> postImages = new ArrayList<>();
 
-  @Column(nullable = false, updatable = false)
-  @CreatedDate
-  private LocalDateTime createdAt;
-
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
+  @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
+  @JsonIgnore
+  private Collection<PostTag> postTags = new ArrayList<>();
 
   @PrePersist
   private void prePersist() {

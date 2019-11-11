@@ -1,6 +1,7 @@
 package com.wonder.blog.config;
 
 import com.wonder.blog.entity.Post;
+import com.wonder.blog.entity.PostTag;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.repository.PostRepository;
 import com.wonder.blog.repository.UserRepository;
@@ -13,6 +14,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Configuration
 public class AppConfig {
@@ -42,13 +45,19 @@ public class AppConfig {
 
         userRepository.save(user);
 
+        Collection<PostTag> postTags = new ArrayList<>();
+        PostTag postTag = PostTag.builder().text("Java").build();
+        postTags.add(postTag);
+
         Post post = Post.builder()
           .title("자자 ...")
           .user(user)
           .content("무엇을 쓸까 ...")
+          .postTags(postTags)
           .createdAt(LocalDateTime.now())
           .build();
 
+        postTag.setPost(post);
         postRepository.save(post);
       }
     };
