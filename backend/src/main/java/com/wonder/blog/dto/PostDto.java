@@ -2,6 +2,7 @@ package com.wonder.blog.dto;
 
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.PostImage;
+import com.wonder.blog.entity.PostTag;
 import com.wonder.blog.entity.User;
 import lombok.*;
 import org.springframework.lang.Nullable;
@@ -23,6 +24,7 @@ public class PostDto {
   private String title;
   private String content;
   private Collection<PostImageDto> postImages;
+  private Collection<PostTag> postTags;
   private UserDto user;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
@@ -32,6 +34,7 @@ public class PostDto {
     this.title = post.getTitle();
     this.content = post.getContent();
     this.postImages = post.getPostImages().stream().map(PostImageDto::new).collect(Collectors.toList());
+    this.postTags = post.getPostTags();
     this.user = new UserDto(post.getUser());
     this.createdAt = post.getCreatedAt();
     this.updatedAt = post.getUpdatedAt();
