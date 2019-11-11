@@ -1,6 +1,5 @@
 package com.wonder.blog.dto;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.wonder.blog.entity.Post;
@@ -52,9 +51,8 @@ public class PostDto {
 
     public Collection<PostTag> getPostTags() {
       Collection<PostTag> postTags = new ArrayList<>();
-      JsonArray jsonArray = JsonParser.parseString(this.postTags).getAsJsonArray();
-      for (JsonElement item : jsonArray) {
-        String text = item.getAsJsonObject().get("text").toString().replace("\"", "");
+      for (JsonElement postTag : JsonParser.parseString(this.postTags).getAsJsonArray()) {
+        String text = postTag.getAsJsonObject().get("text").toString().replace("\"", "");
         postTags.add(PostTag.builder().text(text).build());
       }
 
