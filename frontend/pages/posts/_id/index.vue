@@ -10,7 +10,13 @@
         {{ post.content }}
       </div>
 
-      <div class="images">
+      <div class="tags">
+        <span v-for="tag in post.postTags" :key="tag.id">
+          #{{ tag.text }}
+        </span>
+      </div>
+
+      <div class="images" v-if="post.postImages.length">
         <div class="wrapper-image" v-for="postImage in post.postImages" :key="postImage.id">
           <img :src="postImage.url" alt="">
         </div>
@@ -82,6 +88,22 @@ export default {
   white-space: pre-line;
   font-size: 18px;
   line-height: 1.5;
+}
+
+.tags {
+  margin-top: 12px;
+}
+
+.tags span {
+  padding: 5px 8px;
+  background-color: #aaa;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 12px;
+  box-sizing: border-box;
+  display: inline-block;
+  margin-right: 4px;
+  margin-bottom: 4px;
 }
 
 .images {
