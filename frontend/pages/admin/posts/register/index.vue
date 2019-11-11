@@ -58,10 +58,10 @@ export default {
   methods: {
     submit: async function(event) {
       event.preventDefault();
-
       const data = new FormData();
       data.append('title', this.title);
       data.append('content', this.content);
+      data.append('postTags', JSON.stringify(this.postTags));
       if (this.$refs.file.files[0]) {
         data.append('file', this.$refs.file.files[0]);
       }
@@ -86,7 +86,9 @@ export default {
       if ($event.keyCode === 13) {
         $event.preventDefault();
         if (!this.postTags.some(item => item === this.postTagInputText)) {
-          this.postTags.push(this.postTagInputText);
+          this.postTags.push({
+            text: this.postTagInputText
+          });
         };
         this.postTagInputText = '';
       }

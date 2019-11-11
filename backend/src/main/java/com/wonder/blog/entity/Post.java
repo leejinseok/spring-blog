@@ -57,4 +57,9 @@ public class Post {
   private void preUpdate() {
     this.updatedAt = LocalDateTime.now();
   }
+
+  public void setPostTags(Collection<PostTag> postTags) {
+    postTags.stream().forEach(e -> e.setPost(this));
+    this.postTags = postTags;
+  }
 }

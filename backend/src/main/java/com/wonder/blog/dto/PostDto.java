@@ -1,19 +1,20 @@
 package com.wonder.blog.dto;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.wonder.blog.entity.Post;
-import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.entity.PostTag;
-import com.wonder.blog.entity.User;
-import lombok.*;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor @AllArgsConstructor
@@ -46,7 +47,18 @@ public class PostDto {
     private String title;
     @NotEmpty
     private String content;
-    private Collection<PostTag> postTags;
+    private String postTags;
     private MultipartFile file;
+
+    public Collection<PostTag> getPostTags() {
+      Collection<PostTag> postTags = new ArrayList<>();
+      JsonArray jsonArray = JsonParser.parseString(this.postTags).getAsJsonArray();
+      for (JsonElement item : jsonArray) {
+        String text = item.getAsJsonObject().get("text").toString().replace("\"", "");
+        postTags.add(PostTag.builder().text(text).build());
+      }
+
+      return postTags;
+    }
   }
 }
