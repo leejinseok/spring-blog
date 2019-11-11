@@ -17,40 +17,40 @@ import java.time.LocalDateTime;
 @Configuration
 public class AppConfig {
 
-    @Bean
-    @Profile("dev")
-    public ApplicationRunner applicationRunner() {
-        return new ApplicationRunner() {
+  @Bean
+  @Profile("dev")
+  public ApplicationRunner applicationRunner() {
+    return new ApplicationRunner() {
 
-            @Autowired
-            UserRepository userRepository;
+      @Autowired
+      UserRepository userRepository;
 
-            @Autowired
-            PostRepository postRepository;
+      @Autowired
+      PostRepository postRepository;
 
-            @Autowired
-            BCryptPasswordEncoder bCryptPasswordEncoder;
+      @Autowired
+      BCryptPasswordEncoder bCryptPasswordEncoder;
 
-            @Override
-            public void run(ApplicationArguments args) {
+      @Override
+      public void run(ApplicationArguments args) {
 
-                User user = User.builder()
-                  .email("sonaky47@naver.com")
-                  .name("leejinseok")
-                  .password(bCryptPasswordEncoder.encode("1111"))
-                  .build();
+        User user = User.builder()
+          .email("sonaky47@naver.com")
+          .name("jinseok")
+          .password(bCryptPasswordEncoder.encode("1111"))
+          .build();
 
-                userRepository.save(user);
+        userRepository.save(user);
 
-                Post post = Post.builder()
-                  .title("자자 ...")
-                  .user(user)
-                  .content("무엇을 쓸까 ...")
-                  .createdAt(LocalDateTime.now())
-                  .build();
+        Post post = Post.builder()
+          .title("자자 ...")
+          .user(user)
+          .content("무엇을 쓸까 ...")
+          .createdAt(LocalDateTime.now())
+          .build();
 
-                postRepository.save(post);
-            }
-        };
-    }
+        postRepository.save(post);
+      }
+    };
+  }
 }

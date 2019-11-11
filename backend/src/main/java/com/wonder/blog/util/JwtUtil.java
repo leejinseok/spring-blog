@@ -2,16 +2,12 @@ package com.wonder.blog.util;
 
 import com.wonder.blog.security.UserContext;
 import io.jsonwebtoken.*;
-import jdk.vm.ci.meta.Local;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
