@@ -59,6 +59,7 @@ public class Post {
   }
 
   public void setPostTags(Collection<PostTag> postTags) {
+    // Casecade Persist 위함
     postTags.stream().forEach(e -> e.setPost(this));
     this.postTags = postTags;
   }
