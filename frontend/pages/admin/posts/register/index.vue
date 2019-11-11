@@ -17,6 +17,15 @@
           <div class="form-group">
             <textarea class="form-control" v-model="content" placeholder="내용"></textarea>
           </div>
+          <div class="form-group register-tag">
+            <input class="form-control" type="text" v-model="postTagInputText" placeholder="태그" @keydown="handleKeyUpPostTagInputText">
+            <button class="btn btn-sm btn-dark" type="button">추가</button>
+          </div>
+          <div class="form-group list-tag">
+            <span v-for="(tag, tagIndex) in postTags" :key="tagIndex">
+              {{ tag }}
+            </span>
+          </div>
           <div class="form-group">
             <input class="form-control" type="file" ref="file">
           </div>
@@ -41,7 +50,9 @@ export default {
   data() {
     return {
       title: '',
-      content: ''
+      content: '',
+      postTagInputText: '',
+      postTags: []
     }
   },
   methods: {
@@ -68,6 +79,16 @@ export default {
       } catch (e) {
         console.log(e.response.data);
         alert('에러발생');
+      }
+    },
+    handleKeyUpPostTagInputText: function($event) {
+      $event.stopPropagation();
+      if ($event.keyCode === 13) {
+        $event.preventDefault();
+        if (!this.postTags.some(item => item === this.postTagInputText)) {
+          this.postTags.push(this.postTagInputText);
+        };
+        this.postTagInputText = '';
       }
     }
   }
@@ -96,5 +117,25 @@ export default {
 
 .form-container textarea {
   margin-top: 10px;
+}
+
+.form-group.register-tag {
+  display: flex;
+  align-items: center;
+}
+
+.form-group.register-tag input,
+.form-group.register-tag button {
+  display: inline;
+  width: auto;
+  margin-top: 0;
+}
+
+.form-group.register-tag button {
+  margin-left: 6px;
+}
+
+.form-group.list-tag {
+  text-align: left;
 }
 </style>

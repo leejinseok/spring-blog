@@ -13,6 +13,7 @@
         <div class="form-group">
           <input class="form-control" type="text" v-model="post.title">
         </div>
+
         <div class="form-group">
           <textarea class="form-control" v-model="post.content"></textarea>
         </div>

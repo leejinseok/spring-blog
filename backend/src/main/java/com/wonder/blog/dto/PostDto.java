@@ -46,6 +46,7 @@ public class PostDto {
     private String title;
     @NotEmpty
     private String content;
+    private Collection<PostTag> postTags;
     private MultipartFile file;
   }
 }

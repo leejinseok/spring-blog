@@ -39,7 +39,7 @@ public class AppConfig {
 
         User user = User.builder()
           .email("sonaky47@naver.com")
-          .name("jinseok")
+          .name("leejinseok")
           .password(bCryptPasswordEncoder.encode("1111"))
           .build();
 
