@@ -41,6 +41,7 @@
 <script>
 import qs from 'qs';
 import LogoutBtn from '~/components/admin/LogoutBtn';
+import {addPost} from '~/api/posts';
 
 export default {
   layout: 'admin',
@@ -52,12 +53,13 @@ export default {
       title: '',
       content: '',
       postTagInputText: '',
-      postTags: []
+      postTags: [],
     }
   },
   methods: {
     submit: async function(event) {
       event.preventDefault();
+
       const data = new FormData();
       data.append('title', this.title);
       data.append('content', this.content);
@@ -67,16 +69,10 @@ export default {
       }
       
       try {
-        const result = await this.$axios({
-          url: '/api/v1/posts',
-          method: 'post',
-          header: {
-            'Content-Type': 'multipart/form-data'
-          },
-          data
-        });
+        const result = await addPost.bind(this)(data);
         this.$router.push('/admin/posts');
       } catch (e) {
+        console.log(e);
         console.log(e.response.data);
         alert('에러발생');
       }
