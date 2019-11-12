@@ -6,7 +6,6 @@ import com.wonder.blog.dto.PostImageDto;
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.PostImage;
 import com.wonder.blog.exception.AccessNotOwnedResourceException;
-import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.service.PostImageService;
 import com.wonder.blog.service.PostService;
 import lombok.RequiredArgsConstructor;

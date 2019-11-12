@@ -3,9 +3,8 @@ package com.wonder.blog.service;
 import com.wonder.blog.common.CurrentUser;
 import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.entity.Post;
-import com.wonder.blog.entity.PostTag;
 import com.wonder.blog.entity.User;
-import com.wonder.blog.exception.CustomException;
+import com.wonder.blog.exception.AccessNotOwnedResourceException;
 import com.wonder.blog.exception.DataNotFoundException;
 import com.wonder.blog.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +55,7 @@ public class PostService {
     User user = userService.getUserByEmail(CurrentUser.create().getEmail());
     Post post = getPost(id);
     if (!post.getUser().getId().equals(user.getId())) {
-      throw new CustomException("This post is not yours");
+      throw new AccessNotOwnedResourceException("This post is not yours");
     }
 
     postRepository.deleteById(id);

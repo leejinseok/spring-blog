@@ -2,7 +2,6 @@ package com.wonder.blog.controller;
 
 import com.wonder.blog.common.ErrorResponse;
 import com.wonder.blog.exception.AccessNotOwnedResourceException;
-import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.exception.DataNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class Advice {
 
-  @ExceptionHandler({CustomException.class, AccessNotOwnedResourceException.class})
+  @ExceptionHandler(AccessNotOwnedResourceException.class)
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public ErrorResponse custom(Exception exception) {
     return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
