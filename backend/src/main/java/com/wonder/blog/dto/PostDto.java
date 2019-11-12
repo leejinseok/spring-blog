@@ -2,8 +2,11 @@ package com.wonder.blog.dto;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.wonder.blog.common.CurrentUser;
 import com.wonder.blog.domain.Post;
 import com.wonder.blog.domain.PostTag;
+import com.wonder.blog.domain.User;
+import com.wonder.blog.security.UserContext;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,6 +50,7 @@ public class PostDto {
     @NotEmpty
     private String content;
     private String postTags;
+    private User user;
     private MultipartFile file;
 
     public Collection<PostTag> getPostTags() {

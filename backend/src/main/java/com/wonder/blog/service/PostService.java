@@ -27,7 +27,7 @@ public class PostService {
     post.setTitle(dto.getTitle());
     post.setContent(dto.getContent());
     post.setPostTags(dto.getPostTags());
-    post.setUser(userService.getUserByEmail(CurrentUser.create().getEmail()));
+    post.setUser(dto.getUser());
     return postRepository.save(post);
   }
 

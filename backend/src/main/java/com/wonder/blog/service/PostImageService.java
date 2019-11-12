@@ -48,8 +48,8 @@ public class PostImageService {
   }
 
   public void deletePostImageByPost(Post post) {
-    for (PostImage e : post.getPostImages()) {
-      deletePostImage(e.getId());
+    for (PostImage postImage : post.getPostImages()) {
+      deletePostImage(postImage.getId());
     }
   }
 }

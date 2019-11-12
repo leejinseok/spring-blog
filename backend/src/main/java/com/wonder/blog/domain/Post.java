@@ -61,20 +61,20 @@ public class Post {
 
   public void setPostTags(Collection<PostTag> postTags) {
     // Casecade Persist 위함
-    for (PostTag e : postTags) {
-      e.setPost(this);
+    for (PostTag postTag : postTags) {
+      postTag.setPost(this);
     }
     this.postTags = postTags;
   }
 
   public void clearAndAddPostTags(PostDto.UpdateReq dto) {
     this.postTags.clear();
-    for (PostTag e : dto.getPostTags()) {
-      PostTag postTag = PostTag.builder()
-        .text(e.getText())
+    for (PostTag postTag : dto.getPostTags()) {
+      PostTag newPostTag = PostTag.builder()
+        .text(postTag.getText())
         .post(this)
         .build();
-      this.getPostTags().add(postTag);
+      this.getPostTags().add(newPostTag);
     }
   }
 }

@@ -1,5 +1,7 @@
 package com.wonder.blog.controller;
 
+import com.wonder.blog.common.CurrentUser;
+import com.wonder.blog.domain.User;
 import com.wonder.blog.dto.PageDto;
 import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.dto.PostImageDto;
@@ -8,6 +10,7 @@ import com.wonder.blog.domain.PostImage;
 import com.wonder.blog.exception.AccessNotOwnedResourceException;
 import com.wonder.blog.service.PostImageService;
 import com.wonder.blog.service.PostService;
+import com.wonder.blog.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,11 +26,15 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class PostController {
 
+  private final UserService userService;
   private final PostService postService;
   private final PostImageService postImageService;
 
   @PostMapping
   public ResponseEntity<PostDto> addPost(@ModelAttribute @Valid PostDto.RegisterReq dto) throws IOException {
+    User user = userService.getUserByEmail(CurrentUser.create().getEmail());
+    dto.setUser(user);
+
     Post post = postService.addPost(dto);
 
     MultipartFile file = dto.getFile();
