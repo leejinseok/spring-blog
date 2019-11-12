@@ -18,6 +18,15 @@
           <textarea class="form-control" v-model="post.content"></textarea>
         </div>
 
+        <div class="form-group form-group-tags" v-if="post.postTags.length">
+          <div class="tag-wrapper" v-for="(tag, tagIndex) in post.postTags" :key="tag.id">
+            <div class="close" title="삭제" @click="removeTag(tagIndex)">X</div>
+            <span>
+              {{ tag.text }}
+            </span>
+          </div>
+        </div>
+
         <div class="form-group images">
           <div class="wrapper-image" v-for="(postImage, index) in post.postImages" :key="postImage.id">
             <button type="button" @click="removeImage(postImage, index)" title="이미지삭제">X</button>
@@ -128,6 +137,9 @@ export default {
         alert('에러발생');
         console.error(e);
       }
+    },
+    removeTag: function(index) {
+      this.post.postTags.splice(index, 1);
     }
   }
 }
@@ -188,5 +200,32 @@ form button {
 
 .form-group [type=file] {
   margin-top: 6px;
+}
+
+.form-group-tags .tag-wrapper {
+  display: inline-block;
+  padding: 4px 8px;
+  padding-right: 18px;
+  background-color: #aaa;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.form-group-tags .tag-wrapper .close {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  border-radius: 50%;
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  cursor: pointer;
+  color: #fff;
+  opacity: 1;
+  font-weight: 400;
 }
 </style>
