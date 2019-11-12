@@ -2,7 +2,7 @@ package com.wonder.blog.controller;
 
 import com.wonder.blog.common.CurrentUser;
 import com.wonder.blog.dto.UserDto;
-import com.wonder.blog.entity.User;
+import com.wonder.blog.domain.User;
 import com.wonder.blog.security.UserContext;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;

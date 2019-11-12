@@ -2,8 +2,8 @@ package com.wonder.blog.service;
 
 import com.wonder.blog.common.CurrentUser;
 import com.wonder.blog.dto.PostDto;
-import com.wonder.blog.entity.Post;
-import com.wonder.blog.entity.User;
+import com.wonder.blog.domain.Post;
+import com.wonder.blog.domain.User;
 import com.wonder.blog.exception.AccessNotOwnedResourceException;
 import com.wonder.blog.exception.DataNotFoundException;
 import com.wonder.blog.repository.PostRepository;

@@ -1,4 +1,4 @@
-package com.wonder.blog.entity;
+package com.wonder.blog.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -61,7 +61,7 @@ public class Post {
 
   public void setPostTags(Collection<PostTag> postTags) {
     // Casecade Persist 위함
-    postTags.stream().forEach(e -> e.setPost(this));
+    postTags.forEach(e -> e.setPost(this));
     this.postTags = postTags;
   }
 

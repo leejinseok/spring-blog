@@ -1,4 +1,4 @@
-package com.wonder.blog.entity;
+package com.wonder.blog.domain;
 
 import lombok.*;
 

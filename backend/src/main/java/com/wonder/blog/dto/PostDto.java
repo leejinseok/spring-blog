@@ -2,8 +2,8 @@ package com.wonder.blog.dto;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.wonder.blog.entity.Post;
-import com.wonder.blog.entity.PostTag;
+import com.wonder.blog.domain.Post;
+import com.wonder.blog.domain.PostTag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

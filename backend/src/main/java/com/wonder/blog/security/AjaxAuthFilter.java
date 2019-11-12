@@ -3,7 +3,7 @@ package com.wonder.blog.security;
 import com.wonder.blog.common.DefaultResponse;
 import com.wonder.blog.common.ResponseWriter;
 import com.wonder.blog.config.AppProperties;
-import com.wonder.blog.entity.User;
+import com.wonder.blog.domain.User;
 import com.wonder.blog.service.UserService;
 import com.wonder.blog.util.CookieUtil;
 import com.wonder.blog.util.JwtUtil;
@@ -40,7 +40,7 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
 
   public AjaxAuthFilter(String loginUrl) {
     super(loginUrl);
-  };
+  }
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -66,7 +66,7 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   }
 
   @Override
-  protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+  protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
     UserContext userContext = (UserContext) authResult.getPrincipal();
     cookieUtil.create(response, JWT_TOKEN_NAME, jwtUtil.generateToken(userContext), false, -1, appProperties.getBaseUrl());
     ResponseWriter.builder()
@@ -79,7 +79,7 @@ public class AjaxAuthFilter extends AbstractAuthenticationProcessingFilter {
   }
 
   @Override
-  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
     SecurityContextHolder.clearContext();
     ResponseWriter.builder()
       .defaultResponse(new DefaultResponse(HttpStatus.UNAUTHORIZED.value(), failed.getMessage()))

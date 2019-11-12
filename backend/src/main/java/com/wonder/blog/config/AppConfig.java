@@ -1,8 +1,8 @@
 package com.wonder.blog.config;
 
-import com.wonder.blog.entity.Post;
-import com.wonder.blog.entity.PostTag;
-import com.wonder.blog.entity.User;
+import com.wonder.blog.domain.Post;
+import com.wonder.blog.domain.PostTag;
+import com.wonder.blog.domain.User;
 import com.wonder.blog.repository.PostRepository;
 import com.wonder.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

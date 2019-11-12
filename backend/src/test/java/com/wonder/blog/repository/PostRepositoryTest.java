@@ -1,7 +1,7 @@
 package com.wonder.blog.repository;
 
-import com.wonder.blog.entity.Post;
-import com.wonder.blog.entity.User;
+import com.wonder.blog.domain.Post;
+import com.wonder.blog.domain.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

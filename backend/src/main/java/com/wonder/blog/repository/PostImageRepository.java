@@ -1,7 +1,7 @@
 package com.wonder.blog.repository;
 
-import com.wonder.blog.entity.Post;
-import com.wonder.blog.entity.PostImage;
+import com.wonder.blog.domain.Post;
+import com.wonder.blog.domain.PostImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;

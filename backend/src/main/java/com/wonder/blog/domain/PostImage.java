@@ -1,6 +1,5 @@
-package com.wonder.blog.entity;
+package com.wonder.blog.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -9,30 +8,35 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "post_tags")
-@NoArgsConstructor @AllArgsConstructor @Builder
+@Table(name = "post_images")
+@NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
-public class PostTag {
+@Builder
+public class PostImage {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private int id;
+  private Integer id;
 
-  @Column(length = 30, nullable = false)
-  private String text;
+  @Column
+  private String uuid;
+
+  @Column
+  private String s3Key;
+
+  @Column
+  private String url;
+
+  @ManyToOne
+  @JoinColumn(name = "post_id")
+  private Post post;
 
   @Column(nullable = false, updatable = false)
   @CreatedDate
   private LocalDateTime createdAt;
 
-  @Column
   @LastModifiedDate
   private LocalDateTime updatedAt;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "post_id")
-  @JsonIgnore
-  private Post post;
 
   @PrePersist
   private void prePersist() {

@@ -1,6 +1,6 @@
 package com.wonder.blog.dto;
 
-import com.wonder.blog.entity.User;
+import com.wonder.blog.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

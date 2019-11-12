@@ -1,6 +1,6 @@
 package com.wonder.blog.dto;
 
-import com.wonder.blog.entity.PostImage;
+import com.wonder.blog.domain.PostImage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

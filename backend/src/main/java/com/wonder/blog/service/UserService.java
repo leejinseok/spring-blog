@@ -1,6 +1,6 @@
 package com.wonder.blog.service;
 
-import com.wonder.blog.entity.User;
+import com.wonder.blog.domain.User;
 import com.wonder.blog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
