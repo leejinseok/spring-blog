@@ -3,6 +3,7 @@ package com.wonder.blog.service;
 import com.wonder.blog.common.CurrentUser;
 import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.entity.Post;
+import com.wonder.blog.entity.PostTag;
 import com.wonder.blog.entity.User;
 import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.exception.DataNotFoundException;
@@ -42,11 +43,12 @@ public class PostService {
   }
 
   @Transactional
-  public Post updatePost(int id, PostDto.RegisterReq dto) {
+  public Post updatePost(int id, PostDto.UpdateReq dto) {
     // 영속성으로 분류되어 set 만으로 update가 가능하다는 점 ...
     Post post = getPost(id);
     post.setTitle(dto.getTitle());
     post.setContent(dto.getContent());
+    post.clearAndAddPostTags(dto);
     return post;
   }
 

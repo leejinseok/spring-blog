@@ -46,6 +46,7 @@
 
 <script>
 import LogoutBtn from '~/components/admin/LogoutBtn';
+import {updatePost} from '~/api/posts';
 
 export default {
   layout: 'admin',
@@ -75,14 +76,12 @@ export default {
       const data = this.post;
 
       try {
-        const result = await this.$axios({
-          url: `/api/v1/posts/${data.id}`,
-          method: 'put',
-          data: {
-            title: this.post.title,
-            content: this.post.content
-          }
-        });
+        // const result = await this.$axios({
+        //   url: `/api/v1/posts/${data.id}`,
+        //   method: 'put',
+        //   data
+        // });
+        const result = await updatePost.bind(this)(data);
 
         this.$router.push('/admin/posts');
       } catch (e) {

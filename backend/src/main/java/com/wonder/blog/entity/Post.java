@@ -2,6 +2,7 @@ package com.wonder.blog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.serializer.UserSerializer;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -62,5 +63,16 @@ public class Post {
     // Casecade Persist 위함
     postTags.stream().forEach(e -> e.setPost(this));
     this.postTags = postTags;
+  }
+
+  public void clearAndAddPostTags(PostDto.UpdateReq dto) {
+    this.postTags.clear();
+    dto.getPostTags().forEach(e -> {
+      PostTag postTag = PostTag.builder()
+        .text(e.getText())
+        .post(this)
+        .build();
+      this.getPostTags().add(postTag);
+    });
   }
 }
