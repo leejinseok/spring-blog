@@ -32,8 +32,7 @@ public class PostController {
 
     MultipartFile file = dto.getFile();
     if (file != null) {
-      PostImage postImage = postImageService.addPostImage(post, file);
-      post.getPostImages().add(postImage);
+      post.getPostImages().add(postImageService.addPostImage(post, file));
     }
 
     return new ResponseEntity<>(new PostDto(post), HttpStatus.CREATED);
