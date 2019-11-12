@@ -17,10 +17,10 @@ public class SkipPathRequestMatcher implements RequestMatcher {
   public SkipPathRequestMatcher(List<RequestMapper> pathsToSkip, String processingPath) {
     List<RequestMatcher> requestMatchers = new ArrayList<>();
 
-    pathsToSkip.forEach(e -> {
+    for (RequestMapper e : pathsToSkip) {
       AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher(e.getUrl(), e.getMethod().name());
       requestMatchers.add(antPathRequestMatcher);
-    });
+    }
 
     matchers = new OrRequestMatcher(requestMatchers);
     processiongMatcher = new AntPathRequestMatcher(processingPath);
