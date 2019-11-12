@@ -5,6 +5,7 @@ import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.dto.PostImageDto;
 import com.wonder.blog.entity.Post;
 import com.wonder.blog.entity.PostImage;
+import com.wonder.blog.exception.AccessNotOwnedResourceException;
 import com.wonder.blog.exception.CustomException;
 import com.wonder.blog.service.PostImageService;
 import com.wonder.blog.service.PostService;
@@ -59,7 +60,7 @@ public class PostController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deletePost(@PathVariable int id) throws CustomException {
+  public ResponseEntity<Void> deletePost(@PathVariable int id) throws AccessNotOwnedResourceException {
     postImageService.deletePostImageByPost(postService.getPost(id));
     postService.deletePost(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
