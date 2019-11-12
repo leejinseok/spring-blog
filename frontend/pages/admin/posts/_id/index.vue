@@ -137,7 +137,6 @@ export default {
 form {
   margin-left: auto;
   margin-right: auto;
-  max-width: 600px;
   margin-top: 30px;
 }
 

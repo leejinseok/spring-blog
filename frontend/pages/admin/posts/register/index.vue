@@ -67,13 +67,12 @@ export default {
       if (this.$refs.file.files[0]) {
         data.append('file', this.$refs.file.files[0]);
       }
-      
+
       try {
         const result = await addPost.bind(this)(data);
         this.$router.push('/admin/posts');
       } catch (e) {
         console.log(e);
-        console.log(e.response.data);
         alert('에러발생');
       }
     },
@@ -99,7 +98,6 @@ export default {
 }
 
 .form-container {
-  max-width: 900px;
   margin-left: auto;
   margin-right: auto;
 }
