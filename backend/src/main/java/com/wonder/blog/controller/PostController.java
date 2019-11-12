@@ -56,7 +56,9 @@ public class PostController {
 
   @PutMapping("/{id}/images")
   public ResponseEntity<PostImageDto> uploadPostImage(@PathVariable int id, @RequestParam("file") MultipartFile file) throws IOException {
-    return new ResponseEntity<>(new PostImageDto(postImageService.addPostImage(postService.getPost(id), file)), HttpStatus.OK);
+    Post post = postService.getPost(id);
+    PostImage postImage = postImageService.addPostImage(post, file);
+    return new ResponseEntity<>(new PostImageDto(postImage), HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
