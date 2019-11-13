@@ -72,6 +72,10 @@ public class PostDto {
     private String title;
     @NotEmpty
     private String content;
-    private Collection<PostTag> postTags;
+    private Collection<PostTag> postTags = new ArrayList<>();
+
+    public void setPostTags(Collection<PostTag> postTags) {
+      this.postTags = postTags.stream().map(e -> PostTag.builder().text(e.getText()).build()).collect(Collectors.toList());
+    }
   }
 }

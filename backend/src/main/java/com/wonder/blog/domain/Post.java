@@ -66,15 +66,4 @@ public class Post {
     }
     this.postTags = postTags;
   }
-
-  public void clearAndAddPostTags(PostDto.UpdateReq dto) {
-    this.postTags.clear();
-    for (PostTag postTag : dto.getPostTags()) {
-      PostTag newPostTag = PostTag.builder()
-        .text(postTag.getText())
-        .post(this)
-        .build();
-      this.getPostTags().add(newPostTag);
-    }
-  }
 }

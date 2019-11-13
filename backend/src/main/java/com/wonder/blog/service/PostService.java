@@ -47,7 +47,8 @@ public class PostService {
     Post post = getPost(id);
     post.setTitle(dto.getTitle());
     post.setContent(dto.getContent());
-    post.clearAndAddPostTags(dto);
+    post.getPostTags().clear();
+    post.getPostTags().addAll(dto.getPostTags());
     return post;
   }
 
