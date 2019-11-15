@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     list.add(new RequestMapper(PermittedPath.REFRESH_TOKEN_URL.value(), HttpMethod.PATCH));
     list.add(new RequestMapper(PermittedPath.POSTS_URL.value(), HttpMethod.GET));
     list.add(new RequestMapper(PermittedPath.POST_URL.value(), HttpMethod.GET));
-    list.add(new RequestMapper(PermittedPath.SIGNUP_URL.value(), HttpMethod.POST));
+    list.add(new RequestMapper(PermittedPath.REGISTER_URL.value(), HttpMethod.POST));
     return list;
   }
 

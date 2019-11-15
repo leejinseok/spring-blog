@@ -7,7 +7,7 @@ public enum PermittedPath {
   REFRESH_TOKEN_URL("/api/v1/auth/token"),
   POSTS_URL("/api/v1/posts"),
   POST_URL("/api/v1/posts/*"),
-  SIGNUP_URL("/api/v1/auth/signup");
+  REGISTER_URL("/api/v1/auth/register");
 
   final private String value;
 
