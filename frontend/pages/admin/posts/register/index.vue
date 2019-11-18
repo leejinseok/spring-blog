@@ -22,9 +22,12 @@
             <button class="btn btn-sm btn-dark" type="button">추가</button>
           </div>
           <div class="form-group list-tag">
-            <span v-for="(tag, tagIndex) in postTags" :key="tagIndex">
-              {{ tag }}
-            </span>
+            <div class="tag-wrapper" v-for="(tag, tagIndex) in postTags" :key="tagIndex">
+              <div class="close" title="삭제" @click="removeTag(tagIndex)">X</div>
+              <span >
+                {{ tag.text }}
+              </span>
+            </div>
           </div>
           <div class="form-group">
             <input class="form-control" type="file" ref="file">
@@ -80,13 +83,16 @@ export default {
       $event.stopPropagation();
       if ($event.keyCode === 13) {
         $event.preventDefault();
-        if (!this.postTags.some(item => item === this.postTagInputText)) {
+        if (!this.postTags.some(item => item.text === this.postTagInputText)) {
           this.postTags.push({
             text: this.postTagInputText
           });
         };
         this.postTagInputText = '';
       }
+    },
+    removeTag: function(index) {
+      this.postTags.splice(index, 1);
     }
   }
 }

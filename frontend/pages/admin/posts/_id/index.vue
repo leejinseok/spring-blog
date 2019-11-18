@@ -18,6 +18,11 @@
           <textarea class="form-control" v-model="post.content"></textarea>
         </div>
 
+        <div class="form-group register-tag">
+          <input class="form-control" type="text" v-model="postTagInputText" placeholder="태그" @keydown="handleKeyUpPostTagInputText">
+          <button class="btn btn-sm btn-dark" type="button">추가</button>
+        </div>
+
         <div class="form-group form-group-tags" v-if="post.postTags.length">
           <div class="tag-wrapper" v-for="(tag, tagIndex) in post.postTags" :key="tag.id">
             <div class="close" title="삭제" @click="removeTag(tagIndex)">X</div>
@@ -69,6 +74,11 @@ export default {
       redirect('/admin/posts');
     }
   },
+  data() {
+    return {
+      postTagInputText: ''
+    }
+  },
   methods: {
     update: async function() {
       if (!confirm('정말 수정하시겠습니까?')) return;
@@ -76,13 +86,7 @@ export default {
       const data = this.post;
 
       try {
-        // const result = await this.$axios({
-        //   url: `/api/v1/posts/${data.id}`,
-        //   method: 'put',
-        //   data
-        // });
         const result = await updatePost.bind(this)(data);
-
         this.$router.push('/admin/posts');
       } catch (e) {
         console.log(e);
@@ -139,7 +143,20 @@ export default {
     },
     removeTag: function(index) {
       this.post.postTags.splice(index, 1);
-    }
+    },
+    handleKeyUpPostTagInputText: function($event) {
+      $event.stopPropagation();
+      if ($event.keyCode === 13) {
+        $event.preventDefault();
+        if (!this.post.postTags.some(item => item.text === this.postTagInputText)) {
+          this.post.postTags.push({
+            text: this.postTagInputText
+          });
+        };
+        
+        this.postTagInputText = '';
+      }
+    },
   }
 }
 </script>
@@ -201,30 +218,18 @@ form button {
   margin-top: 6px;
 }
 
-.form-group-tags .tag-wrapper {
-  display: inline-block;
-  padding: 4px 8px;
-  padding-right: 18px;
-  background-color: #aaa;
-  color: #fff;
-  font-size: 14px;
-  border-radius: 5px;
-  position: relative;
+.form-group.register-tag {
+  display: flex;
+  align-items: center;
 }
 
-.form-group-tags .tag-wrapper .close {
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  border-radius: 50%;
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 10px;
-  cursor: pointer;
-  color: #fff;
-  opacity: 1;
-  font-weight: 400;
+.form-group.register-tag input {
+  display: inline;
+  width: auto;
+}
+
+.form-group.register-tag button {
+  margin-top: 0;
+  margin-left: 6px;
 }
 </style>
