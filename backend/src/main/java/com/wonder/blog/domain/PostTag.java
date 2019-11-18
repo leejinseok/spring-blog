@@ -6,13 +6,14 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "post_tags")
 @NoArgsConstructor @AllArgsConstructor @Builder
 @Getter @Setter
-public class PostTag {
+public class PostTag implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +30,7 @@ public class PostTag {
   @LastModifiedDate
   private LocalDateTime updatedAt;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "post_id")
   @JsonIgnore
   private Post post;

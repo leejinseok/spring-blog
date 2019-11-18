@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
   @Override
-  Optional<Post> findById(Integer integer);
+  Optional<Post> findById(Integer id);
 
   @Override
   Page<Post> findAll(Pageable pageable);

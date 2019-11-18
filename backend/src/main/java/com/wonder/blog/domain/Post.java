@@ -2,12 +2,13 @@ package com.wonder.blog.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.wonder.blog.dto.PostDto;
 import com.wonder.blog.serializer.UserSerializer;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +17,7 @@ import java.util.Collection;
 @Table(name = "posts")
 @NoArgsConstructor @AllArgsConstructor @Builder
 @Getter @Setter
-public class Post {
+public class Post implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
