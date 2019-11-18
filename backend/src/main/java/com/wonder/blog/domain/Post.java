@@ -67,4 +67,12 @@ public class Post implements Serializable {
     }
     this.postTags = postTags;
   }
+
+  public void clearAndAddPostTags(Collection<PostTag> postTags) {
+    this.getPostTags().clear();
+    for (PostTag postTag : postTags) {
+      postTag.setPost(this);
+      this.getPostTags().add(postTag);
+    }
+  }
 }
