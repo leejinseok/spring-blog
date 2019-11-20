@@ -29,11 +29,9 @@ public class Post implements Serializable {
   @Column(columnDefinition = "text")
   private String content;
 
-  @Column(nullable = false, updatable = false)
   @CreatedDate
   private LocalDateTime createdAt;
 
-  @Column
   @LastModifiedDate
   private LocalDateTime updatedAt;
 
@@ -49,16 +47,6 @@ public class Post implements Serializable {
   @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
   @JsonIgnore
   private Collection<PostTag> postTags = new ArrayList<>();
-
-  @PrePersist
-  private void prePersist() {
-    this.createdAt = LocalDateTime.now();
-  }
-
-  @PreUpdate
-  private void preUpdate() {
-    this.updatedAt = LocalDateTime.now();
-  }
 
   public void setPostTags(Collection<PostTag> postTags) {
     // Casecade Persist 위함

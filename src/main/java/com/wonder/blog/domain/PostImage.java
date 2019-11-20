@@ -32,20 +32,9 @@ public class PostImage implements Serializable {
   @JoinColumn(name = "post_id")
   private Post post;
 
-  @Column(nullable = false, updatable = false)
   @CreatedDate
   private LocalDateTime createdAt;
 
   @LastModifiedDate
   private LocalDateTime updatedAt;
-
-  @PrePersist
-  private void prePersist() {
-    this.createdAt = LocalDateTime.now();
-  }
-
-  @PreUpdate
-  private void preUpdate() {
-    this.updatedAt = LocalDateTime.now();
-  }
 }

@@ -22,11 +22,9 @@ public class PostTag implements Serializable {
   @Column(length = 30, nullable = false)
   private String text;
 
-  @Column(nullable = false, updatable = false)
   @CreatedDate
   private LocalDateTime createdAt;
 
-  @Column
   @LastModifiedDate
   private LocalDateTime updatedAt;
 
@@ -34,14 +32,4 @@ public class PostTag implements Serializable {
   @JoinColumn(name = "post_id")
   @JsonIgnore
   private Post post;
-
-  @PrePersist
-  private void prePersist() {
-    this.createdAt = LocalDateTime.now();
-  }
-
-  @PreUpdate
-  private void preUpdate() {
-    this.updatedAt = LocalDateTime.now();
-  }
 }
