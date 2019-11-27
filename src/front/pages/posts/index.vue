@@ -9,7 +9,7 @@
       </div>
 
       <div class="post-container">
-        <ul>
+        <ul v-if="posts.length">
           <li v-for="post in posts" :key="post.id">
             <div class="title-and-date">
               <p class="title">
@@ -23,6 +23,9 @@
             </div>
           </li>
         </ul>
+        <div v-else class="no-data">
+          <h3>게시글이 존재하지 않습니다...</h3>
+        </div>
       </div>
 
       <div class="pagination-container" v-if="paginator.range.length">
@@ -156,6 +159,11 @@ export default {
   padding-top: 20px;
   padding-bottom: 20px;
   border-top: 2px solid #eaeaea;
+}
+
+.container__inner .post-container .no-data h3 {
+  text-align: center;
+  font-size: 22px;
 }
 
 .title-and-date {
