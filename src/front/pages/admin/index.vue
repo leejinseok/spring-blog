@@ -32,14 +32,13 @@ export default {
   methods: {
     submit: async function(event) {
       event.preventDefault();
-
       const { $axios, $store, $route, $router } = this;
+      const { email, password } = this;
+      const data = {
+        email,
+        password
+      };
       try {
-        const data = {
-          email: this.$data.email,
-          password: this.$data.password
-        };
-
         const result = await $axios({
           url: '/api/v1/auth/login',
           method: 'post',
@@ -49,9 +48,14 @@ export default {
 
         $store.commit('user/set', result.data.user);
         $router.push('/admin/posts');
-      } catch (e) {
-        alert('로그인 실패');
-        console.log(e.message);
+      } catch (err) {
+        if (err.response.data.message.includes('Email or Password not valid')) {
+          alert('이메일 혹은 패스워드를 확인해주세요.');
+        } else {
+          alert('로그인 실패');
+        }
+
+        console.error(err);
       }
     }
   }
