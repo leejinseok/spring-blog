@@ -48,7 +48,6 @@ export default {
   */
   axios: {
     proxy: true,
-
   },
   proxy: {
     '/api/': {

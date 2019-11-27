@@ -2,6 +2,12 @@
   <div class="container">
     <Header />
     <div class="container__inner">
+
+      <div class="search-container">
+        <img :src="SearchSvg" alt="" class="search-icon">
+        <input type="text" v-model="q" placeholder="검색어를 입력해주세요." @input="handleInputSearch($event)">
+      </div>
+
       <div class="post-container">
         <ul>
           <li v-for="post in posts" :key="post.id">
@@ -50,13 +56,14 @@
 
 <script>
 import Header from '~/components/Header';
-import { findAll } from '~/api/posts';
+import { findPosts } from '~/api/posts';
 import { mapState } from 'vuex';
 import pagination from 'pagination';
+import SearchSvg from '~/assets/fontawesome-free-5.11.2-web/svgs/solid/search.svg';
 
 export default {
   components: {
-    Header
+    Header,
   },
   computed: {
     ...mapState({
@@ -66,7 +73,7 @@ export default {
   },
   async asyncData(context) {
     const { store, route, $axios } = context;
-    const result = await findAll(route.query, $axios);
+    const result = await findPosts(route.query, $axios);
     const paginator = pagination.create('search', {
       prelink:'/posts', 
       current: result.data.number + 1, 
@@ -78,12 +85,24 @@ export default {
       paginator: paginator.getPaginationData()
     });
   },
+  data() {
+    return {
+      q: '',
+      SearchSvg
+    }
+  },
   watch: {
     '$route': function() {
       this.fetchPosts();
+    },
+    'q': function(newVal, oldVal) {
+      console.log(oldVal, newVal);
     }
   },
   methods: {
+    handleInputSearch: function(evt) {
+      this.q = evt.target.value;
+    },
     displayDate: function (val) {
       const date = new Date(val);
       return date.getFullYear() + "년 " + (+date.getMonth() + 1) + "월 " + date.getDate() + "일 " + date.getHours() + '시 ' + date.getMinutes() + '분';
@@ -97,6 +116,29 @@ export default {
 </script>
 
 <style scoped>
+.container__inner .search-container {
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.container__inner .search-container .search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 30px;
+  width: 100%;
+}
+
+.container__inner .search-container input {
+  width: 100%;
+  padding: 20px 10px;
+  padding-left: 60px;
+  box-sizing: border-box;
+  border: 0;
+  font-size: 24px;
+}
+
 .container__inner .post-container ul li {
   padding-top: 20px;
   padding-bottom: 20px;
