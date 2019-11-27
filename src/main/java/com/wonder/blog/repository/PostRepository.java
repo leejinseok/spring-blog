@@ -18,6 +18,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
   Page<Post> findAll(Pageable pageable);
 
   @Query("select p from Post p where (p.title like CONCAT('%', :q, '%'))")
-  Page<Post> findPosts(@Param("q") String title, Pageable pageable);
+  Page<Post> findPosts(Pageable pageable, @Param("q") String title);
 
 }
