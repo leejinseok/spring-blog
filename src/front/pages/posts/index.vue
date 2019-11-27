@@ -4,7 +4,7 @@
     <div class="container__inner">
 
       <div class="search-container">
-        <img :src="SearchSvg" alt="" class="search-icon">
+        <img :src="searchSvg" class="search-icon">
         <input type="text" v-model="q" placeholder="검색어를 입력해주세요." @input="handleInputSearch($event)">
       </div>
 
@@ -62,7 +62,7 @@ import Header from '~/components/Header';
 import { findPosts } from '~/api/posts';
 import { mapState } from 'vuex';
 import pagination from 'pagination';
-import SearchSvg from '~/assets/fontawesome-free-5.11.2-web/svgs/solid/search.svg';
+import searchSvg from '~/assets/fontawesome-free-5.11.2-web/svgs/solid/search.svg';
 import { debounce } from '~/util/common';
 
 export default {
@@ -92,7 +92,7 @@ export default {
   data() {
     return {
       q: '',
-      SearchSvg
+      searchSvg
     }
   },
   watch: {
