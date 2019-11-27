@@ -71,7 +71,8 @@ export default {
       params: {
         size,
         page: page - 1,
-        sort
+        sort,
+        q: ''
       }
     });
 

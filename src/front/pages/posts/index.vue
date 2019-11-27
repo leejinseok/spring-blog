@@ -94,24 +94,31 @@ export default {
   },
   watch: {
     '$route': function() {
+      this.fetchPosts();
     },
   },
   methods: {
     handleInputSearch: function(evt) {
       this.q = evt.target.value;
-      this.handleSearch();
+      debounce(this.fetchPosts, 300)();
     },
-    handleSearch: debounce(async function() {
-      try {
-        const result = await findPosts(Object.assign(this.$route.query, {
-          q: this.q
-        }), this.$axios);
+    fetchPosts: async function() {
+      const result = await findPosts(Object.assign(this.$route.query, {
+        q: this.q
+      }), this.$axios);
 
-        console.log(result);
-      } catch (err) {
-        console.error(err);
-      }
-    }, 300),
+      const paginator = pagination.create('search', {
+        prelink:'/posts', 
+        current: result.data.number + 1, 
+        rowsPerPage: result.data.size, 
+        totalResult: result.data.totalElements
+      });
+
+      this.$store.commit('posts/set', {
+        data: result.data.content,
+        paginator: paginator.getPaginationData()
+      });
+    },
     displayDate: function (val) {
       const date = new Date(val);
       return date.getFullYear() + "년 " + (+date.getMonth() + 1) + "월 " + date.getDate() + "일 " + date.getHours() + "시 " + date.getMinutes() + '분';
