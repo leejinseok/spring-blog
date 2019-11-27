@@ -94,7 +94,6 @@ export default {
   },
   watch: {
     '$route': function() {
-      this.fetchPosts();
     },
   },
   methods: {
@@ -103,14 +102,21 @@ export default {
       this.handleSearch();
     },
     handleSearch: debounce(async function() {
-      
+      try {
+        const result = await findPosts(Object.assign(this.$route.query, {
+          q: this.q
+        }), this.$axios);
+
+        console.log(result);
+      } catch (err) {
+        console.error(err);
+      }
     }, 300),
     displayDate: function (val) {
       const date = new Date(val);
-      return date.getFullYear() + "년 " + (+date.getMonth() + 1) + "월 " + date.getDate() + "일 " + date.getHours() + '시 ' + date.getMinutes() + '분';
+      return date.getFullYear() + "년 " + (+date.getMonth() + 1) + "월 " + date.getDate() + "일 " + date.getHours() + "시 " + date.getMinutes() + '분';
     },
-    fetchPosts: async function() {
-    }
+
   }
 }
 </script>

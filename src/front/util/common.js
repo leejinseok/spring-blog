@@ -1,17 +1,12 @@
 let timer = null;
 export function debounce(func, wait) {
-
-  if (typeof func != 'function') {
-    throw new TypeError('First arg must function type');
-  }
-
-  function debounced() {
+  return function() {
     if (timer) {
       clearTimeout(timer);
     }
-  
-    timer = setTimeout(func, wait);
+
+    timer = setTimeout(function() {
+      func.apply(this);
+    }.bind(this), wait);
   }
-  
-  return debounced;
 }

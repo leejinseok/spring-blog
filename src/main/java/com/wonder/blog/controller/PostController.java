@@ -46,8 +46,8 @@ public class PostController {
   }
 
   @GetMapping
-  public ResponseEntity<PageDto> getPosts(Pageable pageable) {
-    return new ResponseEntity<>(new PageDto(postService.getPosts(pageable)), HttpStatus.OK);
+  public ResponseEntity<PageDto> getPosts(Pageable pageable, String q) {
+    return new ResponseEntity<>(new PageDto(postService.getPosts(pageable, q)), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")

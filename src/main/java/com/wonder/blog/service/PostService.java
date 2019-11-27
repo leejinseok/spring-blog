@@ -29,9 +29,14 @@ public class PostService {
     return postRepository.save(post);
   }
 
+//  @Transactional(readOnly = true)
+//  public Page<Post> getPosts(Pageable pageable) {
+//    return postRepository.findAll(pageable);
+//  }
+
   @Transactional(readOnly = true)
-  public Page<Post> getPosts(Pageable pageable) {
-    return postRepository.findAll(pageable);
+  public Page<Post> getPosts(Pageable pageable, String q) {
+    return postRepository.findPosts(q, pageable);
   }
 
   @Transactional(readOnly = true)
