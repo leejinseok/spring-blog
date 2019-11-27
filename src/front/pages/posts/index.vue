@@ -136,10 +136,10 @@ export default {
 
 .container__inner .search-container .search-icon {
   position: absolute;
-  left: 10px;
+  left: 16px;
   top: 50%;
   transform: translateY(-50%);
-  max-width: 30px;
+  max-width: 26px;
   width: 100%;
 }
 
