@@ -26,7 +26,7 @@ public class AuthController {
   private final CookieUtil cookieUtil;
 
   @PostMapping("/register")
-  public ResponseEntity<UserDto> addUser(@RequestBody @Valid UserDto.RequestRegister dto) {
+  public ResponseEntity<UserDto> addUser(@RequestBody @Valid UserDto.RegisterReq dto) {
     User newUser = userService.addUser(dto.getEmail(), dto.getName(), dto.getPassword());
     return new ResponseEntity<>(new UserDto(newUser), HttpStatus.CREATED);
   }

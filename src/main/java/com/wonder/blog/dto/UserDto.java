@@ -23,7 +23,7 @@ public class UserDto {
   }
 
   @Getter @Setter
-  public static class RequestRegister {
+  public static class RegisterReq {
     @NotEmpty
     private String name;
     @NotEmpty
