@@ -60,6 +60,7 @@ import { findPosts } from '~/api/posts';
 import { mapState } from 'vuex';
 import pagination from 'pagination';
 import SearchSvg from '~/assets/fontawesome-free-5.11.2-web/svgs/solid/search.svg';
+import { debounce } from '~/util/common';
 
 export default {
   components: {
@@ -95,21 +96,20 @@ export default {
     '$route': function() {
       this.fetchPosts();
     },
-    'q': function(newVal, oldVal) {
-      console.log(oldVal, newVal);
-    }
   },
   methods: {
     handleInputSearch: function(evt) {
       this.q = evt.target.value;
+      this.handleSearch();
     },
+    handleSearch: debounce(async function() {
+      
+    }, 300),
     displayDate: function (val) {
       const date = new Date(val);
       return date.getFullYear() + "년 " + (+date.getMonth() + 1) + "월 " + date.getDate() + "일 " + date.getHours() + '시 ' + date.getMinutes() + '분';
     },
     fetchPosts: async function() {
-      const { $store, $route, $axios } = this;
-      await getPosts($store, $route, $axios);
     }
   }
 }
