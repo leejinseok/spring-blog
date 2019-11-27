@@ -3,6 +3,7 @@ package com.wonder.blog.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.wonder.blog.serializer.UserSerializer;
+import jdk.vm.ci.meta.Local;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -47,6 +48,16 @@ public class Post implements Serializable {
   @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
   @JsonIgnore
   private Collection<PostTag> postTags = new ArrayList<>();
+
+  @PrePersist
+  private void prePersist() {
+    this.createdAt = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  private void preUpdate() {
+    this.updatedAt = LocalDateTime.now();
+  }
 
   public void setPostTags(Collection<PostTag> postTags) {
     // Casecade Persist 위함

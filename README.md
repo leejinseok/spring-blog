@@ -1,5 +1,5 @@
 ### TODO
-- [ ] @CurrentUser
+- [ ] 게시글 페이징
 
 ### Completed
 - [x] 게시글 조회 > user 정보 필터
