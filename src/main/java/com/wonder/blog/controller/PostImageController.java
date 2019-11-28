@@ -13,9 +13,9 @@ public class PostImageController {
 
   private final PostImageService postImageService;
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deletePostImage(@PathVariable("id") int id) {
-    postImageService.deletePostImage(id);
+  @DeleteMapping("/{uuid}")
+  public ResponseEntity<Void> deletePostImage(@PathVariable("uuid") String uuid) {
+    postImageService.deletePostImage(uuid);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }

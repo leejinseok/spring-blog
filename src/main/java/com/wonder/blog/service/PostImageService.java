@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,31 +26,22 @@ public class PostImageService {
     awsS3Util.upload(key, file);
 
     PostImage postImage = new PostImage();
+    postImage.setUuid(UUID.randomUUID().toString());
     postImage.setPost(post);
     postImage.setS3Key(key);
 
     return postImageRepository.save(postImage);
   }
 
-  @Transactional(readOnly = true)
-  public Collection<PostImage> getPostImagesByPost(Post post) {
-    return postImageRepository.findAllByPost(post);
-  }
-
-  @Transactional(readOnly = true)
-  public PostImage getPostImageById(int id) {
-    return postImageRepository.findById(id).orElseThrow(() -> new DataNotFoundException(id + " id postImage not found"));
-  }
-
-  public void deletePostImage(int id) {
-    PostImage postImage = getPostImageById(id);
+  public void deletePostImage(String uuid) {
+    PostImage postImage = postImageRepository.findOneByUuid(uuid).orElseThrow(() -> new DataNotFoundException(uuid + " uuid post image not found"));
     awsS3Util.delete(postImage.getS3Key());
     postImageRepository.deleteById(postImage.getId());
   }
 
   public void deletePostImageByPost(Post post) {
     for (PostImage postImage : post.getPostImages()) {
-      deletePostImage(postImage.getId());
+      deletePostImage(postImage.getUuid());
     }
   }
 }

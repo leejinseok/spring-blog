@@ -113,14 +113,14 @@ export default {
     removeImage: async function(image, index) {
       try {
         const result = await this.$axios({
-          url: `/api/v1/posts/images/${image.id}`,
+          url: `/api/v1/posts/images/${image.uuid}`,
           method: 'delete',
         });
 
         this.post.postImages.splice(index, 1);
-      } catch (e) {
+      } catch (err) {
         alert('에러발생!');
-        console.log(e);
+        console.log(err.response);
       }
     },
     uploadImage: async function() {
