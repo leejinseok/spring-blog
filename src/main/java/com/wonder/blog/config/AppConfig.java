@@ -39,26 +39,22 @@ public class AppConfig {
 
       @Override
       public void run(ApplicationArguments args) {
-
-        User user = User.builder()
-          .email("sonaky47@naver.com")
-          .name("leejinseok")
-          .password(bCryptPasswordEncoder.encode("1111"))
-          .build();
+        User user = new User();
+        user.setEmail("sonaky47@naver.com");
+        user.setName("leeinseok");
+        user.setPassword(bCryptPasswordEncoder.encode("1111"));
 
         userRepository.save(user);
 
         Collection<PostTag> postTags = new ArrayList<>();
-        PostTag postTag = PostTag.builder().text("Java").build();
+        PostTag postTag = new PostTag();
+        postTag.setText("Java");
         postTags.add(postTag);
 
-        Post post = Post.builder()
-          .title("자자 ...")
-          .user(user)
-          .content("무엇을 쓸까 ...")
-          .postTags(postTags)
-          .createdAt(LocalDateTime.now())
-          .build();
+        Post post = new Post();
+        post.setTitle("자자 ...");
+        post.setUser(user);
+        post.setContent("무엇을 쓸까 ...");
 
         postTag.setPost(post);
         postRepository.save(post);
