@@ -17,7 +17,7 @@ public class AwsConfig {
   private final AwsProperties properties;
 
   @Bean
-  public AmazonS3 s3() {
+  public AmazonS3 amazonS3() {
     AWSCredentials credentials = new BasicAWSCredentials(accessKey(), secretKey());
     AWSStaticCredentialsProvider credentialsProvider = new AWSStaticCredentialsProvider(credentials);
 

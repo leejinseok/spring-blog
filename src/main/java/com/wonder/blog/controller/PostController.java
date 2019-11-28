@@ -39,7 +39,8 @@ public class PostController {
 
     MultipartFile file = dto.getFile();
     if (file != null) {
-      post.getPostImages().add(postImageService.addPostImage(post, file));
+      PostImage postImage = postImageService.uploadAndAddPostImage(post, file);
+      post.getPostImages().add(postImage);
     }
 
     return new ResponseEntity<>(new PostDto(post), HttpStatus.CREATED);
@@ -63,7 +64,7 @@ public class PostController {
   @PutMapping("/{id}/images")
   public ResponseEntity<PostImageDto> uploadPostImage(@PathVariable int id, @RequestParam("file") MultipartFile file) throws IOException {
     Post post = postService.getPost(id);
-    PostImage postImage = postImageService.addPostImage(post, file);
+    PostImage postImage = postImageService.uploadAndAddPostImage(post, file);
     return new ResponseEntity<>(new PostImageDto(postImage), HttpStatus.OK);
   }
 

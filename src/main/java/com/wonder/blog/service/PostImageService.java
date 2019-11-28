@@ -20,9 +20,10 @@ public class PostImageService {
   private final PostImageRepository postImageRepository;
   private final AwsS3Util awsS3Util;
 
-  public PostImage addPostImage(Post post, MultipartFile file) throws IOException {
+  public PostImage uploadAndAddPostImage(Post post, MultipartFile file) throws IOException {
     String key = awsS3Util.generateS3Key(post.getId(), file.getOriginalFilename());
     awsS3Util.upload(key, file);
+
     PostImage postImage = PostImage.builder()
       .post(post)
       .s3Key(key)
