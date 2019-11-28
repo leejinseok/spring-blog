@@ -98,9 +98,9 @@ export default {
   methods: {
     handleInputSearch: function(evt) {
       this.q = evt.target.value;
-      debounce(this.fetchPosts, 300)();
+      this.fetchPosts();
     },
-    fetchPosts: async function() {
+    fetchPosts: debounce(async function() {
       const params = Object.assign(this.$route.query, { q: this.q });
       const result = await findPosts(params, this.$axios);
       const paginator = getPaginator('/posts', result.data);
@@ -108,7 +108,7 @@ export default {
         data: result.data.content,
         paginator
       });
-    },
+    }, 300),
     displayDate: function (val) {
       const date = new Date(val);
       return date.getFullYear() + "년 " + (+date.getMonth() + 1) + "월 " + date.getDate() + "일 " + date.getHours() + "시 " + date.getMinutes() + "분";
