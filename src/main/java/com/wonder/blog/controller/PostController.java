@@ -34,7 +34,6 @@ public class PostController {
   public ResponseEntity<PostDto> addPost(@ModelAttribute @Valid PostDto.RegisterReq dto) throws IOException {
     User user = userService.getUserByEmail(CurrentUser.create().getEmail());
     dto.setUser(user);
-
     Post post = postService.addPost(dto);
 
     MultipartFile file = dto.getFile();

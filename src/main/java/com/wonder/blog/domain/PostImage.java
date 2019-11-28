@@ -39,7 +39,7 @@ public class PostImage implements Serializable {
   private LocalDateTime updatedAt;
 
   @PrePersist
-  private void prePersiste() {
+  private void prePersist() {
     this.createdAt = LocalDateTime.now();
   }
 
