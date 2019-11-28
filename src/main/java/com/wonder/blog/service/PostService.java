@@ -36,6 +36,7 @@ public class PostService {
 
   @Transactional(readOnly = true)
   public Page<Post> getPosts(Pageable pageable, String q) {
+    if (q == null) q = "";
     return postRepository.findPosts(pageable, q);
   }
 
