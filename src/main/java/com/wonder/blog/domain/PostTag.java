@@ -25,11 +25,13 @@ public class PostTag implements Serializable {
   @CreatedDate
   private LocalDateTime createdAt;
 
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
-
   @ManyToOne
   @JoinColumn(name = "post_id")
   @JsonIgnore
   private Post post;
+
+  @PrePersist
+  private void perPersist() {
+    this.createdAt = LocalDateTime.now();
+  }
 }
