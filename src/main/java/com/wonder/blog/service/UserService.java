@@ -23,11 +23,10 @@ public class UserService {
     }
 
     public User addUser(String email, String name, String password) throws DataDuplicateException {
-        User user = User.builder()
-          .email(email)
-          .name(name)
-          .password(bCryptPasswordEncoder.encode(password))
-          .build();
+        User user = new User();
+        user.setEmail(email);
+        user.setName(name);
+        user.setPassword(password);
 
         try {
             return userRepository.save(user);

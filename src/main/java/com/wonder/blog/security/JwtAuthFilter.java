@@ -2,6 +2,7 @@ package com.wonder.blog.security;
 
 import com.google.gson.GsonBuilder;
 import com.wonder.blog.common.DefaultResponse;
+import com.wonder.blog.common.ResponseWriter;
 import com.wonder.blog.util.CookieUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.Getter;
@@ -57,11 +58,11 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
     SecurityContextHolder.clearContext();
-    String json = new GsonBuilder().create().toJson(new DefaultResponse(403, failed.getMessage()));
-    response.setStatus(HttpStatus.UNAUTHORIZED.value());
-    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.getWriter().write(json);
-    response.getWriter().flush();
-    response.getWriter().close();
+    ResponseWriter.builder()
+      .defaultResponse(new DefaultResponse(HttpStatus.UNAUTHORIZED.value(), failed.getMessage()))
+      .contentType(MediaType.APPLICATION_JSON_VALUE)
+      .response(response)
+      .build()
+      .write();
   }
 }

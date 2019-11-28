@@ -24,10 +24,9 @@ public class PostImageService {
     String key = awsS3Util.generateS3Key(post.getId(), file.getOriginalFilename());
     awsS3Util.upload(key, file);
 
-    PostImage postImage = PostImage.builder()
-      .post(post)
-      .s3Key(key)
-      .build();
+    PostImage postImage = new PostImage();
+    postImage.setPost(post);
+    postImage.setS3Key(key);
 
     return postImageRepository.save(postImage);
   }
