@@ -111,6 +111,7 @@ export default {
       }
     },
     removeImage: async function(image, index) {
+      if (!confirm('정말 이미지를 삭제하시겠습니까?')) return;
       try {
         const result = await this.$axios({
           url: `/api/v1/posts/images/${image.uuid}`,
