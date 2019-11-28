@@ -63,7 +63,7 @@ import { findPosts } from '~/api/posts';
 import { mapState } from 'vuex';
 import pagination from 'pagination';
 import searchSvg from '~/assets/fontawesome-free-5.11.2-web/svgs/solid/search.svg';
-import { debounce } from '~/util/common';
+import { debounce, getPaginator } from '~/util/common';
 
 export default {
   components: {
@@ -78,15 +78,10 @@ export default {
   async asyncData(context) {
     const { store, route, $axios } = context;
     const result = await findPosts(route.query, $axios);
-    const paginator = pagination.create('search', {
-      prelink:'/posts', 
-      current: result.data.number + 1, 
-      rowsPerPage: result.data.size, 
-      totalResult: result.data.totalElements
-    });
+    const paginator = getPaginator('/posts', result.data);
     store.commit('posts/set', {
       data: result.data.content,
-      paginator: paginator.getPaginationData()
+      paginator
     });
   },
   data() {
@@ -106,25 +101,17 @@ export default {
       debounce(this.fetchPosts, 300)();
     },
     fetchPosts: async function() {
-      const result = await findPosts(Object.assign(this.$route.query, {
-        q: this.q
-      }), this.$axios);
-
-      const paginator = pagination.create('search', {
-        prelink:'/posts', 
-        current: result.data.number + 1, 
-        rowsPerPage: result.data.size, 
-        totalResult: result.data.totalElements
-      });
-
+      const params = Object.assign(this.$route.query, { q: this.q });
+      const result = await findPosts(params, this.$axios);
+      const paginator = getPaginator('/posts', result.data);
       this.$store.commit('posts/set', {
         data: result.data.content,
-        paginator: paginator.getPaginationData()
+        paginator
       });
     },
     displayDate: function (val) {
       const date = new Date(val);
-      return date.getFullYear() + "년 " + (+date.getMonth() + 1) + "월 " + date.getDate() + "일 " + date.getHours() + "시 " + date.getMinutes() + '분';
+      return date.getFullYear() + "년 " + (+date.getMonth() + 1) + "월 " + date.getDate() + "일 " + date.getHours() + "시 " + date.getMinutes() + "분";
     },
 
   }
