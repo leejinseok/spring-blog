@@ -65,8 +65,6 @@ public class PostDto {
   @Getter @Setter
   public static class UpdateReq {
     @NotEmpty
-    private int id;
-    @NotEmpty
     private String title;
     @NotEmpty
     private String content;

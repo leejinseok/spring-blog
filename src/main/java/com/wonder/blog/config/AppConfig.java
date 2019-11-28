@@ -55,8 +55,8 @@ public class AppConfig {
         post.setTitle("자자 ...");
         post.setUser(user);
         post.setContent("무엇을 쓸까 ...");
+        post.setPostTags(postTags);
 
-        postTag.setPost(post);
         postRepository.save(post);
       }
     };
