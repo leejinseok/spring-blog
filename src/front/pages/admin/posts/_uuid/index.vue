@@ -20,7 +20,7 @@
 
         <div class="form-group register-tag">
           <input class="form-control" type="text" v-model="postTagInputText" placeholder="태그" @keydown="handleKeyUpPostTagInputText">
-          <button class="btn btn-sm btn-dark" type="button">추가</button>
+          <button class="btn btn-sm btn-dark" type="button" @click="addTag()">추가</button>
         </div>
 
         <div class="form-group form-group-tags" v-if="post.postTags.length">
@@ -63,7 +63,7 @@ export default {
 
     try {
       const { data: post } = await $axios({
-        url: `/api/v1/posts/${route.params.id}`,
+        url: `/api/v1/posts/${route.params.uuid}`,
         method: 'get'
       });
       return {
@@ -71,7 +71,7 @@ export default {
       }
     } catch (e) {
       console.error(e.message);
-      redirect('/admin/posts');
+      // redirect('/admin/posts');
     }
   },
   data() {
@@ -99,7 +99,7 @@ export default {
         if (!confirm('정말 삭제하시겠습니까?')) return;
 
         const result = await this.$axios({
-          url: `/api/v1/posts/${this.post.id}`,
+          url: `/api/v1/posts/${this.post.uuid}`,
           method: 'delete'
         });
 
@@ -130,7 +130,7 @@ export default {
         const formData = new FormData();
         formData.append('file', file);
         const result = await this.$axios({
-          url: `/api/v1/posts/${this.post.id}/images`,
+          url: `/api/v1/posts/${this.post.uuid}/images`,
           method: 'put',
           data: formData
         });
@@ -140,6 +140,15 @@ export default {
       } catch (e) {
         alert('에러발생');
         console.error(e);
+        console.error(e.response);
+      }
+    },
+    addTag: function() {
+      const tag = this.postTagInputText;
+      if (!this.post.postTags.some(item => item.text === tag)) {
+        this.post.postTags.push({
+          text: tag
+        });
       }
     },
     removeTag: function(index) {

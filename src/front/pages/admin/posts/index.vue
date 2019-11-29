@@ -21,7 +21,7 @@
                 {{ post.id }}
               </td>
               <td>
-                <nuxt-link :to="`/admin/posts/${post.id}`">
+                <nuxt-link :to="`/admin/posts/${post.uuid}`">
                   {{ post.title }}
                 </nuxt-link>
               </td>

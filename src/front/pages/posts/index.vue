@@ -13,7 +13,7 @@
           <li v-for="post in posts" :key="post.id">
             <div class="title-and-date">
               <p class="title">
-                <nuxt-link :to="`/posts/${post.id}`">
+                <nuxt-link :to="`/posts/${post.uuid}`">
                   {{ post.title }}
                 </nuxt-link>
               </p>

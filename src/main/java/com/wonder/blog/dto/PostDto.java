@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class PostDto {
 
   private Integer id;
+  private String uuid;
   private String title;
   private String content;
   private Collection<PostImageDto> postImages;
@@ -32,6 +33,7 @@ public class PostDto {
 
   public PostDto(Post post) {
     this.id = post.getId();
+    this.uuid = post.getUuid();
     this.title = post.getTitle();
     this.content = post.getContent();
     this.postImages = post.getPostImages().stream().map(PostImageDto::new).collect(Collectors.toList());

@@ -41,27 +41,27 @@ public class PostService {
   }
 
   @Transactional(readOnly = true)
-  public Post getPost(int id) {
-    return postRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Post id: " + id + " not founded"));
+  public Post getPost(String uuid) {
+    return postRepository.findByUuid(uuid).orElseThrow(() -> new DataNotFoundException("Post uuid: " + uuid + " not founded"));
   }
 
   @Transactional
-  public Post updatePost(int id, PostDto.UpdateReq dto) {
+  public Post updatePost(String uuid, PostDto.UpdateReq dto) {
     // 영속성으로 분류되어 set 만으로 update가 가능하다는 점 ...
-    Post post = getPost(id);
+    Post post = getPost(uuid);
     post.setTitle(dto.getTitle());
     post.setContent(dto.getContent());
     post.clearAndAddPostTags(dto.getPostTags());
     return post;
   }
 
-  public void deletePost(int id) {
+  public void deletePost(String uuid) {
     User user = userService.getUserByEmail(CurrentUser.create().getEmail());
-    Post post = getPost(id);
+    Post post = getPost(uuid);
     if (!post.getUser().getId().equals(user.getId())) {
       throw new AccessNotOwnedResourceException("This post is not yours");
     }
 
-    postRepository.deleteById(id);
+    postRepository.deleteByUuid(uuid);
   }
 }

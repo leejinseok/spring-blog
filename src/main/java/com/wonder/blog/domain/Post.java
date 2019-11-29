@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 @Entity
 @Table(name = "posts")
@@ -23,6 +24,9 @@ public class Post implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int id;
+
+  @Column(length = 36)
+  private String uuid;
 
   @Column(length = 50, nullable = false)
   private String title;
@@ -51,6 +55,7 @@ public class Post implements Serializable {
 
   @PrePersist
   private void prePersist() {
+    this.uuid = UUID.randomUUID().toString();
     this.createdAt = LocalDateTime.now();
   }
 

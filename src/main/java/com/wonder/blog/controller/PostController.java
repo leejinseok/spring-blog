@@ -50,27 +50,27 @@ public class PostController {
     return new ResponseEntity<>(new PageDto(postService.getPosts(pageable, q)), HttpStatus.OK);
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<PostDto> getPost(@PathVariable int id) {
-    return new ResponseEntity<>(new PostDto(postService.getPost(id)), HttpStatus.OK);
+  @GetMapping("/{uuid}")
+  public ResponseEntity<PostDto> getPost(@PathVariable String uuid) {
+    return new ResponseEntity<>(new PostDto(postService.getPost(uuid)), HttpStatus.OK);
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<PostDto> updatePost(@PathVariable int id, @RequestBody @Valid PostDto.UpdateReq dto) {
-    return new ResponseEntity<>(new PostDto(postService.updatePost(id, dto)), HttpStatus.OK);
+  @PutMapping("/{uuid}")
+  public ResponseEntity<PostDto> updatePost(@PathVariable String uuid, @RequestBody @Valid PostDto.UpdateReq dto) {
+    return new ResponseEntity<>(new PostDto(postService.updatePost(uuid, dto)), HttpStatus.OK);
   }
 
-  @PutMapping("/{id}/images")
-  public ResponseEntity<PostImageDto> uploadPostImage(@PathVariable int id, @RequestParam("file") MultipartFile file) throws IOException {
-    Post post = postService.getPost(id);
+  @PutMapping("/{uuid}/images")
+  public ResponseEntity<PostImageDto> uploadPostImage(@PathVariable String uuid, @RequestParam("file") MultipartFile file) throws IOException {
+    Post post = postService.getPost(uuid);
     PostImage postImage = postImageService.uploadAndAddPostImage(post, file);
     return new ResponseEntity<>(new PostImageDto(postImage), HttpStatus.OK);
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deletePost(@PathVariable int id) throws AccessNotOwnedResourceException {
-    postImageService.deletePostImageByPost(postService.getPost(id));
-    postService.deletePost(id);
+  @DeleteMapping("/{uuid}")
+  public ResponseEntity<Void> deletePost(@PathVariable String uuid) throws AccessNotOwnedResourceException {
+    postImageService.deletePostImageByPost(postService.getPost(uuid));
+    postService.deletePost(uuid);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }

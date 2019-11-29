@@ -24,7 +24,7 @@ export async function addPost(data) {
 
 export async function updatePost(data) {
   return this.$axios({
-    url: `/api/v1/posts/${data.id}`,
+    url: `/api/v1/posts/${data.uuid}`,
     method: 'put',
     data
   });
