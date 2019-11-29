@@ -160,6 +160,14 @@ export default {
   font-size: 18px;
 }
 
+.title-and-date .title {
+}
+
+.title-and-date .createdAt {
+  font-size: 16px;
+  color: #555;
+}
+
 .pagination-container {
   margin-top: 8px;
 }

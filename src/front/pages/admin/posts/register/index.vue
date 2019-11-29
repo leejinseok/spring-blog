@@ -12,7 +12,7 @@
       <div class="form-container">
         <form @submit="submit($event)">
           <div class="form-group">
-            <input class="form-control" v-model="title" type="text" placeholder="타이틀">
+            <input class="form-control" v-model="title" maxlength="50" type="text" placeholder="타이틀">
           </div>
           <div class="form-group">
             <textarea class="form-control" v-model="content" placeholder="내용"></textarea>
