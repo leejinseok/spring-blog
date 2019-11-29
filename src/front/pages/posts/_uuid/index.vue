@@ -43,9 +43,9 @@ export default {
   },
   async asyncData(context) {
     const { $axios, route } = context;
-    const id = route.params.id;
+    const uuid = route.params.uuid;
     const { data: post } = await $axios({
-      url: `/api/v1/posts/${id}`,
+      url: `/api/v1/posts/${uuid}`,
       method: 'get'
     });
 
