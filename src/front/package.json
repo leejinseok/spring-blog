@@ -15,7 +15,7 @@
     "config": "^3.2.3",
     "nuxt": "^2.0.0",
     "pagination": "^0.4.6",
-    "qs": "^6.9.0"
+    "qs": "^6.9.7"
   },
   "devDependencies": {}
 }
